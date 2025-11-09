@@ -3,23 +3,30 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= appName
+    title= t('appName')
     link(href="/app.css" rel="stylesheet")
   body
     .container
       header.d-flex.flex-wrap.align-items-center.justify-content-center.justify-content-md-between.py-3.mb-4.border-bottom
         a.d-flex.align-items-center.col-md-3.mb-2.mb-md-0.text-dark.text-decoration-none(href="/")
-          span.fs-4 Task Manager
+          span.fs-4= t('appName')
         
         ul.nav.col-12.col-md-auto.mb-2.justify-content-center.mb-md-0
           li
-            a.nav-link.px-2.link-secondary(href="/") Home
+            a.nav-link.px-2.link-secondary(href="/")= t('layouts.application.home')
           li
-            a.nav-link.px-2.link-dark(href="/users") Users
+            a.nav-link.px-2.link-dark(href="/users")= t('layouts.application.users')
         
         .col-md-3.text-end
-          a.btn.btn-outline-primary.me-2(href="/session/new") Login
-          a.btn.btn-primary(href="/users/new") Sign-up
+          .btn-group.me-2(role="group")
+            if currentLang === 'en'
+              a.btn.btn-sm.btn-primary(href="/?lang=en") EN
+              a.btn.btn-sm.btn-outline-secondary(href="/?lang=ru") RU
+            else
+              a.btn.btn-sm.btn-outline-secondary(href="/?lang=en") EN
+              a.btn.btn-sm.btn-primary(href="/?lang=ru") RU
+          a.btn.btn-outline-primary.me-2(href="/session/new")= t('layouts.application.signIn')
+          a.btn.btn-primary(href="/users/new")= t('layouts.application.signUp')
       
       block content
     

@@ -3,8 +3,8 @@ extends layout
 block content
   .row.mt-5
     .col-md-8.mx-auto.text-center
-      h1.display-4 Welcome to Task Manager!
-      p.lead.mt-3 Organize your tasks efficiently with our simple and powerful task management system.
+      h1.display-4= t('views.welcome.index.hello')
+      p.lead.mt-3= t('views.welcome.index.description')
       .mt-4
-        a.btn.btn-primary.btn-lg.me-2(href="/users/new") Get Started
-        a.btn.btn-outline-secondary.btn-lg(href="/users") View Users
+        a.btn.btn-primary.btn-lg.me-2(href="/users/new")= t('views.welcome.index.getStarted')
+        a.btn.btn-outline-secondary.btn-lg(href="/users")= t('views.welcome.index.viewUsers')
