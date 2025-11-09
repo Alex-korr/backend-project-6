@@ -1,10 +1,10 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= appName
-  body
-    h1 Welcome to Task Manager!
-    p This is the first version of our application.
-    p Application successfully deployed and running! 🚀
+extends layout
+
+block content
+  .row.mt-5
+    .col-md-8.mx-auto.text-center
+      h1.display-4 Welcome to Task Manager!
+      p.lead.mt-3 Organize your tasks efficiently with our simple and powerful task management system.
+      .mt-4
+        a.btn.btn-primary.btn-lg.me-2(href="/users/new") Get Started
+        a.btn.btn-outline-secondary.btn-lg(href="/users") View Users

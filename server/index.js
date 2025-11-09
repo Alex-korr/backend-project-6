@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import view from '@fastify/view';
 import formbody from '@fastify/formbody';
+import fastifyStatic from '@fastify/static';
 import pug from 'pug';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -17,6 +18,11 @@ const app = Fastify({
 });
 
 // Register plugins
+app.register(fastifyStatic, {
+  root: path.join(__dirname, '..', 'public'),
+  prefix: '/',
+});
+
 app.register(view, {
   engine: {
     pug,
