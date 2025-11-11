@@ -80,12 +80,6 @@ app.addHook('preHandler', (req, reply, done) => {
 app.register(formbody);
 
 // Method override for PATCH/DELETE
-app.addHook('preHandler', (req, reply, done) => {
-  if (req.body && req.body._method) {
-    req.method = req.body._method.toUpperCase();
-  }
-  done();
-});
 
 // Secure session plugin (required for @fastify/passport)
 app.register(fastifySecureSession, {

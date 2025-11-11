@@ -24,7 +24,8 @@ export default (app, options, done) => {
   app.get('/users/:id', usersController.show);
   app.get('/users/:id/edit', usersController.edit);
   app.patch('/users/:id', usersController.update);
-  app.delete('/users/:id', usersController.destroy);
+  // Для удаления через форму (POST)
+  app.post('/users/:id', usersController.destroy);
 
   // Sessions routes
   app.get('/session/new', sessionsController.newSession);

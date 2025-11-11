@@ -62,6 +62,12 @@ export const update = async (request, reply) => {
 
 export const destroy = async (request, reply) => {
   const { id } = request.params;
+  const user = await User.query().findById(id);
+  if (!user) {
+    request.session.flash = { error: ['Пользователь не найден или уже удалён'] };
+    return reply.redirect('/users');
+  }
   await User.query().deleteById(id);
+  request.session.flash = { success: ['Пользователь успешно удалён'] };
   return reply.redirect('/users');
 };
