@@ -1,0 +1,6 @@
+extends ../layout
+
+block content
+  h1= `${user.firstName} ${user.lastName}`
+  p Email: #{user.email}
+  a(href='/users') Back to Users

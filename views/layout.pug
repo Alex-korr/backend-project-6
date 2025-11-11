@@ -3,19 +3,19 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title= t('appName')
+    title= appName
     link(href="/app.css" rel="stylesheet")
   body
     .container
       header.d-flex.flex-wrap.align-items-center.justify-content-center.justify-content-md-between.py-3.mb-4.border-bottom
         a.d-flex.align-items-center.col-md-3.mb-2.mb-md-0.text-dark.text-decoration-none(href="/")
-          span.fs-4= t('appName')
+          span.fs-4 Task Manager
         
         ul.nav.col-12.col-md-auto.mb-2.justify-content-center.mb-md-0
           li
-            a.nav-link.px-2.link-secondary(href="/")= t('layouts.application.home')
+            a.nav-link.px-2.link-secondary(href="/") Home
           li
-            a.nav-link.px-2.link-dark(href="/users")= t('layouts.application.users')
+            a.nav-link.px-2.link-dark(href="/users") Users
         
         .col-md-3.text-end
           .btn-group.me-2(role="group")
@@ -25,9 +25,17 @@ html(lang="en")
             else
               a.btn.btn-sm.btn-outline-secondary(href="/?lang=en") EN
               a.btn.btn-sm.btn-primary(href="/?lang=ru") RU
-          a.btn.btn-outline-primary.me-2(href="/session/new")= t('layouts.application.signIn')
-          a.btn.btn-primary(href="/users/new")= t('layouts.application.signUp')
+          a.btn.btn-outline-primary.me-2(href="/session/new") Sign In
+          a.btn.btn-primary(href="/users/new") Sign Up
       
+      //- Show global flash messages
+      if typeof layoutError !== 'undefined' && layoutError.length
+        each msg in layoutError
+          div.alert.alert-danger.mt-3= msg
+      if typeof layoutSuccess !== 'undefined' && layoutSuccess.length
+        each msg in layoutSuccess
+          div.alert.alert-success.mt-3= msg
+
       block content
     
     script(src="/app.js")
