@@ -5,11 +5,12 @@
   "main": "server/index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "build": "webpack --mode production",
-    "build:dev": "webpack --mode development --watch",
-    "test": "vitest"
+  "start": "node index.js",
+  "dev": "nodemon index.js",
+  "build": "webpack --mode production",
+  "build:dev": "webpack --mode development --watch",
+  "test": "vitest",
+  "migrate": "knex migrate:latest --env production"
   },
   "repository": {
     "type": "git",
