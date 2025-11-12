@@ -18,6 +18,7 @@ export default (app, options, done) => {
   });
 
   // Users routes
+  app.get('/change-lang/:lang', usersController.changeLang);
   app.get('/users', usersController.index);
   app.get('/users/new', usersController.newUser);
   app.post('/users', usersController.create);

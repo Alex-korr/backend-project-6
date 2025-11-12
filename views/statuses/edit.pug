@@ -1,0 +1,12 @@
+//- Edit status page
+extends ../layout.pug
+
+block content
+  h1 Edit status
+  form(action=`/statuses/${status.id}?_method=PATCH`, method='POST')
+    .mb-3
+      label.form-label(for='name') Name
+      input.form-control(type='text', name='name', id='name', required, minlength='1', value=status.name)
+    if error
+      .alert.alert-danger= error
+    button.btn.btn-primary(type='submit') Save

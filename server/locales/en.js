@@ -20,5 +20,10 @@ export default {
         },
       },
     },
+    noUsersYet: 'No users yet',
+    flash: {
+      userNotFound: 'User not found or already deleted',
+      userDeleted: 'User successfully deleted',
+    },
   },
 };

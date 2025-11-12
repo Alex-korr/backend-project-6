@@ -1,0 +1,28 @@
+//- Statuses list page
+extends ../layout.pug
+
+block content
+  h1 Statuses
+  a.btn.btn-primary(href='/statuses/new') Create status
+  if statuses.length
+    table.table.table-bordered.mt-3
+      thead
+        tr
+          th Name
+          th Actions
+      tbody
+        each status in statuses
+          tr
+            td= status.name
+            td
+              a.btn.btn-sm.btn-secondary(href=`/statuses/${status.id}/edit`) Edit
+              form(action=`/statuses/${status.id}?_method=DELETE`, method='POST', style='display:inline')
+                button.btn.btn-sm.btn-danger(type='submit') Delete
+  else
+    p.text-muted.mt-3 No statuses yet
+  if typeof flash !== 'undefined' && flash.success && flash.success.length
+    each msg in flash.success
+      div.alert.alert-success.mt-3= msg
+  if typeof flash !== 'undefined' && flash.error && flash.error.length
+    each msg in flash.error
+      div.alert.alert-danger.mt-3= msg

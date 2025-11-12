@@ -10,7 +10,7 @@
   "build": "webpack --mode production",
   "build:dev": "webpack --mode development --watch",
   "test": "vitest",
-  "migrate": "knex migrate:latest --env production"
+  "migrate": "NODE_ENV=development knex migrate:latest"
   },
   "repository": {
     "type": "git",
