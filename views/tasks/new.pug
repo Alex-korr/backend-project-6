@@ -1,0 +1,31 @@
+extends ../layout.pug
+
+block content
+  h1 New Task
+  if error.length
+    each msg in error
+      .alert.alert-danger= msg
+  if success.length
+    each msg in success
+      .alert.alert-success= msg
+  form(method='post', action='/tasks')
+    .form-group
+      label(for='name') Name
+      input#name.form-control(type='text', name='name', required, value=task.name || '')
+    .form-group
+      label(for='description') Description
+      textarea#description.form-control(name='description')= task.description || ''
+    .form-group
+      label(for='statusId') Status
+      select#statusId.form-control(name='statusId', required)
+        option(value='') Select status
+        each status in statuses
+          option(value=status.id selected=(task.statusId==status.id))= status.name
+    .form-group
+      label(for='executorId') Executor
+      select#executorId.form-control(name='executorId')
+        option(value='') Not assigned
+        each user in users
+          option(value=user.id selected=(task.executorId==user.id))= user.name
+    button.btn.btn-primary(type='submit') Create
+    a.btn.btn-secondary(href='/tasks') Cancel

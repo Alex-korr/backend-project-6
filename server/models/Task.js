@@ -1,0 +1,58 @@
+import { Model } from 'objection';
+
+import TaskStatus from './TaskStatus.js';
+import User from './User.js';
+
+class Task extends Model {
+  static get tableName() {
+    return 'tasks';
+  }
+
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['name', 'statusId', 'creatorId'],
+      properties: {
+        id: { type: 'integer' },
+        name: { type: 'string', minLength: 1 },
+        description: { type: ['string', 'null'] },
+        statusId: { type: 'integer' },
+        creatorId: { type: 'integer' },
+        executorId: { type: ['integer', 'null'] },
+        createdAt: { type: 'string', format: 'date-time' },
+        updatedAt: { type: 'string', format: 'date-time' }
+      }
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      status: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: TaskStatus,
+        join: {
+          from: 'tasks.statusId',
+          to: 'task_statuses.id'
+        }
+      },
+      creator: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'tasks.creatorId',
+          to: 'users.id'
+        }
+      },
+      executor: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'tasks.executorId',
+          to: 'users.id'
+        }
+      }
+    };
+  }
+}
+
+export default Task;

@@ -98,6 +98,13 @@ export const destroy = async (request, reply) => {
     request.session.flash = { error: [request.i18next.t('User not found or already deleted')] };
     return reply.redirect('/users');
   }
+  // Check for related tasks
+  const tasksAsCreator = await User.relatedQuery('tasks').for(id).where('creatorId', id);
+  const tasksAsExecutor = await User.relatedQuery('tasks').for(id).where('executorId', id);
+  if (tasksAsCreator.length > 0 || tasksAsExecutor.length > 0) {
+    request.session.flash = { error: [request.i18next.t('Cannot delete user with related tasks')] };
+    return reply.redirect('/users');
+  }
   await User.query().deleteById(id);
   request.session.flash = { success: [request.i18next.t('User successfully deleted')] };
   return reply.redirect('/users');

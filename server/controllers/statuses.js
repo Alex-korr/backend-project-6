@@ -41,8 +41,14 @@ export const update = async (req, reply) => {
   }
 };
 
-export const destroy = async (req, reply) => {
+export const remove = async (req, reply) => {
   const { id } = req.params;
+  // Check for related tasks
+  const relatedTasks = await req.knex('tasks').where('statusId', id);
+  if (relatedTasks.length > 0) {
+    req.session.flash = { error: ['Cannot delete status with related tasks'] };
+    return reply.redirect('/statuses');
+  }
   await TaskStatus.query().deleteById(id);
   req.session.flash = { success: ['Status deleted successfully'] };
   reply.redirect('/statuses');

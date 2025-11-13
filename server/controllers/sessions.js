@@ -5,27 +5,29 @@ export const newSession = async (request, reply) => {
   const success = request.session.flash?.success || [];
   // Clear flash after reading
   request.session.flash = {};
-  // Передаём пустые error/success в layout, а реальные — только в блок content
+  // Pass empty error/success to layout, real ones only to content block
   return reply.view('sessions/new', { error, success, layoutError: [], layoutSuccess: [] });
 };
 
 export const create = async (request, reply) => {
   // Authenticate user using Passport local strategy
-  // Очистить flash перед обработкой
+  // Clear flash before processing
   request.session.flash = {};
   return fastifyPassport.authenticate('local', async (err, user, info) => {
     if (err) {
-      // Записать только одно сообщение об ошибке
+  // Write only one error message
       request.session.flash = { error: ['Authentication error'] };
       return reply.redirect('/session/new');
     }
     if (!user) {
-      // Записать только одно сообщение об ошибке
+  // Write only one error message
       request.session.flash = { error: [info && info.message ? info.message : 'Invalid credentials'] };
       return reply.redirect('/session/new');
     }
     await request.logIn(user);
-    // Записать только одно сообщение об успехе
+    // Store user in session for later requests
+    request.session.user = user;
+    // Write only one success message
     request.session.flash = { success: ['Successfully logged in'] };
     return reply.redirect('/users');
   })(request, reply);

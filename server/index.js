@@ -116,6 +116,5 @@ app.register(fastifyPassport.secureSession());
 
 // Register routes
 app.register(indexRoutes);
-app.register(statusesRoutes);
 
 export default app;

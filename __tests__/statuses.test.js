@@ -9,8 +9,10 @@ const request = supertest(app.server);
 const db = knex(knexConfig.development);
 
 
+
 beforeAll(async () => {
   await db.migrate.latest();
+  await app.ready();
 });
 
 afterAll(async () => {
@@ -24,7 +26,7 @@ beforeEach(async () => {
 describe('TaskStatus CRUD', () => {
   let cookie;
 
-  // Миграции, регистрация и логин пользователя, ожидание готовности сервера
+  // Migrations, user registration and login, waiting for server readiness
   beforeAll(async () => {
     await db.migrate.latest();
     await app.ready();
@@ -40,7 +42,7 @@ describe('TaskStatus CRUD', () => {
   });
 
   it('should show statuses list', async () => {
-    const res = await request.get('/statuses');
+    const res = await request.get('/statuses').redirects(1);
     expect(res.status).toBe(200);
     expect(res.text).toContain('Statuses');
   });

@@ -1,0 +1,45 @@
+extends ../layout.pug
+
+block content
+block content
+  // ...existing code...
+  h1 Tasks
+  if error.length
+    each msg in error
+      .alert.alert-danger= msg
+  if success.length
+    each msg in success
+      .alert.alert-success= msg
+  if currentUser
+    a.btn.btn-primary(href='/tasks/new') New Task
+  if !currentUser && !tasks.length
+    if currentLang === 'ru'
+      div.alert.alert-info.mt-4 Залогиньтесь, чтобы добавить задачи
+    else
+      div.alert.alert-info.mt-4 Sign in to add tasks
+  else
+    table.table.table-bordered.mt-3
+      thead
+        tr
+          th Name
+          th Status
+          th Creator
+          th Executor
+          th Actions
+      tbody
+        if tasks.length
+          each task in tasks
+            tr
+              td: a(href=`/tasks/${task.id}`)= task.name
+              td= task.status ? task.status.name : ''
+              td= task.creator ? task.creator.name : ''
+              td= task.executor ? task.executor.name : ''
+              td
+                if currentUser
+                  a.btn.btn-sm.btn-secondary(href=`/tasks/${task.id}/edit`) Edit
+                  if currentUser.id === task.creatorId
+                    form(method='post', action=`/tasks/${task.id}?_method=delete`, style='display:inline')
+                      button.btn.btn-sm.btn-danger(type='submit') Delete
+        else
+          tr
+            td(colspan='5') No tasks found
