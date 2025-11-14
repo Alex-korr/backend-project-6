@@ -28,6 +28,7 @@ Model.knex(db);
 
 // Import routes
 import indexRoutes from '../routes/index.js';
+import labelsRoutes from './routes/labels.js';
 
 // Import locales
 import en from './locales/en.js';
@@ -116,5 +117,7 @@ app.register(fastifyPassport.secureSession());
 
 // Register routes
 app.register(indexRoutes);
+app.register(labelsRoutes);
 
 export default app;
+export const server = app.server || app;

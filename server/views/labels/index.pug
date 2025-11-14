@@ -1,0 +1,12 @@
+extends ../layout.pug
+
+block content
+  h1 Список меток
+  a(href='/labels/new') Новая метка
+  ul
+    each label in labels
+      li
+        span= label.name
+        a(href=`/labels/${label.id}/edit`) Редактировать
+        form(action=`/labels/${label.id}?_method=DELETE`, method='POST', style='display:inline')
+          button(type='submit') Удалить

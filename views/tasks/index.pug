@@ -30,7 +30,12 @@ block content
         if tasks.length
           each task in tasks
             tr
-              td: a(href=`/tasks/${task.id}`)= task.name
+              td
+                a(href=`/tasks/${task.id}`)= task.name
+                if task.labels && task.labels.length
+                  ul.list-inline.mt-2
+                    each label in task.labels
+                      li.list-inline-item.badge.bg-info.text-dark= label.name
               td= task.status ? task.status.name : ''
               td= task.creator ? task.creator.name : ''
               td= task.executor ? task.executor.name : ''

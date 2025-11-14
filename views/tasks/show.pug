@@ -21,6 +21,14 @@ block content
     li.list-group-item
       strong Executor:
       |  #{task.executor ? task.executor.name : 'Not assigned'}
+    li.list-group-item
+      strong Labels:
+      if task.labels && task.labels.length
+        ul.list-inline.mt-2
+          each label in task.labels
+            li.list-inline-item.badge.bg-info.text-dark= label.name
+      else
+        |  No labels
   a.btn.btn-secondary.mt-3(href='/tasks') Back to list
   if currentUser
     a.btn.btn-primary.mt-3(href=`/tasks/${task.id}/edit`) Edit

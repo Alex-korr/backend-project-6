@@ -4,7 +4,7 @@ import User from '../models/User.js';
 
 export const index = async (req, reply) => {
   try {
-    const tasks = await Task.query().withGraphFetched('[status, creator, executor]');
+    const tasks = await Task.query().withGraphFetched('[status, creator, executor, labels]');
     const error = req.session?.flash?.error || [];
     const success = req.session?.flash?.success || [];
     req.session.flash = {};
@@ -18,7 +18,7 @@ export const index = async (req, reply) => {
 
 export const show = async (req, reply) => {
   const { id } = req.params;
-  const task = await Task.query().findById(id).withGraphFetched('[status, creator, executor]');
+  const task = await Task.query().findById(id).withGraphFetched('[status, creator, executor, labels]');
   if (!task) return reply.code(404).send('Task not found');
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
@@ -29,17 +29,22 @@ export const show = async (req, reply) => {
 export const newTask = async (req, reply) => {
   const statuses = await TaskStatus.query();
   const users = await User.query();
+  const labels = await import('../models/Label.js').then(m => m.default.query());
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
-  reply.view('tasks/new', { statuses, users, task: {}, currentUser: req.user, error, success });
+  reply.view('tasks/new', { statuses, users, labels, task: {}, currentUser: req.user, error, success });
 };
 
 export const create = async (req, reply) => {
-    const { name, description, statusId, executorId } = req.body;
+    const { name, description, statusId, executorId, labels } = req.body;
     const creatorId = req.user.id;
     try {
-      await Task.query().insert({ name, description, statusId, creatorId, executorId });
+      const task = await Task.query().insert({ name, description, statusId, creatorId, executorId });
+      if (labels) {
+        const labelIds = Array.isArray(labels) ? labels : [labels];
+        await task.$relatedQuery('labels').relate(labelIds);
+      }
       req.flash('success', req.t('flash.tasks.create.success'));
       reply.redirect('/tasks');
     } catch (e) {
@@ -50,21 +55,30 @@ export const create = async (req, reply) => {
 
 export const edit = async (req, reply) => {
   const { id } = req.params;
-  const task = await Task.query().findById(id);
+  const task = await Task.query().findById(id).withGraphFetched('labels');
   if (!task) return reply.code(404).send('Task not found');
   const statuses = await TaskStatus.query();
   const users = await User.query();
+  const labels = await import('../models/Label.js').then(m => m.default.query());
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
-  reply.view('tasks/edit', { task, statuses, users, currentUser: req.user, error, success });
+  reply.view('tasks/edit', { task, statuses, users, labels, currentUser: req.user, error, success });
 };
 
 export const update = async (req, reply) => {
     const { id } = req.params;
-    const { name, description, statusId, executorId } = req.body;
+    const { name, description, statusId, executorId, labels } = req.body;
     try {
       await Task.query().findById(id).patch({ name, description, statusId, executorId });
+      const task = await Task.query().findById(id);
+      // Сначала отвязываем все старые метки
+      await task.$relatedQuery('labels').unrelate();
+      // Потом привязываем новые
+      if (labels) {
+        const labelIds = Array.isArray(labels) ? labels : [labels];
+        await task.$relatedQuery('labels').relate(labelIds);
+      }
       req.flash('success', req.t('flash.tasks.update.success'));
       reply.redirect(`/tasks/${id}`);
     } catch (e) {
