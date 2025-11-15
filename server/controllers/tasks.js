@@ -4,12 +4,41 @@ import User from '../models/User.js';
 
 export const index = async (req, reply) => {
   try {
-    const tasks = await Task.query().withGraphFetched('[status, creator, executor, labels]');
+    let queryBuilder = Task.query().withGraphFetched('[status, creator, executor, labels]');
+    const { status, executor, label, my } = req.query;
+    if (status) {
+      queryBuilder = queryBuilder.where('statusId', status);
+    }
+    if (executor) {
+      queryBuilder = queryBuilder.where('executorId', executor);
+    }
+    if (label) {
+      queryBuilder = queryBuilder.whereExists(
+        Task.relatedQuery('labels').where('labels.id', label)
+      );
+    }
+    if (my && req.user) {
+      queryBuilder = queryBuilder.where('creatorId', req.user.id);
+    }
+    const tasks = await queryBuilder;
+    const statuses = await TaskStatus.query();
+    const users = await User.query();
+    const labels = await import('../models/Label.js').then(m => m.default.query());
     const error = req.session?.flash?.error || [];
     const success = req.session?.flash?.success || [];
     req.session.flash = {};
     const currentLang = req.query.lang || 'en';
-    return reply.view('tasks/index', { tasks, currentUser: req.user, error, success, currentLang });
+    return reply.view('tasks/index', {
+      tasks,
+      statuses,
+      users,
+      labels,
+      query: req.query,
+      currentUser: req.user,
+      error,
+      success,
+      currentLang
+    });
   } catch (err) {
     console.error('TASKS INDEX ERROR:', err);
     reply.type('text/html').code(500).send('<h1>Tasks Controller Error</h1><pre>' + err.stack + '</pre>');

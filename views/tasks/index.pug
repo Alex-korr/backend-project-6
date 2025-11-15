@@ -1,9 +1,34 @@
 extends ../layout.pug
 
 block content
-block content
-  // ...existing code...
   h1 Tasks
+  form(method="get" action="/tasks" class="row g-3 mb-4")
+    .col-md-3
+      label.form-label(for="status") Status
+      select.form-select(name="status" id="status")
+        option(value="") All
+        if statuses && statuses.length
+          each status in statuses
+            option(value=status.id selected=(status.id == query.status))= status.name
+    .col-md-3
+      label.form-label(for="executor") Executor
+      select.form-select(name="executor" id="executor")
+        option(value="") All
+        if users && users.length
+          each user in users
+            option(value=user.id selected=(user.id == query.executor))= user.name
+    .col-md-3
+      label.form-label(for="label") Label
+      select.form-select(name="label" id="label")
+        option(value="") All
+        if labels && labels.length
+          each label in labels
+            option(value=label.id selected=(label.id == query.label))= label.name
+    .col-md-3.d-flex.align-items-end
+      div.form-check
+        input.form-check-input(type="checkbox" name="my" id="my" checked=(query.my ? true : false))
+        label.form-check-label(for="my") Only my tasks
+      button.btn.btn-primary.ms-3(type="submit") Filter
   if error.length
     each msg in error
       .alert.alert-danger= msg
