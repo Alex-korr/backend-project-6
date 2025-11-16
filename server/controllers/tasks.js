@@ -67,8 +67,13 @@ export const newTask = async (req, reply) => {
 
 export const create = async (req, reply) => {
     const { name, description, statusId, executorId, labels } = req.body;
-    const creatorId = req.user.id;
+    const creatorId = req.user?.id;
     try {
+      if (!creatorId) {
+        console.error('No creatorId, user not authenticated');
+        req.flash('error', 'User not authenticated');
+        return reply.redirect('/session/new');
+      }
       const task = await Task.query().insert({ name, description, statusId, creatorId, executorId });
       if (labels) {
         const labelIds = Array.isArray(labels) ? labels : [labels];
@@ -77,6 +82,7 @@ export const create = async (req, reply) => {
       req.flash('success', req.t('flash.tasks.create.success'));
       reply.redirect('/tasks');
     } catch (e) {
+      console.error('Error in create task controller:', e);
       req.flash('error', req.t('flash.tasks.create.error'));
       reply.redirect('/tasks/new');
     }

@@ -2,12 +2,11 @@
 import * as statusesController from '../server/controllers/statuses.js';
 import ensureAuthenticated from '../server/middleware/ensureAuthenticated.js';
 
-export default (app, options, done) => {
-  app.get('/statuses', statusesController.index);
-  app.get('/statuses/new', { preHandler: ensureAuthenticated }, statusesController.newStatus);
-  app.post('/statuses', { preHandler: ensureAuthenticated }, statusesController.create);
-  app.get('/statuses/:id/edit', { preHandler: ensureAuthenticated }, statusesController.edit);
-  app.patch('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.update);
-  app.delete('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.destroy);
-  done();
+export default async (fastify) => {
+  fastify.get('/statuses', statusesController.index);
+  fastify.get('/statuses/new', { preHandler: ensureAuthenticated }, statusesController.newStatus);
+  fastify.post('/statuses', { preHandler: ensureAuthenticated }, statusesController.create);
+  fastify.get('/statuses/:id/edit', { preHandler: ensureAuthenticated }, statusesController.edit);
+  fastify.patch('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.update);
+  fastify.delete('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.destroy);
 };

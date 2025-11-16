@@ -4,8 +4,8 @@ import * as statusesController from '../server/controllers/statuses.js';
 import * as tasksController from '../server/controllers/tasks.js';
 import ensureAuthenticated from '../server/middleware/ensureAuthenticated.js';
 
-export default (app, options, done) => {
-    console.log('ROUTES INDEX.JS LOADED');
+export default async (app, options) => {
+  console.log('ROUTES INDEX.JS LOADED');
   // Home page
   app.get('/', (request, reply) => {
     const currentLang = request.query.lang || 'en';
@@ -19,6 +19,36 @@ export default (app, options, done) => {
       error,
       success,
     });
+  });
+
+
+  // Manual Rollbar error test route
+  app.get('/rollbar-error', (req, reply) => {
+    if (req.server && req.server.rollbar) {
+      req.server.rollbar.error('Manual error test from /rollbar-error', (err) => {
+        if (err) {
+          console.error('Rollbar error send failed:', err);
+        } else {
+          console.log('Rollbar error sent successfully');
+        }
+      });
+    }
+    reply.send({ message: 'Error sent to Rollbar' });
+  });
+
+
+  // Manual Rollbar test route
+  app.get('/rollbar-test', (req, reply) => {
+    if (req.server && req.server.rollbar) {
+      req.server.rollbar.log('Hello world from /rollbar-test!');
+    }
+    reply.send({ message: 'Message sent to Rollbar' });
+  });
+
+
+  // Test route for Rollbar error tracking
+  app.get('/error', (req, reply) => {
+    throw new Error('Test Rollbar error');
   });
 
   // Users routes
@@ -53,5 +83,4 @@ export default (app, options, done) => {
     app.route({ method: 'PATCH', url: '/tasks/:id', preHandler: [ensureAuthenticated], handler: tasksController.update });
     app.route({ method: 'DELETE', url: '/tasks/:id', preHandler: [ensureAuthenticated], handler: tasksController.remove });
 
-  done();
 };

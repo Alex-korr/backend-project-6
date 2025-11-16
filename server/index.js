@@ -1,3 +1,8 @@
+import dotenv from 'dotenv';
+import Rollbar from 'rollbar';
+console.log('Step 1: Loading .env');
+dotenv.config();
+console.log('Step 2: .env loaded, ROLLBAR_ACCESS_TOKEN:', process.env.ROLLBAR_ACCESS_TOKEN);
 import Fastify from 'fastify';
 import view from '@fastify/view';
 import formbody from '@fastify/formbody';
@@ -34,9 +39,25 @@ import labelsRoutes from './routes/labels.js';
 import en from './locales/en.js';
 import ru from './locales/ru.js';
 
+
+console.log('Step 3: Creating Fastify app');
 const app = Fastify({
   logger: true,
 });
+console.log('Step 4: Fastify app created');
+
+console.log('Step 5: Initializing Rollbar');
+
+const rollbar = new Rollbar({
+  accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+  environment: process.env.NODE_ENV || 'development',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+console.log('Step 6: Rollbar initialized');
+rollbar.log('Hello world from server startup!');
+app.decorate('rollbar', rollbar);
+console.log('Step 7: Rollbar decorated in Fastify app');
 
 // Configure i18next
 i18next
@@ -116,8 +137,35 @@ app.register(fastifyPassport.initialize());
 app.register(fastifyPassport.secureSession());
 
 // Register routes
-app.register(indexRoutes);
-app.register(labelsRoutes);
+console.log('Step 8: Registering routes');
+try {
+  await app.register(indexRoutes);
+  console.log('Step 8.1: indexRoutes registered');
+} catch (err) {
+  console.error('Error registering indexRoutes:', err);
+}
+try {
+  await app.register(labelsRoutes);
+  console.log('Step 8.2: labelsRoutes registered');
+} catch (err) {
+  console.error('Error registering labelsRoutes:', err);
+}
+console.log('Step 9: Routes registered');
 
+console.log('Step 10: Exporting app');
 export default app;
 export const server = app.server || app;
+
+// If this file is run directly, start the server
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const PORT = process.env.PORT || 5000;
+  const HOST = process.env.HOST || '0.0.0.0';
+  app.listen({ port: PORT, host: HOST })
+    .then(() => {
+      console.log(`Server running at http://${HOST}:${PORT}`);
+    })
+    .catch((err) => {
+      console.error('Server failed to start:', err);
+      process.exit(1);
+    });
+}

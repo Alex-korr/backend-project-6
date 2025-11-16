@@ -15,6 +15,17 @@ import fastifyPassport from '@fastify/passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import User from './models/User.js';
 
+import dotenv from 'dotenv';
+import Rollbar from 'rollbar';
+dotenv.config();
+
+const rollbar = new Rollbar({
+  accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
+  environment: process.env.NODE_ENV || 'development',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -72,8 +83,14 @@ export function buildApp({ knexInstance } = {}) {
 
   app.register(routes);
 
+  // Test route for Rollbar error tracking
+  app.get('/error', async (req, reply) => {
+    throw new Error('Test Rollbar error');
+  });
+
   // Fallback error handler for all requests
   app.setErrorHandler((error, request, reply) => {
+    rollbar.error(error, request);
     console.error('GLOBAL ERROR:', error);
     reply.type('text/html').code(500).send('<h1>Internal Server Error</h1><pre>' + error.stack + '</pre>');
   });
