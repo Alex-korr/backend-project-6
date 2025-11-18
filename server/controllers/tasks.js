@@ -27,7 +27,7 @@ export const index = async (req, reply) => {
     const error = req.session?.flash?.error || [];
     const success = req.session?.flash?.success || [];
     req.session.flash = {};
-    const currentLang = req.query.lang || 'en';
+    const currentLang = req.cookies?.lang || req.query.lang || 'en';
     return reply.view('tasks/index', {
       tasks,
       statuses,
@@ -37,7 +37,8 @@ export const index = async (req, reply) => {
       currentUser: req.user,
       error,
       success,
-      currentLang
+      currentLang,
+      t: req.i18next.t.bind(req.i18next),
     });
   } catch (err) {
     console.error('TASKS INDEX ERROR:', err);
@@ -52,7 +53,14 @@ export const show = async (req, reply) => {
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
-  reply.view('tasks/show', { task, currentUser: req.user, error, success });
+  reply.view('tasks/show', {
+    task,
+    currentUser: req.user,
+    error,
+    success,
+    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    t: req.i18next.t.bind(req.i18next),
+  });
 };
 
 export const newTask = async (req, reply) => {
@@ -62,7 +70,17 @@ export const newTask = async (req, reply) => {
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
-  reply.view('tasks/new', { statuses, users, labels, task: {}, currentUser: req.user, error, success });
+  reply.view('tasks/new', {
+    statuses,
+    users,
+    labels,
+    task: {},
+    currentUser: req.user,
+    error,
+    success,
+    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    t: req.i18next.t.bind(req.i18next),
+  });
 };
 
 export const create = async (req, reply) => {
@@ -98,7 +116,17 @@ export const edit = async (req, reply) => {
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
-  reply.view('tasks/edit', { task, statuses, users, labels, currentUser: req.user, error, success });
+  reply.view('tasks/edit', {
+    task,
+    statuses,
+    users,
+    labels,
+    currentUser: req.user,
+    error,
+    success,
+    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    t: req.i18next.t.bind(req.i18next),
+  });
 };
 
 export const update = async (req, reply) => {

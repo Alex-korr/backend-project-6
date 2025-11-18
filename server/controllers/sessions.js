@@ -6,7 +6,14 @@ export const newSession = async (request, reply) => {
   // Clear flash after reading
   request.session.flash = {};
   // Pass empty error/success to layout, real ones only to content block
-  return reply.view('sessions/new', { error, success, layoutError: [], layoutSuccess: [] });
+  return reply.view('sessions/new', {
+    error,
+    success,
+    layoutError: [],
+    layoutSuccess: [],
+    t: request.i18next.t.bind(request.i18next),
+    currentLang: request.cookies?.lang || request.query.lang || 'en',
+  });
 };
 
 export const create = async (request, reply) => {
