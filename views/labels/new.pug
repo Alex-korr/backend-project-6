@@ -1,9 +1,9 @@
 extends ../layout
 
 block content
-  .d-flex.justify-content-center.align-items-center(style='min-height:20vh;')
+  .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
     .w-100(style='max-width:350px;')
-      h1.text-center.mb-4 New Label
+      h1.mb-4 New Label
       if error
         p.text-danger.text-center= error
       form(action='/labels', method='post')

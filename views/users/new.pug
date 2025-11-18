@@ -1,20 +1,22 @@
 extends ../layout
 
 block content
-  h1 New User
-  if error
-    p(style='color: red;')= error
-  form(action='/users', method='post')
-    div
-      label(for='firstName') First Name:
-      input(type='text', name='firstName', required)
-    div
-      label(for='lastName') Last Name:
-      input(type='text', name='lastName', required)
-    div
-      label(for='email') Email:
-      input(type='email', name='email', required)
-    div
-      label(for='password') Password:
-      input(type='password', name='password', required)
-    button(type='submit') Create User
+  .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
+    form(action='/users', method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
+      h1.h3.mb-3.fw-normal.text-center New User
+      if (typeof error === 'string' && error.trim()) || (Array.isArray(error) && error.length && error[0] && error[0].trim())
+        .alert.alert-danger.alert-dismissible.fade.show(role='alert')= Array.isArray(error) ? error[0] : error
+      .form-floating.mb-3
+        input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder='First Name', required)
+        label(for='floatingFirstName') First Name
+      .form-floating.mb-3
+        input.form-control(type='text', name='lastName', id='floatingLastName', placeholder='Last Name', required)
+        label(for='floatingLastName') Last Name
+      .form-floating.mb-3
+        input.form-control(type='email', name='email', id='floatingEmail', placeholder='name@example.com', required)
+        label(for='floatingEmail') Email address
+      .form-floating.mb-3
+        input.form-control(type='password', name='password', id='floatingPassword', placeholder='Password', required)
+        label(for='floatingPassword') Password
+      button.w-100.btn.btn-lg.btn-primary(type='submit') Create User
+      // ...existing code...

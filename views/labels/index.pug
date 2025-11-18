@@ -1,10 +1,10 @@
 extends ../layout.pug
 
 block content
-  .d-flex.justify-content-center.align-items-center(style='min-height:20vh;')
+  .d-flex.justify-content-start.align-items-start(style='min-height:20vh;')
     .w-100(style='max-width:600px;')
-      h1.text-center.mb-4 Labels
-      .d-flex.justify-content-center.mb-3
+      h1.mb-4 Labels
+      .d-flex.justify-content-start.mb-3
         a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) New Label
       if labels && labels.length
         table.table.table-striped.mt-3
@@ -21,4 +21,4 @@ block content
                   form(action=`/labels/${label.id}?_method=DELETE&lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method="post", style="display:inline;")
                     button.btn.btn-sm.btn-danger(type="submit") Delete
       else
-        p.text-muted.text-center.mt-4 No labels found.
+        p.text-muted.mt-4 No labels found.
