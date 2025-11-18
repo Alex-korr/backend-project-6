@@ -7,13 +7,14 @@ function getLang(request) {
 
 function setLang(request, lang) {
   request.session.lang = lang;
-  request.cookies.lang = lang;
+  // reply.setCookie будет вызван в контроллере, так как reply доступен только там
 }
 
 export const changeLang = async (request, reply) => {
   const { lang } = request.params;
   if (['en', 'ru'].includes(lang)) {
     setLang(request, lang);
+    reply.setCookie('lang', lang, { path: '/' });
   }
   reply.redirect(request.headers.referer || '/');
 };

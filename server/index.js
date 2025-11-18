@@ -95,8 +95,8 @@ app.register(view, {
 // Add i18next to request with language detection
 app.decorateRequest('i18next', null);
 app.addHook('preHandler', (req, reply, done) => {
-  // Get language from query parameter (?lang=ru) or default to 'en'
-  const lang = req.query.lang || 'en';
+  // Get language from query, then cookie, then session, then default to 'en'
+  const lang = req.query.lang || req.cookies?.lang || req.session?.lang || 'en';
   req.i18next = i18next.cloneInstance({ lng: lang });
   done();
 });

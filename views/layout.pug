@@ -38,6 +38,7 @@ html(lang="en")
         .container.d-flex.justify-content-between.align-items-center
           span.text-muted © 2025 Task Manager
           .btn-group(role="group")
-            a.btn.btn-sm.btn-secondary EN
-            a.btn.btn-sm.btn-outline-secondary RU
+            - const lang = typeof currentLang !== 'undefined' ? currentLang : 'en';
+            a.btn.btn-sm(href=`/change-lang/en?back=${encodeURIComponent(typeof currentUrl !== 'undefined' ? currentUrl : '/')}` class=(lang === 'en' ? 'btn-secondary' : 'btn-outline-secondary')) EN
+            a.btn.btn-sm(href=`/change-lang/ru?back=${encodeURIComponent(typeof currentUrl !== 'undefined' ? currentUrl : '/')}` class=(lang === 'ru' ? 'btn-secondary' : 'btn-outline-secondary')) RU
       script(src="/app.js")
