@@ -8,42 +8,40 @@ html(lang="en")
     title= appName
     link(href="/app.css" rel="stylesheet")
   body
-    .container
-      header.d-flex.flex-wrap.align-items-center.justify-content-center.justify-content-md-between.py-3.mb-4.border-bottom
-        a.d-flex.align-items-center.col-md-3.mb-2.mb-md-0.text-dark.text-decoration-none(href="/")
-          span.fs-4 Task Manager
-        
-        ul.nav.col-12.col-md-auto.mb-2.justify-content-center.mb-md-0
-          li
-            a.nav-link.px-2.link-secondary(href="/") Home
-          li
-            a.nav-link.px-2.link-dark(href="/users") Users
-          li
-            a.nav-link.px-2.link-dark(href="/statuses") Statuses
-          li
-            a.nav-link.px-2.link-dark(href="/tasks") Tasks
-          li
-            a.nav-link.px-2.link-dark(href="/labels") Labels
-        
-        .col-md-3.text-end
-          .btn-group.me-2(role="group")
-            if currentLang === 'en'
-              a.btn.btn-sm.btn-primary(href="/?lang=en") EN
-              a.btn.btn-sm.btn-outline-secondary(href="/?lang=ru") RU
-            else
-              a.btn.btn-sm.btn-outline-secondary(href="/?lang=en") EN
-              a.btn.btn-sm.btn-primary(href="/?lang=ru") RU
-          a.btn.btn-outline-primary.me-2(href="/session/new") Sign In
-          a.btn.btn-primary(href="/users/new") Sign Up
-      
-      //- Show global flash messages
-      if typeof layoutError !== 'undefined' && layoutError.length
-        each msg in layoutError
-          div.alert.alert-danger.mt-3= msg
-      if typeof layoutSuccess !== 'undefined' && layoutSuccess.length
-        each msg in layoutSuccess
-          div.alert.alert-success.mt-3= msg
-
-      block content
-    
-    script(src="/app.js")
+      .main-content
+        .container
+          header.d-flex.flex-wrap.align-items-center.justify-content-center.justify-content-md-between.py-3.mb-4.border-bottom
+            a.d-flex.align-items-center.col-md-3.mb-2.mb-md-0.text-dark.text-decoration-none(href="/")
+              span.fs-4 Task Manager
+            ul.nav.col-12.col-md-auto.mb-2.justify-content-center.mb-md-0
+              li
+                a.nav-link.px-2.link-secondary(href="/") Home
+              li
+                a.nav-link.px-2.link-dark(href="/users") Users
+              li
+                a.nav-link.px-2.link-dark(href="/statuses") Statuses
+              li
+                a.nav-link.px-2.link-dark(href="/tasks") Tasks
+              li
+                a.nav-link.px-2.link-dark(href="/labels") Labels
+            .col-md-3.text-end
+              .btn-group.me-2(role="group")
+                a.btn.btn-sm.btn-primary EN
+                a.btn.btn-sm.btn-outline-secondary RU
+              a.btn.btn-outline-primary.me-2(href="/session/new") Sign In
+              a.btn.btn-primary(href="/users/new") Sign Up
+          //- Show global flash messages
+          if typeof layoutError !== 'undefined' && layoutError.length
+            each msg in layoutError
+              div.alert.alert-danger.mt-3= msg
+          if typeof layoutSuccess !== 'undefined' && layoutSuccess.length
+            each msg in layoutSuccess
+              div.alert.alert-success.mt-3= msg
+          block content
+      footer.footer.py-3.bg-light
+        .container.d-flex.justify-content-between.align-items-center
+          span.text-muted © 2025 Task Manager
+          .btn-group(role="group")
+            a.btn.btn-sm.btn-secondary EN
+            a.btn.btn-sm.btn-outline-secondary RU
+      script(src="/app.js")

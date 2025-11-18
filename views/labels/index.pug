@@ -2,7 +2,7 @@ extends ../layout.pug
 
 block content
   h1 Labels
-  a.btn.btn-primary(href="/labels/new") New Label
+  a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) New Label
   if labels && labels.length
     table.table.table-striped.mt-3
       thead
@@ -14,8 +14,8 @@ block content
           tr
             td= label.name
             td
-              a.btn.btn-sm.btn-outline-secondary(href=`/labels/${label.id}/edit`) Edit
-              form(action=`/labels/${label.id}?_method=DELETE`, method="post", style="display:inline;")
+              a.btn.btn-sm.btn-outline-secondary(href=`/labels/${label.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) Edit
+              form(action=`/labels/${label.id}?_method=DELETE&lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method="post", style="display:inline;")
                 button.btn.btn-sm.btn-danger(type="submit") Delete
   else
     p.text-muted No labels found.

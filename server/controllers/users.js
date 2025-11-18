@@ -2,7 +2,7 @@
 import User from '../models/User.js';
 
 function getLang(request) {
-  return request.session?.lang || request.cookies?.lang || request.query.lang || 'en';
+  return request.query.lang || request.session?.lang || request.cookies?.lang || 'en';
 }
 
 function setLang(request, lang) {

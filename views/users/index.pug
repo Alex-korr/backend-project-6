@@ -2,16 +2,16 @@ extends ../layout
 
 block content
   h1 Users
-  a(href='/users/new') New User
+  a(href=`/users/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) New User
   if users.length
     ul
       each user in users
         li
-          a(href=`/users/${user.id}`)= `${user.firstName} ${user.lastName}`
+          a(href=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= `${user.firstName} ${user.lastName}`
           |  
-          a(href=`/users/${user.id}/edit`) Edit
+          a(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) Edit
           |  
-          form(action=`/users/${user.id}`, method='post', style='display: inline;')
+          form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
             input(type='hidden', name='_method', value='delete')
             button(type='submit') Delete
   else
