@@ -8,7 +8,12 @@ export default async (app, options) => {
   console.log('ROUTES INDEX.JS LOADED');
   // Home page
   app.get('/', (request, reply) => {
-    const currentLang = request.query.lang || 'en';
+    let currentLang = request.cookies?.lang || request.query.lang || 'en';
+    // Если куки нет, установить её в EN
+    if (!request.cookies?.lang) {
+      reply.setCookie('lang', 'en', { path: '/' });
+      currentLang = 'en';
+    }
     // Read and clear flash messages from session
     const error = request.session?.flash?.error || [];
     const success = request.session?.flash?.success || [];
