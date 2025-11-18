@@ -5,6 +5,9 @@ export default {
       application: {
         home: 'Home',
         users: 'Users',
+        statuses: 'Statuses',
+        tasks: 'Tasks',
+        labels: 'Labels',
         signIn: 'Login',
         signUp: 'Sign up',
         language: 'Language',
