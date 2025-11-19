@@ -3,15 +3,22 @@ extends ../layout
 block content
   h1= t('layouts.application.users')
   if users.length
-    ul
-      each user in users
-        li
-          a(href=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= `${user.firstName} ${user.lastName}`
-          |  
-          a(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('Edit')
-          |  
-          form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
-            input(type='hidden', name='_method', value='delete')
-            button(type='submit')= t('Delete')
+    table.table.table-striped.table-hover.mt-4
+      thead
+        tr
+          th= t('Name')
+          th= t('Edit')
+          th= t('Delete')
+      tbody
+        each user in users
+          tr
+            td
+              a(href=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= `${user.firstName} ${user.lastName}`
+            td
+              a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('Edit')
+            td
+              form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
+                input(type='hidden', name='_method', value='delete')
+                button.btn.btn-sm.btn-outline-danger(type='submit')= t('Delete')
   else
     div.alert.alert-info.mt-4= t('noUsersYet')
