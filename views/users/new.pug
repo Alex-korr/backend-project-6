@@ -3,20 +3,20 @@ extends ../layout
 block content
   .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
     form(action='/users', method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
-      h1.h3.mb-3.fw-normal.text-center New User
+      h1.h3.mb-3.fw-normal.text-center= t('users.new.title')
       if (typeof error === 'string' && error.trim()) || (Array.isArray(error) && error.length && error[0] && error[0].trim())
         .alert.alert-danger.alert-dismissible.fade.show(role='alert')= Array.isArray(error) ? error[0] : error
       .form-floating.mb-3
-        input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder='First Name', required)
-        label(for='floatingFirstName') First Name
+        input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder=t('users.new.firstNamePlaceholder'), required)
+        label(for='floatingFirstName')= t('users.new.firstNameLabel')
       .form-floating.mb-3
-        input.form-control(type='text', name='lastName', id='floatingLastName', placeholder='Last Name', required)
-        label(for='floatingLastName') Last Name
+        input.form-control(type='text', name='lastName', id='floatingLastName', placeholder=t('users.new.lastNamePlaceholder'), required)
+        label(for='floatingLastName')= t('users.new.lastNameLabel')
       .form-floating.mb-3
-        input.form-control(type='email', name='email', id='floatingEmail', placeholder='name@example.com', required)
-        label(for='floatingEmail') Email address
+        input.form-control(type='email', name='email', id='floatingEmail', placeholder=t('users.new.emailPlaceholder'), required)
+        label(for='floatingEmail')= t('users.new.emailLabel')
       .form-floating.mb-3
-        input.form-control(type='password', name='password', id='floatingPassword', placeholder='Password', required)
-        label(for='floatingPassword') Password
-      button.w-100.btn.btn-lg.btn-primary(type='submit') Create User
+        input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('users.new.passwordPlaceholder'), required)
+        label(for='floatingPassword')= t('users.new.passwordLabel')
+      button.w-100.btn.btn-lg.btn-primary(type='submit')= t('users.new.submit')
       // ...existing code...

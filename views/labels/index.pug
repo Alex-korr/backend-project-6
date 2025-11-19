@@ -3,22 +3,22 @@ extends ../layout.pug
 block content
   .d-flex.justify-content-start.align-items-start(style='min-height:20vh;')
     .w-100(style='max-width:600px;')
-      h1.mb-4 Labels
+      h1.mb-4= t('layouts.application.labels')
       .d-flex.justify-content-start.mb-3
-        a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) New Label
+        a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('labels.index.newLabel')
       if labels && labels.length
         table.table.table-striped.mt-3
           thead
             tr
-              th Name
-              th Actions
+              th= t('labels.index.name')
+              th= t('labels.index.actions')
           tbody
             each label in labels
               tr
                 td= label.name
                 td
-                  a.btn.btn-sm.btn-outline-secondary(href=`/labels/${label.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) Edit
+                  a.btn.btn-sm.btn-outline-secondary(href=`/labels/${label.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('layouts.application.edit')
                   form(action=`/labels/${label.id}?_method=DELETE&lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method="post", style="display:inline;")
-                    button.btn.btn-sm.btn-danger(type="submit") Delete
+                    button.btn.btn-sm.btn-danger(type="submit")= t('layouts.application.delete')
       else
-        p.text-muted.mt-4 No labels found.
+        // Сообщение о пустом списке меток убрано

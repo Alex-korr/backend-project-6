@@ -1,17 +1,17 @@
 extends ../layout
 
 block content
-  h1 Users
+  h1= t('layouts.application.users')
   if users.length
     ul
       each user in users
         li
           a(href=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= `${user.firstName} ${user.lastName}`
           |  
-          a(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) Edit
+          a(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('Edit')
           |  
           form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
             input(type='hidden', name='_method', value='delete')
-            button(type='submit') Delete
+            button(type='submit')= t('Delete')
   else
-  div.alert.alert-info.mt-4= t('No users yet')
+    div.alert.alert-info.mt-4= t('noUsersYet')

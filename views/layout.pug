@@ -24,8 +24,8 @@ html(lang="en")
                 a.nav-link.px-2.link-dark(href="/tasks")= t('layouts.application.tasks')
               li
                 a.nav-link.px-2.link-dark.me-4(href="/labels")= t('layouts.application.labels')
-              a.btn.btn-outline-primary.me-2(href="/session/new") Sign In
-              a.btn.btn-primary(href="/users/new") Sign Up
+              a.btn.btn-outline-primary.me-2(href="/session/new")= t('layouts.application.signIn')
+              a.btn.btn-primary(href="/users/new")= t('layouts.application.signUp')
           //- Show global flash messages
           if typeof layoutError !== 'undefined' && layoutError.length
             each msg in layoutError

@@ -1,5 +1,54 @@
 export default {
   translation: {
+                    users: {
+                      new: {
+                        title: 'New User',
+                        firstNameLabel: 'First Name',
+                        firstNamePlaceholder: 'First Name',
+                        lastNameLabel: 'Last Name',
+                        lastNamePlaceholder: 'Last Name',
+                        emailLabel: 'Email address',
+                        emailPlaceholder: 'name@example.com',
+                        passwordLabel: 'Password',
+                        passwordPlaceholder: 'Password',
+                        submit: 'Create User',
+                      },
+                    },
+                labels: {
+                  index: {
+                    newLabel: 'New Label',
+                    name: 'Name',
+                    actions: 'Actions',
+                  },
+                },
+            tasks: {
+              index: {
+                status: 'Status',
+                all: 'All',
+                executor: 'Executor',
+                label: 'Label',
+                onlyMy: 'Only my tasks',
+                filter: 'Filter',
+                newTask: 'New Task',
+                signInToAdd: 'Sign in to add tasks',
+                name: 'Name',
+                statusTh: 'Status',
+                creator: 'Creator',
+                executor: 'Executor',
+                actions: 'Actions',
+                noTasksFound: 'No tasks found',
+              },
+            },
+        sessions: {
+          new: {
+            title: 'Please sign in',
+            emailLabel: 'Email address',
+            emailPlaceholder: 'name@example.com',
+            passwordLabel: 'Password',
+            passwordPlaceholder: 'Password',
+            submit: 'Sign in',
+          },
+        },
     appName: 'Task Manager',
     layouts: {
       application: {
@@ -11,6 +60,8 @@ export default {
         signIn: 'Login',
         signUp: 'Sign up',
         language: 'Language',
+        edit: 'Edit',
+        delete: 'Delete',
       },
     },
     views: {
