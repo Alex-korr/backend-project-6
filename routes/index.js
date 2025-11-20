@@ -75,7 +75,7 @@ export default async (app, options) => {
     preHandler: fastifyPassport.authenticate('local', { failureRedirect: '/session/new' }),
     handler: sessionsController.create
   });
-  app.delete('/session', sessionsController.destroy);
+  app.post('/session/logout', sessionsController.destroy);
 
   // Statuses routes
     app.route({ method: 'GET', url: '/statuses', preHandler: [ensureAuthenticated], handler: statusesController.index });

@@ -28,7 +28,7 @@ html(lang="en")
                 a.btn.btn-outline-primary.me-2(href="/session/new")= t('layouts.application.signIn')
                 a.btn.btn-primary(href="/users/new")= t('layouts.application.signUp')
               else
-                form.d-inline(method="POST", action="/session?_method=DELETE")
+                form.d-inline(method="POST", action="/session/logout")
                   button.btn.btn-light(type="submit")= t('layouts.application.signOut')
           //- Show global flash messages
           if typeof layoutError !== 'undefined' && layoutError.length

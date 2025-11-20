@@ -1,19 +1,29 @@
 export default {
   translation: {
-                      users: {
-                        new: {
-                          title: 'Создать пользователя',
-                          firstNameLabel: 'Имя',
-                          firstNamePlaceholder: 'Имя',
-                          lastNameLabel: 'Фамилия',
-                          lastNamePlaceholder: 'Фамилия',
-                          emailLabel: 'Электронная почта',
-                          emailPlaceholder: 'name@example.com',
-                          passwordLabel: 'Пароль',
-                          passwordPlaceholder: 'Пароль',
-                          submit: 'Создать пользователя',
-                        },
-                      },
+    name: 'Имя',
+    edit: 'Редактировать',
+    delete: 'Удалить',
+    noUsersYet: 'Пользователей пока нет',
+    users: {
+      new: {
+        title: 'Создать пользователя',
+        firstNameLabel: 'Имя',
+        firstNamePlaceholder: 'Имя',
+        lastNameLabel: 'Фамилия',
+        lastNamePlaceholder: 'Фамилия',
+        emailLabel: 'Электронная почта',
+        emailPlaceholder: 'name@example.com',
+        passwordLabel: 'Пароль',
+        passwordPlaceholder: 'Пароль',
+        submit: 'Создать пользователя',
+      },
+      index: {
+        Name: 'Имя',
+        Edit: 'Редактировать',
+        Delete: 'Удалить',
+        noUsersYet: 'Пользователей пока нет',
+      },
+    },
                   labels: {
                     index: {
                       newLabel: 'Новая метка',

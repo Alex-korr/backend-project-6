@@ -20,7 +20,11 @@ export const changeLang = async (request, reply) => {
 };
 
 export const index = async (request, reply) => {
-  const users = await User.query();
+  let users = await User.query();
+  // Скрыть админа для обычных пользователей
+  if (!request.user || request.user.role !== 'admin') {
+    users = users.filter(u => u.role !== 'admin');
+  }
   const error = request.session?.flash?.error || [];
   const success = request.session?.flash?.success || [];
   request.session.flash = {};

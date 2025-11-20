@@ -1,19 +1,24 @@
 export default {
   translation: {
-                    users: {
-                      new: {
-                        title: 'New User',
-                        firstNameLabel: 'First Name',
-                        firstNamePlaceholder: 'First Name',
-                        lastNameLabel: 'Last Name',
-                        lastNamePlaceholder: 'Last Name',
-                        emailLabel: 'Email address',
-                        emailPlaceholder: 'name@example.com',
-                        passwordLabel: 'Password',
-                        passwordPlaceholder: 'Password',
-                        submit: 'Create User',
-                      },
-                    },
+    users: {
+      new: {
+        title: 'New User',
+        firstNameLabel: 'First Name',
+        firstNamePlaceholder: 'First Name',
+        lastNameLabel: 'Last Name',
+        lastNamePlaceholder: 'Last Name',
+        emailLabel: 'Email address',
+        emailPlaceholder: 'name@example.com',
+        passwordLabel: 'Password',
+        passwordPlaceholder: 'Password',
+        submit: 'Create User',
+      },
+      index: {
+        Name: 'Name',
+        Edit: 'Edit',
+        Delete: 'Delete',
+      },
+    },
                 labels: {
                   index: {
                     newLabel: 'New Label',

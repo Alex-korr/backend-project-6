@@ -6,19 +6,34 @@ block content
     table.table.table-striped.table-hover.mt-4
       thead
         tr
-          th= t('Name')
-          th= t('Edit')
-          th= t('Delete')
+          if typeof currentLang !== 'undefined' && currentLang === 'ru'
+            th Имя
+            th
+            th
+          else
+            th Name
+            th
+            th
       tbody
         each user in users
           tr
             td
               a(href=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= `${user.firstName} ${user.lastName}`
-            td
-              a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('Edit')
-            td
-              form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
-                input(type='hidden', name='_method', value='delete')
-                button.btn.btn-sm.btn-outline-danger(type='submit')= t('Delete')
+            if user.role === 'user'
+              td(colspan=2)
+                .d-flex.gap-2.justify-content-end
+                  if typeof currentLang !== 'undefined' && currentLang === 'ru'
+                    a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=ru`)= 'Редактировать'
+                  else
+                    a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=en`)= 'Edit'
+                  form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
+                    input(type='hidden', name='_method', value='delete')
+                    if typeof currentLang !== 'undefined' && currentLang === 'ru'
+                      button.btn.btn-sm.btn-outline-danger(type='submit') Удалить
+                    else
+                      button.btn.btn-sm.btn-outline-danger(type='submit') Delete
+            else
+              td
+              td
   else
     div.alert.alert-info.mt-4= t('noUsersYet')

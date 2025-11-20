@@ -11,15 +11,28 @@ async function addAdmin() {
   const password = process.env.ADMIN_PASSWORD || 'admin';
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await db('users').insert({
-    firstName: 'Admin',
-    lastName: 'User',
-    email,
-    password: hashedPassword,
-    role: 'admin',
-  });
-
-  console.log('Admin user added');
+  const existing = await db('users').where({ email }).first();
+  if (existing) {
+    await db('users').where({ email }).update({
+      firstName: 'Admin',
+      lastName: 'User',
+      password: hashedPassword,
+      role: 'admin',
+      updatedAt: new Date().toISOString(),
+    });
+    console.log('Admin user updated');
+  } else {
+    await db('users').insert({
+      firstName: 'Admin',
+      lastName: 'User',
+      email,
+      password: hashedPassword,
+      role: 'admin',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    console.log('Admin user added');
+  }
   process.exit(0);
 }
 

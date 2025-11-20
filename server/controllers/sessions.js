@@ -30,6 +30,12 @@ export const create = async (request, reply) => {
 export const destroy = async (request, reply) => {
   // Logout user and set flash message
   request.logout();
-  request.session.flash = { success: ['Successfully logged out'] };
+  if (request.session && typeof request.session.delete === 'function') {
+    request.session.delete();
+  } else {
+    request.session = null;
+  }
+  reply.clearCookie('session', { path: '/' });
+  request.session = { flash: { success: ['Successfully logged out'] } };
   return reply.redirect('/');
 };
