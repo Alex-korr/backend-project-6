@@ -17,6 +17,7 @@ class User extends Model {
         lastName: { type: 'string', minLength: 1 },
         email: { type: 'string', format: 'email' },
         password: { type: 'string', minLength: 6 },
+        role: { type: 'string', enum: ['user', 'admin'], default: 'user' },
         createdAt: { type: 'string' },
         updatedAt: { type: 'string' },
       },

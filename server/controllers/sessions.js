@@ -17,27 +17,14 @@ export const newSession = async (request, reply) => {
 };
 
 export const create = async (request, reply) => {
-  // Authenticate user using Passport local strategy
-  // Clear flash before processing
+  // После успешной аутентификации Passport, request.user уже определён
   request.session.flash = {};
-  return fastifyPassport.authenticate('local', async (err, user, info) => {
-    if (err) {
-  // Write only one error message
-      request.session.flash = { error: ['Authentication error'] };
-      return reply.redirect('/session/new');
-    }
-    if (!user) {
-  // Write only one error message
-      request.session.flash = { error: [info && info.message ? info.message : 'Invalid credentials'] };
-      return reply.redirect('/session/new');
-    }
-    await request.logIn(user);
-    // Store user in session for later requests
-    request.session.user = user;
-    // Write only one success message
-    request.session.flash = { success: ['Successfully logged in'] };
-    return reply.redirect('/users');
-  })(request, reply);
+  if (!request.user) {
+    request.session.flash = { error: ['Invalid credentials'] };
+    return reply.redirect('/session/new');
+  }
+  request.session.flash = { success: ['Successfully logged in'] };
+  return reply.redirect('/users');
 };
 
 export const destroy = async (request, reply) => {

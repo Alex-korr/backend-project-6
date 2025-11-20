@@ -1,8 +1,7 @@
-// Middleware to check if user is authenticated
-export default function ensureAuthenticated(req, reply, done) {
+export default async function ensureAuthenticated(req, reply) {
+  console.log('ensureAuthenticated middleware called, req.user:', req.user);
   if (!req.user) {
-    reply.redirect('/session/new');
-    return;
+    console.log('User not authenticated, redirecting to /session/new');
+    return reply.redirect('/session/new');
   }
-  done();
 }

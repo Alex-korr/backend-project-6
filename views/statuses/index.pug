@@ -18,8 +18,7 @@ block content
               a.btn.btn-sm.btn-secondary(href=`/statuses/${status.id}/edit`) Edit
               form(action=`/statuses/${status.id}?_method=DELETE`, method='POST', style='display:inline')
                 button.btn.btn-sm.btn-danger(type='submit') Delete
-  else
-    p.text-muted.mt-3 No statuses yet
+  // ...existing code...
   if typeof flash !== 'undefined' && flash.success && flash.success.length
     each msg in flash.success
       div.alert.alert-success.mt-3= msg

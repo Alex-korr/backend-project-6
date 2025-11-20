@@ -62,6 +62,7 @@ export default {
         language: 'Language',
         edit: 'Edit',
         delete: 'Delete',
+        signOut: 'Sign Out',
       },
     },
     views: {

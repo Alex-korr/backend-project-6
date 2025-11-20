@@ -62,6 +62,7 @@ export default {
         signUp: 'Создать аккаунт',
         edit: 'Редактировать',
         delete: 'Удалить',
+        signOut: 'Выйти',
       },
     },
     views: {

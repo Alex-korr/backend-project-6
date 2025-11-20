@@ -106,30 +106,47 @@ app.register(formbody);
 // Method override for PATCH/DELETE
 
 // Secure session plugin (required for @fastify/passport)
+console.log('Registering secure session...');
 app.register(fastifySecureSession, {
-  key: Buffer.from('a'.repeat(32)), // Replace with secure key from .env in production
+  key: Buffer.from(process.env.SECURE_SESSION_KEY, 'hex'),
   cookie: {
     path: '/',
     httpOnly: true,
     secure: false,
   },
 });
+console.log('Secure session registered');
 
 // Passport setup
 fastifyPassport.use('local', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
   try {
+    console.log('Passport local strategy called');
+    console.log('Email:', email);
     const user = await User.query().findOne({ email });
-    if (!user) return done(null, false, { message: 'User not found' });
+    console.log('User from DB:', user);
+    if (!user) {
+      console.error('User not found for email:', email);
+      return done(null, false, { message: 'User not found' });
+    }
     const isValid = await user.verifyPassword(password);
-    if (!isValid) return done(null, false, { message: 'Invalid password' });
+    console.log('Password valid:', isValid);
+    if (!isValid) {
+      console.error('Invalid password for user:', email);
+      return done(null, false, { message: 'Invalid password' });
+    }
     return done(null, user);
   } catch (err) {
+    console.error('Passport error:', err);
     return done(err);
   }
 }));
 
-fastifyPassport.registerUserSerializer(async (user, req) => user.id);
+fastifyPassport.registerUserSerializer(async (user, req) => {
+  console.log('Serializer called for user:', user);
+  return user.id;
+});
 fastifyPassport.registerUserDeserializer(async (id, req) => {
+  console.log('Deserializer called for id:', id);
   return await User.query().findById(id);
 });
 

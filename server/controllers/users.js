@@ -31,6 +31,8 @@ export const index = async (request, reply) => {
     success,
     currentLang,
     t: request.i18next.t.bind(request.i18next),
+    isAuthenticated: !!request.user,
+    user: request.user,
   });
 };
 
@@ -39,14 +41,15 @@ export const newUser = async (request, reply) => {
   const success = request.session?.flash?.success || [];
   request.session.flash = {};
   const currentLang = getLang(request);
-  return reply.view('users/new', { error, success, currentLang, t: request.i18next.t.bind(request.i18next) });
+  return reply.view('users/new', { error, success, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user });
 };
 
 export const create = async (request, reply) => {
   const { firstName, lastName, email, password } = request.body;
+  const role = 'user';
   const currentLang = getLang(request);
   try {
-    await User.query().insert({ firstName, lastName, email, password });
+    await User.query().insert({ firstName, lastName, email, password, role });
     request.session.flash = { success: [request.i18next.t('User created successfully')] };
     return reply.redirect('/users');
   } catch (error) {
@@ -63,7 +66,7 @@ export const show = async (request, reply) => {
     request.session.flash = { error: [request.i18next.t('User not found')] };
     return reply.redirect('/users');
   }
-  return reply.view('users/show', { user, currentLang, t: request.i18next.t.bind(request.i18next) });
+  return reply.view('users/show', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user });
 };
 
 export const edit = async (request, reply) => {
@@ -74,7 +77,7 @@ export const edit = async (request, reply) => {
     request.session.flash = { error: [request.i18next.t('User not found')] };
     return reply.redirect('/users');
   }
-  return reply.view('users/edit', { user, currentLang, t: request.i18next.t.bind(request.i18next) });
+  return reply.view('users/edit', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user });
 };
 
 export const update = async (request, reply) => {
@@ -95,6 +98,11 @@ export const destroy = async (request, reply) => {
   const { id } = request.params;
   const user = await User.query().findById(id);
   const currentLang = getLang(request);
+  // Проверка роли
+  if (!request.user || request.user.role !== 'admin') {
+    request.session.flash = { error: [request.i18next.t('Only admin can delete users')] };
+    return reply.redirect('/users');
+  }
   if (!user) {
     request.session.flash = { error: [request.i18next.t('User not found or already deleted')] };
     return reply.redirect('/users');

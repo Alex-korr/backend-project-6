@@ -4,8 +4,20 @@ block content
   .d-flex.justify-content-start.align-items-start(style='min-height:20vh;')
     .w-100(style='max-width:600px;')
       h1.mb-4= t('layouts.application.labels')
-      .d-flex.justify-content-start.mb-3
-        a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('labels.index.newLabel')
+      if typeof user !== 'undefined' && user
+        .d-flex.justify-content-start.mb-3
+          a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('labels.index.newLabel')
+      else
+        .card.mt-4.p-4.shadow-sm(style='max-width:400px;')
+          h4.mb-3= t('loginRequired')
+          form(action='/session', method='post')
+            .mb-3
+              label.form-label(for='email')= t('Email')
+              input.form-control(type='email', name='email', id='email', required)
+            .mb-3
+              label.form-label(for='password')= t('Password')
+              input.form-control(type='password', name='password', id='password', required)
+            button.btn.btn-primary(type='submit')= t('Login')
       if labels && labels.length
         table.table.table-striped.mt-3
           thead

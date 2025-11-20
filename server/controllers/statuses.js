@@ -3,11 +3,20 @@ import TaskStatus from '../models/TaskStatus.js';
 
 export const index = async (req, reply) => {
   const statuses = await TaskStatus.query();
-  return reply.view('statuses/index', { statuses });
+  return reply.view('statuses/index', {
+    statuses,
+    isAuthenticated: !!req.user,
+    user: req.user,
+    t: req.i18next.t.bind(req.i18next),
+  });
 };
 
 export const newStatus = async (req, reply) => {
-  return reply.view('statuses/new');
+  return reply.view('statuses/new', {
+    isAuthenticated: !!req.user,
+    user: req.user,
+    t: req.i18next.t.bind(req.i18next),
+  });
 };
 
 export const create = async (req, reply) => {
@@ -17,7 +26,12 @@ export const create = async (req, reply) => {
     req.session.flash = { success: ['Status created successfully'] };
     reply.redirect('/statuses');
   } catch (err) {
-    reply.view('statuses/new', { error: err.message });
+    reply.view('statuses/new', {
+      error: err.message,
+      isAuthenticated: !!req.user,
+      user: req.user,
+      t: req.i18next.t.bind(req.i18next),
+    });
   }
 };
 
@@ -25,7 +39,12 @@ export const edit = async (req, reply) => {
   const { id } = req.params;
   const status = await TaskStatus.query().findById(id);
   if (!status) return reply.code(404).send('Status not found');
-  return reply.view('statuses/edit', { status });
+  return reply.view('statuses/edit', {
+    status,
+    isAuthenticated: !!req.user,
+    user: req.user,
+    t: req.i18next.t.bind(req.i18next),
+  });
 };
 
 export const update = async (req, reply) => {
@@ -37,7 +56,13 @@ export const update = async (req, reply) => {
     reply.redirect('/statuses');
   } catch (err) {
     const status = await TaskStatus.query().findById(id);
-    reply.view('statuses/edit', { status, error: err.message });
+    reply.view('statuses/edit', {
+      status,
+      error: err.message,
+      isAuthenticated: !!req.user,
+      user: req.user,
+      t: req.i18next.t.bind(req.i18next),
+    });
   }
 };
 

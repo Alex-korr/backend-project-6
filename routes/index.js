@@ -3,18 +3,17 @@ import * as sessionsController from '../server/controllers/sessions.js';
 import * as statusesController from '../server/controllers/statuses.js';
 import * as tasksController from '../server/controllers/tasks.js';
 import ensureAuthenticated from '../server/middleware/ensureAuthenticated.js';
+import fastifyPassport from '@fastify/passport';
 
 export default async (app, options) => {
   console.log('ROUTES INDEX.JS LOADED');
   // Home page
   app.get('/', (request, reply) => {
     let currentLang = request.cookies?.lang || request.query.lang || 'en';
-    // Если куки нет, установить её в EN
     if (!request.cookies?.lang) {
       reply.setCookie('lang', 'en', { path: '/' });
       currentLang = 'en';
     }
-    // Read and clear flash messages from session
     const error = request.session?.flash?.error || [];
     const success = request.session?.flash?.success || [];
     request.session.flash = {};
@@ -23,6 +22,8 @@ export default async (app, options) => {
       currentLang,
       error,
       success,
+      isAuthenticated: !!request.user,
+      currentUser: request.user || null,
     });
   });
 
@@ -58,7 +59,7 @@ export default async (app, options) => {
 
   // Users routes
   app.get('/change-lang/:lang', usersController.changeLang);
-  app.get('/users', usersController.index);
+  app.route({ method: 'GET', url: '/users', preHandler: [ensureAuthenticated], handler: usersController.index });
   app.get('/users/new', usersController.newUser);
   app.post('/users', usersController.create);
   app.get('/users/:id', usersController.show);
@@ -68,7 +69,12 @@ export default async (app, options) => {
 
   // Sessions routes
   app.get('/session/new', sessionsController.newSession);
-  app.post('/session', sessionsController.create);
+  app.route({
+    method: 'POST',
+    url: '/session',
+    preHandler: fastifyPassport.authenticate('local', { failureRedirect: '/session/new' }),
+    handler: sessionsController.create
+  });
   app.delete('/session', sessionsController.destroy);
 
   // Statuses routes

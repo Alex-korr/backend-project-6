@@ -39,6 +39,8 @@ export const index = async (req, reply) => {
       success,
       currentLang,
       t: req.i18next.t.bind(req.i18next),
+      isAuthenticated: !!req.user,
+      user: req.user,
     });
   } catch (err) {
     console.error('TASKS INDEX ERROR:', err);
@@ -60,6 +62,8 @@ export const show = async (req, reply) => {
     success,
     currentLang: req.cookies?.lang || req.query.lang || 'en',
     t: req.i18next.t.bind(req.i18next),
+    isAuthenticated: !!req.user,
+    user: req.user,
   });
 };
 
@@ -80,6 +84,8 @@ export const newTask = async (req, reply) => {
     success,
     currentLang: req.cookies?.lang || req.query.lang || 'en',
     t: req.i18next.t.bind(req.i18next),
+    isAuthenticated: !!req.user,
+    user: req.user,
   });
 };
 
@@ -126,6 +132,8 @@ export const edit = async (req, reply) => {
     success,
     currentLang: req.cookies?.lang || req.query.lang || 'en',
     t: req.i18next.t.bind(req.i18next),
+    isAuthenticated: !!req.user,
+    user: req.user,
   });
 };
 
