@@ -1,5 +1,22 @@
 export default {
   translation: {
+    flash: {
+      tasks: {
+        create: {
+          success: 'Success',
+          error: 'Failed to create task. Please try again.',
+        },
+        update: {
+          success: 'Task updated successfully!',
+          error: 'Failed to update task.',
+        },
+        delete: {
+          success: 'Task deleted successfully!',
+          forbidden: 'You are not allowed to delete this task.',
+          error: 'Failed to delete task.',
+        },
+      },
+    },
     users: {
       new: {
         title: 'New User',

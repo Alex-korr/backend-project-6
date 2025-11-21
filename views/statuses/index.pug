@@ -5,7 +5,7 @@ block content
   h1 Statuses
   a.btn.btn-primary(href="/statuses/new") Create status
   if statuses.length
-    table.table.table-bordered.mt-3
+    table.table.table-striped.mt-3
       thead
         tr
           th Name
@@ -15,10 +15,10 @@ block content
           tr
             td= status.name
             td
-              a.btn.btn-sm.btn-secondary(href=`/statuses/${status.id}/edit`) Edit
-              form(action=`/statuses/${status.id}?_method=DELETE`, method='POST', style='display:inline')
-                button.btn.btn-sm.btn-danger(type='submit') Delete
-  // ...existing code...
+              form(action=`/statuses/${status.id}?_method=DELETE`, method='POST', style='display:inline;')
+                button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;') Delete
+  else
+    div.text-muted.mt-4 No statuses found
   if typeof flash !== 'undefined' && flash.success && flash.success.length
     each msg in flash.success
       div.alert.alert-success.mt-3= msg

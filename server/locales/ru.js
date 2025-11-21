@@ -1,5 +1,22 @@
 export default {
   translation: {
+    flash: {
+      tasks: {
+        create: {
+          success: 'Задача успешно создана!',
+          error: 'Не удалось создать задачу. Попробуйте еще раз.',
+        },
+        update: {
+          success: 'Задача успешно обновлена!',
+          error: 'Не удалось обновить задачу.',
+        },
+        delete: {
+          success: 'Задача успешно удалена!',
+          forbidden: 'У вас нет прав для удаления этой задачи.',
+          error: 'Не удалось удалить задачу.',
+        },
+      },
+    },
     name: 'Имя',
     edit: 'Редактировать',
     delete: 'Удалить',
@@ -26,7 +43,7 @@ export default {
     },
                   labels: {
                     index: {
-                      newLabel: 'Новая метка',
+                      newLabel: 'Новый тег',
                       name: 'Название',
                       actions: 'Действия',
                     },
@@ -36,7 +53,7 @@ export default {
                   status: 'Статус',
                   all: 'Все',
                   executor: 'Исполнитель',
-                  label: 'Метка',
+                  label: 'Тег',
                   onlyMy: 'Только мои задачи',
                   filter: 'Фильтровать',
                   newTask: 'Новая задача',
@@ -67,7 +84,7 @@ export default {
         users: 'Пользователи',
         statuses: 'Статусы',
         tasks: 'Задачи',
-        labels: 'Метки',
+        labels: 'Теги',
         signIn: 'Вход',
         signUp: 'Создать аккаунт',
         edit: 'Редактировать',

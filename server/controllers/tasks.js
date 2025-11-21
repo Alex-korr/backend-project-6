@@ -4,7 +4,7 @@ import User from '../models/User.js';
 
 export const index = async (req, reply) => {
   try {
-    let queryBuilder = Task.query().withGraphFetched('[status, creator, executor, labels]');
+    let queryBuilder = Task.query().withGraphFetched('[status, labels, executor]');
     const { status, executor, label, my } = req.query;
     if (status) {
       queryBuilder = queryBuilder.where('statusId', status);
@@ -17,9 +17,7 @@ export const index = async (req, reply) => {
         Task.relatedQuery('labels').where('labels.id', label)
       );
     }
-    if (my && req.user) {
-      queryBuilder = queryBuilder.where('creatorId', req.user.id);
-    }
+    // creator filter removed
     const tasks = await queryBuilder;
     const statuses = await TaskStatus.query();
     const users = await User.query();
@@ -50,7 +48,7 @@ export const index = async (req, reply) => {
 
 export const show = async (req, reply) => {
   const { id } = req.params;
-  const task = await Task.query().findById(id).withGraphFetched('[status, creator, executor, labels]');
+  const task = await Task.query().findById(id).withGraphFetched('[status, labels]');
   if (!task) return reply.code(404).send('Task not found');
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
@@ -74,7 +72,7 @@ export const newTask = async (req, reply) => {
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
-  reply.view('tasks/new', {
+  return reply.view('tasks/new', {
     statuses,
     users,
     labels,
@@ -98,16 +96,19 @@ export const create = async (req, reply) => {
         req.flash('error', 'User not authenticated');
         return reply.redirect('/session/new');
       }
-      const task = await Task.query().insert({ name, description, statusId, creatorId, executorId });
+      // Convert statusId and executorId to integers (or null)
+      const statusIdInt = statusId ? Number(statusId) : null;
+      const executorIdInt = executorId ? Number(executorId) : null;
+      const task = await Task.query().insert({ name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt });
       if (labels) {
         const labelIds = Array.isArray(labels) ? labels : [labels];
         await task.$relatedQuery('labels').relate(labelIds);
       }
-      req.flash('success', req.t('flash.tasks.create.success'));
+      // Success flash message removed as requested
       reply.redirect('/tasks');
     } catch (e) {
       console.error('Error in create task controller:', e);
-      req.flash('error', req.t('flash.tasks.create.error'));
+      req.flash('error', req.i18next.t('flash.tasks.create.error'));
       reply.redirect('/tasks/new');
     }
 };
@@ -150,10 +151,10 @@ export const update = async (req, reply) => {
         const labelIds = Array.isArray(labels) ? labels : [labels];
         await task.$relatedQuery('labels').relate(labelIds);
       }
-      req.flash('success', req.t('flash.tasks.update.success'));
+      req.flash('success', req.i18next.t('flash.tasks.update.success'));
       reply.redirect(`/tasks/${id}`);
     } catch (e) {
-      req.flash('error', req.t('flash.tasks.update.error'));
+      req.flash('error', req.i18next.t('flash.tasks.update.error'));
       reply.redirect(`/tasks/${id}/edit`);
     }
 };
@@ -163,10 +164,10 @@ export const remove = async (req, reply) => {
     const task = await Task.query().findById(id);
     if (!task) return reply.code(404).send('Task not found');
     if (task.creatorId !== req.user.id) {
-      req.flash('error', req.t('flash.tasks.delete.forbidden'));
+      req.flash('error', req.i18next.t('flash.tasks.delete.forbidden'));
       return reply.redirect('/tasks');
     }
     await Task.query().deleteById(id);
-    req.flash('success', req.t('flash.tasks.delete.success'));
+    req.flash('success', req.i18next.t('flash.tasks.delete.success'));
     reply.redirect('/tasks');
 };

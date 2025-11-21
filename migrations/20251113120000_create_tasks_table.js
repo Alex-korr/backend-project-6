@@ -4,8 +4,8 @@ export async function up(knex) {
     table.string('name').notNullable();
     table.text('description').nullable();
     table.integer('statusId').notNullable().references('id').inTable('task_statuses').onDelete('RESTRICT');
-    table.integer('creatorId').notNullable().references('id').inTable('users').onDelete('RESTRICT');
     table.integer('executorId').nullable().references('id').inTable('users').onDelete('SET NULL');
+    table.integer('creatorId').notNullable().references('id').inTable('users').onDelete('CASCADE');
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });

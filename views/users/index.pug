@@ -18,8 +18,8 @@ block content
         each user in users
           tr
             td
-              a(href=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= `${user.firstName} ${user.lastName}`
-            if user.role === 'user'
+              | #{user.firstName} #{user.lastName}
+            if user.role === 'user' && currentUser && currentUser.role === 'admin'
               td(colspan=2)
                 .d-flex.gap-2.justify-content-end
                   if typeof currentLang !== 'undefined' && currentLang === 'ru'
@@ -29,9 +29,9 @@ block content
                   form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
                     input(type='hidden', name='_method', value='delete')
                     if typeof currentLang !== 'undefined' && currentLang === 'ru'
-                      button.btn.btn-sm.btn-outline-danger(type='submit') Удалить
+                      button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;') Удалить
                     else
-                      button.btn.btn-sm.btn-outline-danger(type='submit') Delete
+                      button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;') Delete
             else
               td
               td

@@ -49,32 +49,28 @@ block content
         tr
           th= t('tasks.index.name')
           th= t('tasks.index.statusTh')
-          //- th= t('tasks.index.creator')
-          //- th= t('tasks.index.executor')
+          th Description
+          th= t('tasks.index.executor')
           th(style='width: 25px; text-align: left;')= t('tasks.index.actions')
       tbody
         if tasks.length
           each task in tasks
             tr
               td
-                a(href=`/tasks/${task.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}` class='fw-bold text-primary fs-5 text-decoration-none')
-                  span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9;')= task.name
-                if task.labels && task.labels.length
-                  ul.list-inline.mt-2
-                    each label in task.labels
-                      li.list-inline-item.badge.bg-info.text-dark= label.name
+                a(href=`/tasks/${task.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}` class='fw-bold fs-5 text-decoration-none' style='color: #4a6fa5;')
+                  span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; color: #4a6fa5;')= task.name
+                // Labels removed from Name column
               td
                 if task.status
-                  span(style='padding: 2px 8px; border-radius: 6px; background: #fffde7; border: 1px solid #ffe082; font-weight: 500; color: #f9a825;')= task.status.name
+                  span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; font-weight: 500; color: #4a6fa5;')= task.status.name
                 else
                   span.text-muted Нет статуса
-              //- td= task.creator ? task.creator.name : ''
-              //- td= task.executor ? task.executor.name : ''
-              td(style='text-align: left; vertical-align: middle;')
-                if currentUser
-                  if currentUser.id === task.creatorId
+              td= task.description || '-'
+              td= task.executor ? task.executor.firstName + ' ' + task.executor.lastName : '-'
+                td(style='text-align: left; vertical-align: middle;')
+                  if currentUser && currentUser.id === task.creatorId
                     form(method='post', action=`/tasks/${task.id}?_method=delete&lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
-                      button.btn.btn-sm.btn-danger(type='submit')= t('layouts.application.delete')
+                      button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('layouts.application.delete')
         else
           tr
             td(colspan='5')= t('tasks.index.noTasksFound')

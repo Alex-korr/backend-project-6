@@ -1,12 +1,10 @@
 extends ../layout
 
 block content
-  .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
-    .w-100(style='max-width:350px;')
-      h1.mb-4 New Label
-      if error
-        p.text-danger.text-center= error
-      form(action='/labels', method='post')
-        div.form-group.mb-3
-          input.form-control(type='text', name='name', required, style='max-width:220px; margin:auto; display:block;')
-        button.btn.btn-primary.w-100(type='submit') Create Label
+block content
+  h1 Create label
+  form(action='/labels', method='POST')
+    .mb-3
+      label.form-label(for='name') Name
+      input.form-control(type='text', name='name', id='name', required, minlength='1')
+    button.btn.btn-primary(type='submit') Create label

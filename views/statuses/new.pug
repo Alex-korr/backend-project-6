@@ -7,6 +7,5 @@ block content
     .mb-3
       label.form-label(for='name') Name
       input.form-control(type='text', name='name', id='name', required, minlength='1')
-    if error
-      .alert.alert-danger= error
+    // Error alert removed
     button.btn.btn-primary(type='submit') Create
