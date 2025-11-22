@@ -27,7 +27,7 @@ block content
               input.form-check-input(type='checkbox', name='label', value=label.id checked=(Array.isArray(query.label) ? query.label.includes(label.id.toString()) : query.label == label.id))
               span.form-check-label(style='margin-left: 8px;')= label.name
         else
-          span(style='color: #bbb;') Нет меток
+          span(style='color: #bbb;')= t('labels.index.noLabels')
     .col-md-3.d-flex.align-items-start
       div.d-flex.align-items-center.mt-4.mb-3.w-100
         input.form-check-input(type="checkbox" name="my" id="my" checked=(query.my ? true : false))
@@ -44,7 +44,7 @@ block content
         tr
           th= t('tasks.index.name')
           th= t('tasks.index.statusTh')
-          th Description
+          th= t('tasks.index.description')
           th= t('tasks.index.executor')
           th= t('tasks.index.labels')
           th(style='width: 25px; text-align: left;')= t('tasks.index.actions')
@@ -67,11 +67,11 @@ block content
                   each label in task.labels
                     span.badge.bg-info.text-dark.me-1= label.name
                 else
-                  span.text-muted Нет тегов
+                  span.text-muted= t('labels.index.noLabels')
               td(style='text-align: left; vertical-align: middle;')
                 if currentUser && currentUser.id === task.creatorId
-                  form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
-                      button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;') Удалить
+                    form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
+                      button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('tasks.index.delete')
         else
           tr
             td(colspan='6')= t('tasks.index.noTasksFound')

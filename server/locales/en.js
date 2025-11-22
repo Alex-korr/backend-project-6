@@ -42,31 +42,43 @@ export default {
         Delete: 'Delete',
       },
     },
-                labels: {
-                  index: {
-                    newLabel: 'New Label',
-                    name: 'Name',
-                    actions: 'Actions',
-                  },
-                },
-            tasks: {
-              index: {
-                status: 'Status',
-                all: 'All',
-                executor: 'Executor',
-                label: 'Label',
-                labels: 'Labels',
-                onlyMy: 'Only my tasks',
-                filter: 'Filter',
-                newTask: 'New Task',
-                signInToAdd: 'Sign in to add tasks',
-                name: 'Name',
-                statusTh: 'Status',
-                creator: 'Creator',
-                executor: 'Executor',
-                actions: 'Actions',
-                noTasksFound: 'No tasks found',
-              },
+    labels: {
+      index: {
+        newLabel: 'New Label',
+        name: 'Name',
+        actions: 'Actions',
+        noLabels: 'No tags',
+      },
+    },
+    statuses: {
+      index: {
+        title: 'Statuses',
+        createStatus: 'Create status',
+        name: 'Name',
+        actions: 'Actions',
+        delete: 'Delete',
+      },
+    },
+    tasks: {
+      index: {
+        status: 'Status',
+        all: 'All',
+        executor: 'Executor',
+        label: 'Label',
+        labels: 'Labels',
+        onlyMy: 'Only my tasks',
+        filter: 'Filter',
+        newTask: 'New Task',
+        signInToAdd: 'Sign in to add tasks',
+        name: 'Name',
+        statusTh: 'Status',
+        creator: 'Creator',
+        executor: 'Executor',
+        actions: 'Actions',
+        noTasksFound: 'No tasks found',
+        delete: 'Delete',
+        description: 'Description',
+      },
             },
         sessions: {
           new: {

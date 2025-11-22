@@ -9,20 +9,20 @@ block content
     if error && error.length
       each msg in error
         div.alert.alert-danger.mt-3(style='position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60%; z-index: 10; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);')= msg
-    h1 Statuses
-    a.btn.btn-primary(href="/statuses/new") Create status
+    h1= t('statuses.index.title')
+    a.btn.btn-primary(href="/statuses/new")= t('statuses.index.createStatus')
     if statuses.length
       table.table.table-striped.mt-3
         thead
           tr
-            th Name
-            th Actions
+            th= t('statuses.index.name')
+            th= t('statuses.index.actions')
         tbody
           each status in statuses
             tr
               td= status.name
               td
                 form(action=`/statuses/${status.id}/delete`, method='POST', style='display:inline;')
-                  button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;') Delete
+                  button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('statuses.index.delete')
     else
       div.text-muted.mt-4 No statuses found

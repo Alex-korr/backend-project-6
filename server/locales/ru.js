@@ -30,7 +30,9 @@ export default {
         statusTh: 'Статус',
         creator: 'Автор',
         actions: 'Действия',
-        noTasksFound: 'Задачи не найдены'
+        noTasksFound: 'Задачи не найдены',
+        delete: 'Удалить',
+        description: 'Описание'
       }
     },
     users: {
@@ -58,6 +60,15 @@ export default {
         newLabel: 'Новый тег',
         name: 'Название',
         actions: 'Действия'
+      }
+    },
+    statuses: {
+      index: {
+        title: 'Статусы',
+        createStatus: 'Создать статус',
+        name: 'Название',
+        actions: 'Действия',
+        delete: 'Удалить'
       }
     },
     sessions: {
