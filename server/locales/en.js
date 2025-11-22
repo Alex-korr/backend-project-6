@@ -11,9 +11,15 @@ export default {
           error: 'Failed to update task.',
         },
         delete: {
-          success: 'Task deleted successfully!',
+          success: 'Task was deleted!',
           forbidden: 'You are not allowed to delete this task.',
           error: 'Failed to delete task.',
+        },
+      },
+      labels: {
+        delete: {
+          success: 'Label was deleted!',
+          error: 'Cannot delete label with related tasks.',
         },
       },
     },
@@ -49,6 +55,7 @@ export default {
                 all: 'All',
                 executor: 'Executor',
                 label: 'Label',
+                labels: 'Labels',
                 onlyMy: 'Only my tasks',
                 filter: 'Filter',
                 newTask: 'New Task',

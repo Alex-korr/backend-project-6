@@ -34,6 +34,7 @@ Model.knex(db);
 // Import routes
 import indexRoutes from '../routes/index.js';
 import labelsRoutes from './routes/labels.js';
+import tasksRoutes from '../routes/tasks.js';
 
 // Import locales
 import en from './locales/en.js';
@@ -166,6 +167,18 @@ try {
   console.log('Step 8.2: labelsRoutes registered');
 } catch (err) {
   console.error('Error registering labelsRoutes:', err);
+}
+try {
+  await app.register(tasksRoutes);
+  console.log('Step 8.3: tasksRoutes registered');
+} catch (err) {
+  console.error('Error registering tasksRoutes:', err);
+}
+try {
+  await app.register(statusesRoutes);
+  console.log('Step 8.4: statusesRoutes registered');
+} catch (err) {
+  console.error('Error registering statusesRoutes:', err);
 }
 console.log('Step 9: Routes registered');
 

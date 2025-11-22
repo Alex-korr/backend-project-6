@@ -3,8 +3,13 @@ import TaskStatus from '../models/TaskStatus.js';
 
 export const index = async (req, reply) => {
   const statuses = await TaskStatus.query();
+  const error = req.session?.flash?.status?.error || [];
+  const success = req.session?.flash?.status?.success || [];
+  req.session.flash = {};
   return reply.view('statuses/index', {
     statuses,
+    error,
+    success,
     isAuthenticated: !!req.user,
     user: req.user,
     t: req.i18next.t.bind(req.i18next),
@@ -23,7 +28,7 @@ export const create = async (req, reply) => {
   const { name } = req.body;
   try {
     await TaskStatus.query().insert({ name });
-    req.session.flash = { success: ['Status created successfully'] };
+    req.session.flash = { status: { success: ['Status created successfully'] } };
     reply.redirect('/statuses');
   } catch (err) {
     reply.view('statuses/new', {
@@ -52,7 +57,7 @@ export const update = async (req, reply) => {
   const { name } = req.body;
   try {
     await TaskStatus.query().findById(id).patch({ name });
-    req.session.flash = { success: ['Status updated successfully'] };
+    req.session.flash = { status: { success: ['Status updated successfully'] } };
     reply.redirect('/statuses');
   } catch (err) {
     const status = await TaskStatus.query().findById(id);
@@ -68,12 +73,14 @@ export const update = async (req, reply) => {
 
 export const remove = async (req, reply) => {
   const { id } = req.params;
-  const relatedTasks = await req.knex('tasks').where('statusId', id);
+  // Use Task model to check for related tasks
+  const Task = (await import('../models/Task.js')).default;
+  const relatedTasks = await Task.query().where('statusId', id);
   if (relatedTasks.length > 0) {
-    req.session.flash = { error: ['Cannot delete status with related tasks'] };
+    req.session.flash = { status: { error: ['Cannot delete status with related tasks'] } };
     return reply.redirect('/statuses');
   }
   await TaskStatus.query().deleteById(id);
-  req.session.flash = { success: ['Status deleted successfully'] };
+  req.session.flash = { status: { success: ['Status deleted successfully'] } };
   reply.redirect('/statuses');
 };

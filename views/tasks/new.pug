@@ -11,7 +11,7 @@ block content
       .alert.alert-danger= msg
   if success && success.length
     each msg in success
-      .alert.alert-success= msg
+      .alert.alert-success(style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= msg
 
   form(method='post', action='/tasks')
     .form-group
@@ -38,7 +38,7 @@ block content
         .checkbox-group(style='height: 100px; overflow-y: scroll; background: #f8f8f8; border: 1px solid #ccc; border-radius: 8px; padding: 12px;')
           each label in labels
             label.form-check(style='display: flex; align-items: center; margin-bottom: 8px;')
-              input.form-check-input(type='checkbox', name='labels', value=label.id checked=(task.labels && task.labels.includes(label.id)))
+              input.form-check-input(type='checkbox', name='labels[]', value=label.id checked=(task.labels && task.labels.includes(label.id)))
               span.form-check-label(style='margin-left: 8px;')= label.name
       else
         span(style='color: #bbb;') Нет меток

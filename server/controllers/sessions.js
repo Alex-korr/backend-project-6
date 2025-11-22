@@ -17,7 +17,7 @@ export const newSession = async (request, reply) => {
 };
 
 export const create = async (request, reply) => {
-  // После успешной аутентификации Passport, request.user уже определён
+  // After successful Passport authentication, request.user is already defined
   request.session.flash = {};
   if (!request.user) {
     request.session.flash = { error: ['Invalid credentials'] };

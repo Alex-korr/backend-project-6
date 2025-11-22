@@ -17,8 +17,14 @@ export const index = async (req, reply) => {
         Task.relatedQuery('labels').where('labels.id', label)
       );
     }
-    // creator filter removed
-    const tasks = await queryBuilder;
+    let tasks;
+    if (my && !req.user) {
+      tasks = [];
+    } else if (my && req.user) {
+      tasks = await queryBuilder.where('creatorId', req.user.id);
+    } else {
+      tasks = await queryBuilder;
+    }
     const statuses = await TaskStatus.query();
     const users = await User.query();
     const labels = await import('../models/Label.js').then(m => m.default.query());
@@ -88,7 +94,9 @@ export const newTask = async (req, reply) => {
 };
 
 export const create = async (req, reply) => {
-    const { name, description, statusId, executorId, labels } = req.body;
+    const { name, description, statusId, executorId, newLabels } = req.body;
+    const raw = req.body['labels[]'];
+    let labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
     const creatorId = req.user?.id;
     try {
       if (!creatorId) {
@@ -99,12 +107,23 @@ export const create = async (req, reply) => {
       // Convert statusId and executorId to integers (or null)
       const statusIdInt = statusId ? Number(statusId) : null;
       const executorIdInt = executorId ? Number(executorId) : null;
-      const task = await Task.query().insert({ name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt });
-      if (labels) {
-        const labelIds = Array.isArray(labels) ? labels : [labels];
-        await task.$relatedQuery('labels').relate(labelIds);
+      // Create new labels if provided
+      if (newLabels && newLabels.trim()) {
+        const Label = (await import('../models/Label.js')).default;
+        const names = newLabels.split(',').map(s => s.trim()).filter(Boolean);
+        for (const name of names) {
+          // Check if label already exists
+          let label = await Label.query().findOne({ name });
+          if (!label) {
+            label = await Label.query().insert({ name });
+          }
+          labelIds.push(label.id.toString());
+        }
       }
-      // Success flash message removed as requested
+      const task = await Task.query().insert({ name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt });
+      if (labelIds.length > 0) {
+        await task.$relatedQuery('labels').relate(labelIds.map(Number));
+      }
       reply.redirect('/tasks');
     } catch (e) {
       console.error('Error in create task controller:', e);
@@ -140,16 +159,17 @@ export const edit = async (req, reply) => {
 
 export const update = async (req, reply) => {
     const { id } = req.params;
-    const { name, description, statusId, executorId, labels } = req.body;
+    const { name, description, statusId, executorId } = req.body;
+    const raw = req.body['labels[]'];
+    const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
     try {
       await Task.query().findById(id).patch({ name, description, statusId, executorId });
       const task = await Task.query().findById(id);
-      // Сначала отвязываем все старые метки
+      // First, detach all old labels
       await task.$relatedQuery('labels').unrelate();
-      // Потом привязываем новые
-      if (labels) {
-        const labelIds = Array.isArray(labels) ? labels : [labels];
-        await task.$relatedQuery('labels').relate(labelIds);
+      // Then attach new ones
+      for (const labelId of labelIds) {
+        await task.$relatedQuery('labels').relate(Number(labelId));
       }
       req.flash('success', req.i18next.t('flash.tasks.update.success'));
       reply.redirect(`/tasks/${id}`);
@@ -164,10 +184,10 @@ export const remove = async (req, reply) => {
     const task = await Task.query().findById(id);
     if (!task) return reply.code(404).send('Task not found');
     if (task.creatorId !== req.user.id) {
-      req.flash('error', req.i18next.t('flash.tasks.delete.forbidden'));
+      req.flash('error', req.i18next.t('Task not found'));
       return reply.redirect('/tasks');
     }
     await Task.query().deleteById(id);
-    req.flash('success', req.i18next.t('flash.tasks.delete.success'));
+    req.flash('success', req.i18next.t('Task was removed'));
     reply.redirect('/tasks');
 };

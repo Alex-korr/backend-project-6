@@ -4,23 +4,35 @@ export default {
       tasks: {
         create: {
           success: 'Задача успешно создана!',
-          error: 'Не удалось создать задачу. Попробуйте еще раз.',
+          error: 'Не удалось создать задачу. Попробуйте еще раз.'
         },
-        update: {
-          success: 'Задача успешно обновлена!',
-          error: 'Не удалось обновить задачу.',
-        },
-        delete: {
-          success: 'Задача успешно удалена!',
-          forbidden: 'У вас нет прав для удаления этой задачи.',
-          error: 'Не удалось удалить задачу.',
-        },
+        error: 'Не удалось обновить задачу.'
       },
+      labels: {
+        delete: {
+          success: 'Тег успешно удалён',
+          error: 'Не удалось удалить тег.'
+        }
+      }
     },
-    name: 'Имя',
-    edit: 'Редактировать',
-    delete: 'Удалить',
-    noUsersYet: 'Пользователей пока нет',
+    tasks: {
+      index: {
+        status: 'Статус',
+        all: 'Все',
+        executor: 'Исполнитель',
+        label: 'Тег',
+        labels: 'Теги',
+        onlyMy: 'Только мои задачи',
+        filter: 'Фильтровать',
+        newTask: 'Новая задача',
+        signInToAdd: 'Войдите, чтобы добавить задачи',
+        name: 'Название',
+        statusTh: 'Статус',
+        creator: 'Автор',
+        actions: 'Действия',
+        noTasksFound: 'Задачи не найдены'
+      }
+    },
     users: {
       new: {
         title: 'Создать пользователя',
@@ -32,51 +44,32 @@ export default {
         emailPlaceholder: 'name@example.com',
         passwordLabel: 'Пароль',
         passwordPlaceholder: 'Пароль',
-        submit: 'Создать пользователя',
+        submit: 'Создать пользователя'
       },
       index: {
         Name: 'Имя',
         Edit: 'Редактировать',
         Delete: 'Удалить',
-        noUsersYet: 'Пользователей пока нет',
-      },
+        noUsersYet: 'Пользователей пока нет'
+      }
     },
-                  labels: {
-                    index: {
-                      newLabel: 'Новый тег',
-                      name: 'Название',
-                      actions: 'Действия',
-                    },
-                  },
-              tasks: {
-                index: {
-                  status: 'Статус',
-                  all: 'Все',
-                  executor: 'Исполнитель',
-                  label: 'Тег',
-                  onlyMy: 'Только мои задачи',
-                  filter: 'Фильтровать',
-                  newTask: 'Новая задача',
-                  signInToAdd: 'Войдите, чтобы добавить задачи',
-                  name: 'Название',
-                  statusTh: 'Статус',
-                  creator: 'Автор',
-                  executor: 'Исполнитель',
-                  actions: 'Действия',
-                  noTasksFound: 'Задачи не найдены',
-                },
-              },
-          sessions: {
-            new: {
-              title: 'Войдите в аккаунт',
-              emailLabel: 'Электронная почта',
-              emailPlaceholder: 'name@example.com',
-              passwordLabel: 'Пароль',
-              passwordPlaceholder: 'Пароль',
-              submit: 'Вход',
-            },
-          },
-      noUsersYet: 'Пользователи не найдены',
+    labels: {
+      index: {
+        newLabel: 'Новый тег',
+        name: 'Название',
+        actions: 'Действия'
+      }
+    },
+    sessions: {
+      new: {
+        title: 'Войдите в аккаунт',
+        emailLabel: 'Электронная почта',
+        emailPlaceholder: 'name@example.com',
+        passwordLabel: 'Пароль',
+        passwordPlaceholder: 'Пароль',
+        submit: 'Вход'
+      }
+    },
     appName: 'Менеджер задач',
     layouts: {
       application: {
@@ -89,8 +82,8 @@ export default {
         signUp: 'Создать аккаунт',
         edit: 'Редактировать',
         delete: 'Удалить',
-        signOut: 'Выйти',
-      },
+        signOut: 'Выйти'
+      }
     },
     views: {
       welcome: {
@@ -98,10 +91,10 @@ export default {
           hello: 'Добро пожаловать в Менеджер задач!',
           description: 'Организуйте свои задачи эффективно с помощью нашей простой и мощной системы управления задачами.',
           getStarted: 'Начать',
-          viewUsers: 'Показать пользователей',
-        },
-      },
-    },
+          viewUsers: 'Показать пользователей'
+        }
+      }
+    }
   }
 };
 

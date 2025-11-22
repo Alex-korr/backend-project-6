@@ -33,12 +33,7 @@ block content
         input.form-check-input(type="checkbox" name="my" id="my" checked=(query.my ? true : false))
         label.form-check-label(for="my" style='margin-left: 8px;')= t('tasks.index.onlyMy')
         button.btn.btn-primary.ms-3(type="submit")= t('tasks.index.filter')
-  if error.length
-    each msg in error
-      .alert.alert-danger= msg
-  if success.length
-    each msg in success
-      .alert.alert-success= msg
+  // ...existing code...
   if currentUser
     a.btn.btn-primary(href=`/tasks/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('tasks.index.newTask')
   if !currentUser && !tasks.length
@@ -51,6 +46,7 @@ block content
           th= t('tasks.index.statusTh')
           th Description
           th= t('tasks.index.executor')
+          th= t('tasks.index.labels')
           th(style='width: 25px; text-align: left;')= t('tasks.index.actions')
       tbody
         if tasks.length
@@ -59,7 +55,6 @@ block content
               td
                 a(href=`/tasks/${task.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}` class='fw-bold fs-5 text-decoration-none' style='color: #4a6fa5;')
                   span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; color: #4a6fa5;')= task.name
-                // Labels removed from Name column
               td
                 if task.status
                   span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; font-weight: 500; color: #4a6fa5;')= task.status.name
@@ -67,10 +62,16 @@ block content
                   span.text-muted Нет статуса
               td= task.description || '-'
               td= task.executor ? task.executor.firstName + ' ' + task.executor.lastName : '-'
-                td(style='text-align: left; vertical-align: middle;')
-                  if currentUser && currentUser.id === task.creatorId
-                    form(method='post', action=`/tasks/${task.id}?_method=delete&lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
-                      button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('layouts.application.delete')
+              td
+                if task.labels && task.labels.length
+                  each label in task.labels
+                    span.badge.bg-info.text-dark.me-1= label.name
+                else
+                  span.text-muted Нет тегов
+              td(style='text-align: left; vertical-align: middle;')
+                if currentUser && currentUser.id === task.creatorId
+                  form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
+                      button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;') Удалить
         else
           tr
-            td(colspan='5')= t('tasks.index.noTasksFound')
+            td(colspan='6')= t('tasks.index.noTasksFound')

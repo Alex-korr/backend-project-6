@@ -1,6 +1,6 @@
-// Перемещение метки по клику: из верхнего бокса в нижний
+// Move label on click: from the upper box to the lower box
 document.addEventListener('DOMContentLoaded', () => {
-	const allLabelsBox = document.getElementById('all-labels-box');
+	const allLabelsBox = document.getElementById( 'all-labels-box');
 	const selectedLabelsBox = document.getElementById('selected-labels-box');
 	const selectedLabelsInput = document.getElementById('selectedLabelsInput');
 	if (!allLabelsBox || !selectedLabelsBox || !selectedLabelsInput) return;
@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	getLabelCards(allLabelsBox).forEach(card => {
 		card.addEventListener('click', () => {
-			// Проверка на дубликаты
+			// Check for duplicates
 			if (getLabelCards(selectedLabelsBox).some(c => c.textContent === card.textContent)) return;
-			// Удалить placeholder
+			// Remove placeholder
 			const placeholder = selectedLabelsBox.querySelector('div[style*="color: #bbb"]');
 			if (placeholder) selectedLabelsBox.removeChild(placeholder);
-			// Переместить DOM-элемент
+			// Move DOM element
 			selectedLabelsBox.appendChild(card);
 			card.style.background = '#e0ffe0';
 			card.style.border = '1px solid #4caf50';
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		form.addEventListener('submit', updateSelectedLabelsInput);
 	}
 });
-// --- Чистый drag-and-drop: метка остается в нижнем боксе до отправки формы ---
+// --- Pure drag-and-drop: label stays in the lower box until the form is submitted ---
 document.addEventListener('DOMContentLoaded', () => {
 	const allLabelsBox = document.getElementById('all-labels-box');
 	const selectedLabelsBox = document.getElementById('selected-labels-box');
@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		return Array.from(container.querySelectorAll('.label-card'));
 	}
 
-	// Делать карточки перетаскиваемыми
+	// Make cards draggable
 	getLabelCards(allLabelsBox).forEach(card => {
 		card.setAttribute('draggable', 'true');
 		card.addEventListener('dragstart', (e) => {
 			e.dataTransfer.setData('text/plain', card.textContent);
 			e.dataTransfer.effectAllowed = 'move';
-			// Сохраняем ссылку на перетаскиваемую карточку
+			// Save a reference to the dragged card
 			window._draggedLabelCard = card;
 		});
 	});
@@ -71,12 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		selectedLabelsBox.style.background = '#f6fff6';
 		const labelName = e.dataTransfer.getData('text/plain');
 		if (!labelName || !window._draggedLabelCard) return;
-		// Проверка на дубликаты
+		// Check for duplicates
 		if (getLabelCards(selectedLabelsBox).some(card => card.textContent === labelName)) return;
-		// Удалить placeholder
+		// Remove placeholder
 		const placeholder = selectedLabelsBox.querySelector('div[style*="color: #bbb"]');
 		if (placeholder) selectedLabelsBox.removeChild(placeholder);
-		// Переместить DOM-элемент из верхнего бокса в нижний
+		// Move DOM element from the upper box to the lower box
 		selectedLabelsBox.appendChild(window._draggedLabelCard);
 		window._draggedLabelCard.style.background = '#e0ffe0';
 		window._draggedLabelCard.style.border = '1px solid #4caf50';
@@ -129,15 +129,15 @@ document.addEventListener('DOMContentLoaded', () => {
 			e.preventDefault();
 			selectedLabelsBox.style.background = '#f6fff6';
 			if (!draggedCard) return;
-			// Проверка на дубликаты
+			// Check for duplicates
 			if (getLabelCards(selectedLabelsBox).some(card => card.textContent === draggedCard.textContent)) {
 				draggedCard = null;
 				return;
 			}
-			// Удалить placeholder
+			// Remove placeholder
 			const placeholder = selectedLabelsBox.querySelector('div[style*="color: #bbb"]');
 			if (placeholder) selectedLabelsBox.removeChild(placeholder);
-			// Переместить DOM-элемент из верхнего бокса в нижний
+			// Move DOM element from the upper box to the lower box
 			selectedLabelsBox.appendChild(draggedCard);
 			draggedCard.style.background = '#e0ffe0';
 			draggedCard.style.border = '1px solid #4caf50';
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-// Drag-and-drop для меток
+// Drag-and-drop for labels
 document.addEventListener('DOMContentLoaded', () => {
 	const allLabelsBox = document.getElementById('all-labels-box');
 	const selectedLabelsBox = document.getElementById('selected-labels-box');

@@ -8,4 +8,5 @@ export default async (app) => {
   app.route({ method: 'GET', url: '/labels/:id/edit', handler: edit });
   app.route({ method: 'PATCH', url: '/labels/:id', handler: update });
   app.route({ method: 'DELETE', url: '/labels/:id', handler: remove });
+  app.route({ method: 'POST', url: '/labels/:id/delete', handler: remove });
 };

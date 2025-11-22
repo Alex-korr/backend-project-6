@@ -5,8 +5,13 @@ export const index = async (req, reply) => {
     return reply.redirect('/session/new');
   }
   const labels = await Label.query().where('userId', req.user.id);
+  const error = req.session?.flash?.labels?.error || [];
+  const success = req.session?.flash?.labels?.success || [];
+  req.session.flash = {};
   return reply.view('labels/index', {
     labels,
+    error,
+    success,
     t: req.i18next.t.bind(req.i18next),
     currentLang: req.cookies?.lang || req.query.lang || 'en',
     isAuthenticated: !!req.user,
@@ -49,10 +54,12 @@ export const update = async (req, reply) => {
 
 export const remove = async (req, reply) => {
   const label = await Label.query().findById(req.params.id).withGraphFetched('tasks');
+  const t = req.i18next.t.bind(req.i18next);
   if (label.tasks && label.tasks.length > 0) {
-    // Если метка связана с задачами, удалять нельзя
-    return reply.code(400).send('Нельзя удалить связанную метку');
+    req.session.flash = { labels: { error: [t('flash.labels.delete.error')] } };
+    return reply.redirect('/labels');
   }
   await Label.query().deleteById(req.params.id);
+  req.session.flash = { labels: { success: [t('flash.labels.delete.success')] } };
   return reply.redirect('/labels');
 };

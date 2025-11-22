@@ -1,6 +1,5 @@
 import * as usersController from '../server/controllers/users.js';
 import * as sessionsController from '../server/controllers/sessions.js';
-import * as statusesController from '../server/controllers/statuses.js';
 import * as tasksController from '../server/controllers/tasks.js';
 import ensureAuthenticated from '../server/middleware/ensureAuthenticated.js';
 import fastifyPassport from '@fastify/passport';
@@ -77,21 +76,6 @@ export default async (app, options) => {
   });
   app.post('/session/logout', sessionsController.destroy);
 
-  // Statuses routes
-    app.route({ method: 'GET', url: '/statuses', preHandler: [ensureAuthenticated], handler: statusesController.index });
-  app.route({ method: 'GET', url: '/statuses/new', preHandler: [ensureAuthenticated], handler: statusesController.newStatus });
-    app.route({ method: 'POST', url: '/statuses', preHandler: [ensureAuthenticated], handler: statusesController.create });
-    app.route({ method: 'GET', url: '/statuses/:id/edit', preHandler: [ensureAuthenticated], handler: statusesController.edit });
-    app.route({ method: 'PATCH', url: '/statuses/:id', preHandler: [ensureAuthenticated], handler: statusesController.update });
-    app.route({ method: 'DELETE', url: '/statuses/:id', preHandler: [ensureAuthenticated], handler: statusesController.remove });
 
-  // Tasks routes
-    app.route({ method: 'GET', url: '/tasks', handler: tasksController.index });
-  app.route({ method: 'GET', url: '/tasks/new', preHandler: [ensureAuthenticated], handler: tasksController.newTask });
-    app.route({ method: 'POST', url: '/tasks', preHandler: [ensureAuthenticated], handler: tasksController.create });
-    app.route({ method: 'GET', url: '/tasks/:id', handler: tasksController.show });
-    app.route({ method: 'GET', url: '/tasks/:id/edit', preHandler: [ensureAuthenticated], handler: tasksController.edit });
-    app.route({ method: 'PATCH', url: '/tasks/:id', preHandler: [ensureAuthenticated], handler: tasksController.update });
-    app.route({ method: 'DELETE', url: '/tasks/:id', preHandler: [ensureAuthenticated], handler: tasksController.remove });
 
 };

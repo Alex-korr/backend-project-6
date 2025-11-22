@@ -40,7 +40,7 @@ afterAll(async () => {
   await db.destroy();
 });
 
-// Удалены тесты Tasks CRUD, оставлены только тесты фильтрации
+// Tasks CRUD tests removed, only filtering tests remain
 
 describe('Tasks filtering', () => {
   let secondStatusId;

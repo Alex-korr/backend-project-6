@@ -8,5 +8,6 @@ export default async (fastify) => {
   fastify.post('/statuses', { preHandler: ensureAuthenticated }, statusesController.create);
   fastify.get('/statuses/:id/edit', { preHandler: ensureAuthenticated }, statusesController.edit);
   fastify.patch('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.update);
-  fastify.delete('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.destroy);
+  fastify.delete('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.remove);
+  fastify.post('/statuses/:id/delete', { preHandler: ensureAuthenticated }, statusesController.remove);
 };

@@ -7,7 +7,7 @@ function getLang(request) {
 
 function setLang(request, lang) {
   request.session.lang = lang;
-  // reply.setCookie будет вызван в контроллере, так как reply доступен только там
+  // reply.setCookie will be called in the controller, since reply is only available there
 }
 
 export const changeLang = async (request, reply) => {
@@ -21,7 +21,7 @@ export const changeLang = async (request, reply) => {
 
 export const index = async (request, reply) => {
   let users = await User.query();
-  // Скрыть админа для обычных пользователей
+  // Hide admin from regular users
   if (!request.user || request.user.role !== 'admin') {
     users = users.filter(u => u.role !== 'admin');
   }
@@ -102,7 +102,7 @@ export const destroy = async (request, reply) => {
   const { id } = request.params;
   const user = await User.query().findById(id);
   const currentLang = getLang(request);
-  // Проверка роли
+  // Role check
   if (!request.user || request.user.role !== 'admin') {
     request.session.flash = { error: [request.i18next.t('Only admin can delete users')] };
     return reply.redirect('/users');

@@ -1,5 +1,5 @@
-import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
-import tasksController from '../controllers/tasks.js';
+import ensureAuthenticated from '../server/middleware/ensureAuthenticated.js';
+import * as tasksController from '../server/controllers/tasks.js';
 
 export default async (fastify) => {
   fastify.get('/tasks', tasksController.index);
@@ -9,4 +9,5 @@ export default async (fastify) => {
   fastify.get('/tasks/:id/edit', { preHandler: ensureAuthenticated }, tasksController.edit);
   fastify.patch('/tasks/:id', { preHandler: ensureAuthenticated }, tasksController.update);
   fastify.delete('/tasks/:id', { preHandler: ensureAuthenticated }, tasksController.remove);
+  fastify.post('/tasks/:id/delete', { preHandler: ensureAuthenticated }, tasksController.remove);
 };

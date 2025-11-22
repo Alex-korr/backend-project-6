@@ -1,3 +1,14 @@
+// Кнопка удаления: эффект наведения как у Sign Out
+.btn.btn-sm[style*='color: #e57373'] {
+	background: #fff;
+	color: #e57373;
+	border: 1px solid #e57373;
+	transition: background 0.2s, color 0.2s;
+}
+.btn.btn-sm[style*='color: #e57373']:hover {
+	background: #e57373;
+	color: #fff;
+}
 // Import Bootstrap CSS
 @import "bootstrap";
 

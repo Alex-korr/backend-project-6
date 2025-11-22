@@ -6,5 +6,6 @@ block content
       h1.display-4= t('views.welcome.index.hello')
       p.lead.mt-3= t('views.welcome.index.description')
       .mt-4
-        a.btn.btn-primary.btn-lg.me-2(href=`/users/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('views.welcome.index.getStarted')
+        if !currentUser
+          a.btn.btn-primary.btn-lg.me-2(href=`/users/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('views.welcome.index.getStarted')
         a.btn.btn-outline-secondary.btn-lg(href=`/users?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('views.welcome.index.viewUsers')
