@@ -16,6 +16,18 @@ export default {
           error: 'Failed to delete task.',
         },
       },
+      statuses: {
+        create: {
+          success: 'Status created successfully',
+        },
+        update: {
+          success: 'Status updated successfully',
+        },
+        delete: {
+          success: 'Status deleted successfully',
+          error: 'Cannot delete status with related tasks.',
+        },
+      },
       labels: {
         delete: {
           success: 'Label was deleted!',

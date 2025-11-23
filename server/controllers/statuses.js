@@ -19,10 +19,12 @@ export const index = async (req, reply) => {
 };
 
 export const newStatus = async (req, reply) => {
+  const currentLang = req.cookies?.lang || req.session?.lang || 'en';
   return reply.view('statuses/new', {
     isAuthenticated: !!req.user,
     user: req.user,
     t: req.i18next.t.bind(req.i18next),
+    currentLang,
   });
 };
 
@@ -30,7 +32,12 @@ export const create = async (req, reply) => {
   const { name } = req.body;
   try {
     await TaskStatus.query().insert({ name });
-    req.session.flash = { status: { success: ['Status created successfully'] } };
+    let successMsg = req.i18next.t('flash.statuses.create.success');
+    console.log('DEBUG: Translation for flash.statuses.create.success:', successMsg, 'lang:', req.i18next.language);
+    if (successMsg === 'flash.statuses.create.success') {
+      successMsg = 'Status created successfully.';
+    }
+    req.session.flash = { status: { success: [successMsg] } };
     reply.redirect('/statuses');
   } catch (err) {
     reply.view('statuses/new', {
@@ -59,7 +66,7 @@ export const update = async (req, reply) => {
   const { name } = req.body;
   try {
     await TaskStatus.query().findById(id).patch({ name });
-    req.session.flash = { status: { success: ['Status updated successfully'] } };
+    req.session.flash = { status: { success: [req.i18next.t('flash.statuses.update.success')] } };
     reply.redirect('/statuses');
   } catch (err) {
     const status = await TaskStatus.query().findById(id);
@@ -79,10 +86,17 @@ export const remove = async (req, reply) => {
   const Task = (await import('../models/Task.js')).default;
   const relatedTasks = await Task.query().where('statusId', id);
   if (relatedTasks.length > 0) {
-    req.session.flash = { status: { error: ['Cannot delete status with related tasks'] } };
+    const errorMsg = req.i18next.t('flash.statuses.delete.error');
+    console.log('DEBUG: Translation for flash.statuses.delete.error:', errorMsg, 'lang:', req.i18next.language);
+    req.session.flash = { status: { error: [errorMsg] } };
     return reply.redirect('/statuses');
   }
   await TaskStatus.query().deleteById(id);
-  req.session.flash = { status: { success: ['Status deleted successfully'] } };
+  let successMsg = req.i18next.t('flash.statuses.delete.success');
+  console.log('DEBUG: Translation for flash.statuses.delete.success:', successMsg, 'lang:', req.i18next.language);
+  if (successMsg === 'flash.statuses.delete.success') {
+    successMsg = 'Status deleted successfully.';
+  }
+  req.session.flash = { status: { success: [successMsg] } };
   reply.redirect('/statuses');
 };
