@@ -122,7 +122,9 @@ export const create = async (req, reply) => {
       }
       const task = await Task.query().insert({ name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt });
       if (labelIds.length > 0) {
-        await task.$relatedQuery('labels').relate(labelIds.map(Number));
+        for (const labelId of labelIds) {
+          await task.$relatedQuery('labels').relate(Number(labelId));
+        }
       }
       reply.redirect('/tasks');
     } catch (e) {
