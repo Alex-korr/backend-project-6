@@ -5,6 +5,9 @@ export default {
       filename: './db.sqlite3',
     },
     useNullAsDefault: true,
+    migrations: {
+      directory: './project/migrations',
+    },
   },
   test: {
     client: 'sqlite3',
@@ -12,12 +15,18 @@ export default {
       filename: ':memory:', // in-memory
     },
     useNullAsDefault: true,
+    migrations: {
+      directory: './project/migrations',
+    },
   },
   production: {
     client: 'pg',
     connection: {
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
+    },
+    migrations: {
+      directory: './project/migrations',
     },
   },
 };
