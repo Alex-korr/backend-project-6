@@ -9,6 +9,7 @@ export default {
       directory: './migrations',
     },
   },
+    // minor change for new commit
   test: {
     client: 'sqlite3',
     connection: {
