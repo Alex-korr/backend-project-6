@@ -34,4 +34,4 @@ block content
     a.btn.btn-primary.mt-3(href=`/tasks/${task.id}/edit`) Edit
     if currentUser.id === task.creatorId
       form(method='post', action=`/tasks/${task.id}?_method=delete`, style='display:inline')
-          button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('layouts.application.delete')
+          button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('layouts.application.delete')

@@ -11,7 +11,7 @@ block content
     h1.mb-4= t('layouts.application.labels')
     if typeof user !== 'undefined' && user
       .d-flex.justify-content-start.mb-3
-        a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`) Create label
+        a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('labels.index.newLabel')
     else
       .card.mt-4.p-4.shadow-sm(style='max-width:400px;')
         h4.mb-3= t('loginRequired')
@@ -35,6 +35,6 @@ block content
               td= label.name
               td
                 form(action=`/labels/${label.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}` method="post" style="display:inline;")
-                  button.btn.btn-sm(type="submit" style="background: #fff; color: #e57373; border: 1px solid #e57373;")= t('layouts.application.delete')
+                  button.btn.btn-sm(type="submit" style="background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;")= t('layouts.application.delete')
     else
-      // Сообщение о пустом списке меток убрано
+      // Message about empty label list removed

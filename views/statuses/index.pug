@@ -1,4 +1,4 @@
-//- Statuses list page
+// Statuses list page
 extends ../layout.pug
 
 block content
@@ -23,6 +23,5 @@ block content
               td= status.name
               td
                 form(action=`/statuses/${status.id}/delete`, method='POST', style='display:inline;')
-                  button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('statuses.index.delete')
-    else
-      div.text-muted.mt-4 No statuses found
+                  button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('statuses.index.delete')
+    // No message shown when statuses are empty

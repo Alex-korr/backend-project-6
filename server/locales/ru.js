@@ -69,9 +69,10 @@ export default {
     },
     labels: {
       index: {
-        newLabel: 'Новый тег',
+        newLabel: 'Создать тег',
         name: 'Название',
-        actions: 'Действия'
+        actions: 'Действия',
+        noLabels: 'Нет тегов'
       }
     },
     statuses: {

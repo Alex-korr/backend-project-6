@@ -60,6 +60,6 @@ export const remove = async (req, reply) => {
     return reply.redirect('/labels');
   }
   await Label.query().deleteById(req.params.id);
-  req.session.flash = { labels: { success: [t('Removed sucessfully')] } };
+  req.session.flash = { labels: { success: [t('flash.labels.delete.success')] } };
   return reply.redirect('/labels');
 };

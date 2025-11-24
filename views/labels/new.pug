@@ -2,9 +2,9 @@ extends ../layout
 
 block content
 block content
-  h1 Create label
+  h1= t('labels.index.newLabel')
   form(action='/labels', method='POST')
     .mb-3
-      label.form-label(for='name') Name
+      label.form-label(for='name')= t('labels.index.name')
       input.form-control(type='text', name='name', id='name', required, minlength='1')
-    button.btn.btn-primary(type='submit') Create label
+    button.btn.btn-primary(type='submit')= t('labels.index.newLabel')
