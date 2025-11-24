@@ -6,7 +6,7 @@ export default {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: './project/migrations',
+      directory: './migrations',
     },
   },
   test: {
@@ -16,7 +16,7 @@ export default {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: './project/migrations',
+      directory: './migrations',
     },
   },
   production: {
@@ -26,7 +26,7 @@ export default {
       ssl: { rejectUnauthorized: false },
     },
     migrations: {
-      directory: './project/migrations',
+      directory: './migrations',
     },
   },
 };
