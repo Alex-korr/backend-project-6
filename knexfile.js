@@ -6,7 +6,7 @@ export default {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: './migrations',
+      directory: './server/migrations',
     },
   },
     // minor change for new commit
