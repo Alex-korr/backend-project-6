@@ -9,7 +9,6 @@ export default {
       directory: './server/migrations',
     },
   },
-    // minor change for new commit
   test: {
     client: 'sqlite3',
     connection: {
@@ -27,7 +26,7 @@ export default {
       ssl: { rejectUnauthorized: false },
     },
     migrations: {
-      directory: './migrations',
+      directory: './server/migrations',
     },
   },
 };
