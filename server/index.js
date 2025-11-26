@@ -75,7 +75,7 @@ i18next
 
 // Register plugins
 app.register(fastifyStatic, {
-  root: path.join(__dirname, '..', 'public'),
+  root: path.join(__dirname, '..', 'code', 'public'),
   prefix: '/',
 });
 
@@ -83,7 +83,7 @@ app.register(view, {
   engine: {
     pug,
   },
-  root: path.join(__dirname, '..', 'views'),
+  root: path.join(__dirname, 'views/views'),
   defaultContext: {
     appName: 'Task Manager',
     error: [], // Prevent undefined error in layout
