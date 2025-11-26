@@ -1,6 +1,6 @@
 import view from '@fastify/view';
 import pug from 'pug';
-import Fastify from 'fastify';
+import Fastify from 'fastify'; // Fastify v4+
 import fastifyFormbody from '@fastify/formbody';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';

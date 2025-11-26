@@ -3,7 +3,7 @@ import Rollbar from 'rollbar';
 console.log('Step 1: Loading .env');
 dotenv.config();
 console.log('Step 2: .env loaded, ROLLBAR_ACCESS_TOKEN:', process.env.ROLLBAR_ACCESS_TOKEN);
-import Fastify from 'fastify';
+import Fastify from 'fastify'; // Fastify v4+
 import view from '@fastify/view';
 import formbody from '@fastify/formbody';
 import fastifyStatic from '@fastify/static';

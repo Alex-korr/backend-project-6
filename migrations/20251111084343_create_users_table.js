@@ -1,1 +1,0 @@
-// ...existing code from server/migrations/20251111084343_create_users_table.js
