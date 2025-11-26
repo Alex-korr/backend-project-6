@@ -7,4 +7,4 @@ db-migrate:
 	npx knex migrate:latest
 
 test:
-	npx playwright test
+	npm test
