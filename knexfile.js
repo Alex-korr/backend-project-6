@@ -17,7 +17,7 @@ export default {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: './migrations',
+      directory: './server/migrations',
     },
   },
   production: {
