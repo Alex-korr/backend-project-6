@@ -109,7 +109,7 @@ app.register(formbody);
 // Secure session plugin (required for @fastify/passport)
 console.log('Registering secure session...');
 app.register(fastifySecureSession, {
-  key: Buffer.from(process.env.SECURE_SESSION_KEY, 'hex'),
+  key: Buffer.from(process.env.SESSION_KEY, 'hex'),
   cookie: {
     path: '/',
     httpOnly: true,
