@@ -6,3 +6,4 @@
 A task management application built with Fastify, PostgreSQL, and Pug.
 
 **Live Demo:** [https://alexmadeprod.com](https://alexmadeprod.com)
+<!-- Update Fastify (technical commit) -->
