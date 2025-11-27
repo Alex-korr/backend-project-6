@@ -34,3 +34,5 @@ export const production = {
   },
   migrations,
 };
+
+export default { development, test, production };
