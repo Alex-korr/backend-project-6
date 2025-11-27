@@ -1,32 +1,36 @@
-export default {
-  development: {
-    client: 'sqlite3',
-    connection: {
-      filename: './db.sqlite3',
-    },
-    useNullAsDefault: true,
-    migrations: {
-      directory: './server/migrations',
-    },
+// @ts-check
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const migrations = {
+  directory: path.join(__dirname, 'server', 'migrations'),
+};
+
+export const development = {
+  client: 'sqlite3',
+  connection: {
+    filename: path.resolve(__dirname, 'database.sqlite'),
   },
-  test: {
-    client: 'sqlite3',
-    connection: {
-      filename: ':memory:', // in-memory
-    },
-    useNullAsDefault: true,
-    migrations: {
-      directory: './server/migrations',
-    },
+  useNullAsDefault: true,
+  migrations,
+};
+
+export const test = {
+  client: 'sqlite3',
+  connection: ':memory:',
+  useNullAsDefault: true,
+  // debug: true,
+  migrations,
+};
+
+export const production = {
+  client: 'pg',
+  connection: {
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
   },
-  production: {
-    client: 'pg',
-    connection: {
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    },
-    migrations: {
-      directory: './server/migrations',
-    },
-  },
+  migrations,
 };
