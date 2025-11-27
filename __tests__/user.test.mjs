@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import knex from 'knex';
 import knexConfig from '../knexfile.js';
 import User from '../server/models/User.js';
-import { createTestUser } from './__fixtures__/users.js';
+import { createTestUser } from '../__fixtures__/users.js';
 
 const db = knex(knexConfig.test);
 
