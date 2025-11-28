@@ -31,7 +31,7 @@
     "@fastify/sensible": "^5.0.1",
     "@fastify/session": "^10.0.0",
     "@fastify/static": "^7.0.0",
-    "@fastify/view": "^10.0.0",
+      "@fastify/view": "^9.0.0",
     "@popperjs/core": "^2.11.8",
     "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.8",
