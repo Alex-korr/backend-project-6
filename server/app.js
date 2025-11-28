@@ -107,21 +107,9 @@ export function buildApp({ knexInstance } = {}) {
 }
 
 // Экспорт функции init для совместимости с Hexlet-тестами
-export async function init(app) {
-  // Если app не передан, создаём новый через buildApp
-  if (!app) {
-    app = await buildApp();
-  }
-  // Явно добавляем objection к любому объекту Fastify
-  try {
-    const knexConfig = require('../knexfile.js').default;
-    const db = require('knex')(knexConfig[process.env.NODE_ENV || 'development']);
-    app.objection = { knex: db };
-    Model.knex(db);
-  } catch (e) {
-    // Если что-то пошло не так, выводим ошибку для диагностики
-    console.error('Ошибка инициализации objection:', e);
-  }
-  return app;
+export async function init() {
+  // Всегда создаём новый экземпляр Fastify с objection
+  return buildApp();
+}
 }
 
