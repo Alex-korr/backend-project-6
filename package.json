@@ -54,7 +54,7 @@
     "yup": "^1.0.0",
     "vite": "^4.4.9",
     "yargs-parser": "^6.0.0",
-    "find-my-way": "^3.0.0",
+    "find-my-way": "^3.0.0"
   },
   "engines": {
     "node": ">=16.x"
