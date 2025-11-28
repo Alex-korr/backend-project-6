@@ -8,6 +8,9 @@ let knex;
 
 beforeAll(async () => {
   app = await buildApp();
+  if (!app.objection || !app.objection.knex) {
+    throw new Error('app.objection или app.objection.knex не определены после buildApp(). Проверьте реализацию buildApp и конфиг knex.');
+  }
   knex = app.objection.knex;
   await runServer(app);
   await knex.migrate.latest();
