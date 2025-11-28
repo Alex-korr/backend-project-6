@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, test } from '@jest/globals';
-import { buildApp, runServer } from '../server/app.js';
+import { init, runServer } from '../server/app.js';
 import { User } from '../server/models/User.js';
 import { faker } from '@faker-js/faker';
 
@@ -7,9 +7,9 @@ let app;
 let knex;
 
 beforeAll(async () => {
-  app = await buildApp();
+  app = await init();
   if (!app.objection || !app.objection.knex) {
-    throw new Error('app.objection или app.objection.knex не определены после buildApp(). Проверьте реализацию buildApp и конфиг knex.');
+    throw new Error('app.objection or app.objection.knex is not defined after init(). Check init implementation and knex config.');
   }
   knex = app.objection.knex;
   await runServer(app);
@@ -30,7 +30,7 @@ describe('test session', () => {
       lastName: faker.person.lastName(),
     });
 
-    // Здесь должен быть тест логики входа/выхода
+    // TODO: add login/logout logic test
     expect(user).toBeDefined();
   });
 });
