@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/Alex-korr/backend-project-6#readme",
   "dependencies": {
-    "@faker-js/faker": "^10.1.0",
+    "@faker-js/faker": "^7.6.0",
     "@fastify/formbody": "^7.0.1",
     "@fastify/passport": "^2.0.1",
     "@fastify/secure-session": "^7.0.0",
@@ -50,7 +50,9 @@
     "rollbar": "^2.26.5",
     "sqlite3": "^5.1.7",
     "supertest": "^7.1.4",
-    "yup": "^1.7.1"
+    "yup": "^1.0.0"
+      ,"vite": "^4.4.9"
+      ,"yargs-parser": "^21.1.1"
   },
   "devDependencies": {
     "css-loader": "^7.1.2",
@@ -59,7 +61,7 @@
     "sass": "^1.93.3",
     "sass-loader": "^16.0.6",
     "style-loader": "^4.0.0",
-    "vitest": "^4.0.8",
+    "vitest": "^0.34.6",
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1"
   }
