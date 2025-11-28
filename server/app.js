@@ -102,6 +102,23 @@ export function buildApp({ knexInstance } = {}) {
     reply.type('text/html').code(404).send('<h1>404 Not Found</h1>');
   });
 
+
+  return app;
+}
+
+// Экспорт функции init для совместимости с Hexlet-тестами
+export async function init(app) {
+  // Если app не передан, создаём новый через buildApp
+  if (!app) {
+    app = await buildApp();
+  }
+  // Убедимся, что app.objection присутствует
+  if (!app.objection) {
+    const knexConfig = require('../knexfile.js').default;
+    const db = require('knex')(knexConfig[process.env.NODE_ENV || 'development']);
+    app.objection = { knex: db };
+    Model.knex(db);
+  }
   return app;
 }
 
