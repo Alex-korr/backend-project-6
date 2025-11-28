@@ -1,3 +1,4 @@
+// useless test comment for git push
 import dotenv from 'dotenv';
 import Rollbar from 'rollbar';
 console.log('Step 1: Loading .env');
