@@ -36,6 +36,8 @@ export function buildApp({ knexInstance } = {}) {
   const db = knexInstance || require('knex')(knexConfig[process.env.NODE_ENV || 'development']);
   Model.knex(db);
   const app = Fastify({ logger: false });
+  // Добавляем объект objection для тестов
+  app.objection = { knex: db };
 
   app.register(fastifyFormbody);
   app.register(fastifyCookie);
