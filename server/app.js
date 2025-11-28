@@ -112,13 +112,11 @@ export async function init(app) {
   if (!app) {
     app = await buildApp();
   }
-  // Убедимся, что app.objection присутствует
-  if (!app.objection) {
-    const knexConfig = require('../knexfile.js').default;
-    const db = require('knex')(knexConfig[process.env.NODE_ENV || 'development']);
-    app.objection = { knex: db };
-    Model.knex(db);
-  }
+  // Всегда инициализируем базу и добавляем objection
+  const knexConfig = require('../knexfile.js').default;
+  const db = require('knex')(knexConfig[process.env.NODE_ENV || 'development']);
+  app.objection = { knex: db };
+  Model.knex(db);
   return app;
 }
 
