@@ -1,4 +1,5 @@
 import view from '@fastify/view';
+import objectionPlugin from './lib/objection.js';
 import pug from 'pug';
 import Fastify from 'fastify'; // Fastify v4+
 import fastifyFormbody from '@fastify/formbody';
@@ -108,8 +109,9 @@ export function buildApp({ knexInstance } = {}) {
 
 // Экспорт функции init для совместимости с Hexlet-тестами
 export async function init() {
-  // Всегда создаём новый экземпляр Fastify с objection
-  return buildApp();
+  const app = buildApp();
+  await app.register(objectionPlugin);
+  return app;
 }
 }
 
