@@ -28,12 +28,12 @@ export default async function init(app) {
     cookie: { secure: false },
   });
   app.register(fastifyStatic, {
-    root: path.resolve(process.cwd(), 'public'),
+    root: path.resolve(process.cwd(), 'code/public'),
     prefix: '/public/',
   });
   app.register(fastifyView, {
     engine: { pug },
-    root: path.resolve(process.cwd(), 'views'),
+    root: path.resolve(process.cwd(), 'code/views'),
     defaultContext: {
       appName: 'Task Manager',
       error: [],
