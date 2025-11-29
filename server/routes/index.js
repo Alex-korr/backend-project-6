@@ -1,7 +1,7 @@
-import * as usersController from '../server/controllers/users.js';
-import * as sessionsController from '../server/controllers/sessions.js';
-import * as tasksController from '../server/controllers/tasks.js';
-import ensureAuthenticated from '../server/middleware/ensureAuthenticated.js';
+import * as usersController from '../controllers/users.js';
+import * as sessionsController from '../controllers/sessions.js';
+import * as tasksController from '../controllers/tasks.js';
+import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
 import fastifyPassport from '@fastify/passport';
 
 export default async (app, options) => {
@@ -52,9 +52,6 @@ export default async (app, options) => {
 
 
   // Test route for Rollbar error tracking
-  app.get('/error', (req, reply) => {
-    throw new Error('Test Rollbar error');
-  });
 
   // Users routes
   app.get('/change-lang/:lang', usersController.changeLang);
@@ -75,6 +72,14 @@ export default async (app, options) => {
     handler: sessionsController.create
   });
   app.post('/session/logout', sessionsController.destroy);
+
+  // Register additional routes for tasks, statuses, labels
+  const tasksRoutes = (await import('./tasks.js')).default;
+  const statusesRoutes = (await import('./statuses.js')).default;
+  const labelsRoutes = (await import('./labels.js')).default;
+  await tasksRoutes(app);
+  await statusesRoutes(app);
+  await labelsRoutes(app);
 
 
 

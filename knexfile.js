@@ -2,7 +2,6 @@
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const migrations = {
@@ -22,7 +21,6 @@ export const test = {
   client: 'sqlite3',
   connection: ':memory:',
   useNullAsDefault: true,
-  // debug: true,
   migrations,
 };
 

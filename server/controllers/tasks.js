@@ -32,6 +32,8 @@ export const index = async (req, reply) => {
     const success = req.session?.flash?.success || [];
     req.session.flash = {};
     const currentLang = req.cookies?.lang || req.query.lang || 'en';
+    // Fallback for i18next in tests
+    const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     return reply.view('tasks/index', {
       tasks,
       statuses,
@@ -42,7 +44,7 @@ export const index = async (req, reply) => {
       error,
       success,
       currentLang,
-      t: req.i18next.t.bind(req.i18next),
+      t,
       isAuthenticated: !!req.user,
       user: req.user,
     });
@@ -59,13 +61,14 @@ export const show = async (req, reply) => {
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
+  const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
   reply.view('tasks/show', {
     task,
     currentUser: req.user,
     error,
     success,
     currentLang: req.cookies?.lang || req.query.lang || 'en',
-    t: req.i18next.t.bind(req.i18next),
+    t,
     isAuthenticated: !!req.user,
     user: req.user,
   });
@@ -78,6 +81,7 @@ export const newTask = async (req, reply) => {
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
+  const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
   return reply.view('tasks/new', {
     statuses,
     users,
@@ -87,7 +91,7 @@ export const newTask = async (req, reply) => {
     error,
     success,
     currentLang: req.cookies?.lang || req.query.lang || 'en',
-    t: req.i18next.t.bind(req.i18next),
+    t,
     isAuthenticated: !!req.user,
     user: req.user,
   });
@@ -99,9 +103,10 @@ export const create = async (req, reply) => {
     let labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
     const creatorId = req.user?.id;
     try {
+      const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
       if (!creatorId) {
         console.error('No creatorId, user not authenticated');
-        req.flash('error', 'User not authenticated');
+        req.flash('error', t('User not authenticated'));
         return reply.redirect('/session/new');
       }
       // Convert statusId and executorId to integers (or null)
@@ -129,7 +134,7 @@ export const create = async (req, reply) => {
       reply.redirect('/tasks');
     } catch (e) {
       console.error('Error in create task controller:', e);
-      req.flash('error', req.i18next.t('flash.tasks.create.error'));
+      req.flash('error', t('flash.tasks.create.error'));
       reply.redirect('/tasks/new');
     }
 };
@@ -144,6 +149,7 @@ export const edit = async (req, reply) => {
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
+  const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
   reply.view('tasks/edit', {
     task,
     statuses,
@@ -153,7 +159,7 @@ export const edit = async (req, reply) => {
     error,
     success,
     currentLang: req.cookies?.lang || req.query.lang || 'en',
-    t: req.i18next.t.bind(req.i18next),
+    t,
     isAuthenticated: !!req.user,
     user: req.user,
   });
@@ -173,10 +179,11 @@ export const update = async (req, reply) => {
       for (const labelId of labelIds) {
         await task.$relatedQuery('labels').relate(Number(labelId));
       }
-      req.flash('success', req.i18next.t('flash.tasks.update.success'));
+      const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
+      req.flash('success', t('flash.tasks.update.success'));
       reply.redirect(`/tasks/${id}`);
     } catch (e) {
-      req.flash('error', req.i18next.t('flash.tasks.update.error'));
+      req.flash('error', t('flash.tasks.update.error'));
       reply.redirect(`/tasks/${id}/edit`);
     }
 };
@@ -185,11 +192,12 @@ export const remove = async (req, reply) => {
     const { id } = req.params;
     const task = await Task.query().findById(id);
     if (!task) return reply.code(404).send('Task not found');
+    const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     if (task.creatorId !== req.user.id) {
-      req.flash('error', req.i18next.t('Task not found'));
+      req.flash('error', t('Task not found'));
       return reply.redirect('/tasks');
     }
     await Task.query().deleteById(id);
-    req.flash('success', req.i18next.t('Task was removed'));
+    req.flash('success', t('Task was removed'));
     reply.redirect('/tasks');
 };

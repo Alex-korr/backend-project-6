@@ -1,5 +1,4 @@
-
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import knex from 'knex';
 import knexConfig from '../knexfile.js';
 import User from '../server/models/User.js';

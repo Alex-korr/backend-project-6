@@ -8,7 +8,7 @@ import fastifySession from '@fastify/session';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import routes from '../routes/index.js';
+import routes from './routes/index.js';
 import knex from 'knex';
 import knexConfig from '../knexfile.js';
 import { Model } from 'objection';
@@ -33,8 +33,11 @@ const __dirname = path.dirname(__filename);
 
 
 export function buildApp({ knexInstance } = {}) {
-  const knexConfig = require('../knexfile.js').default;
-  const db = knexInstance || require('knex')(knexConfig[process.env.NODE_ENV || 'development']);
+  // Only use passed knexInstance for Jest/ESM compatibility
+  if (!knexInstance) {
+    throw new Error('buildApp must be called with knexInstance in Jest/ESM environment');
+  }
+  const db = knexInstance;
   Model.knex(db);
   const app = Fastify({ logger: false });
   // Добавляем объект objection для тестов
@@ -86,11 +89,6 @@ export function buildApp({ knexInstance } = {}) {
 
   app.register(routes);
 
-  // Test route for Rollbar error tracking
-  app.get('/error', async (req, reply) => {
-    throw new Error('Test Rollbar error');
-  });
-
   // Fallback error handler for all requests
   app.setErrorHandler((error, request, reply) => {
     rollbar.error(error, request);
@@ -112,6 +110,5 @@ export async function init() {
   const app = buildApp();
   // Не регистрируем objectionPlugin, чтобы app.objection.knex был доступен как ожидают тесты
   return app;
-}
 }
 
