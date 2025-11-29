@@ -1,6 +1,6 @@
 // Statuses routes
-import * as statusesController from '../server/controllers/statuses.js';
-import ensureAuthenticated from '../server/middleware/ensureAuthenticated.js';
+import * as statusesController from '../controllers/statuses.js';
+import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
 
 export default async (fastify) => {
   fastify.get('/statuses', statusesController.index);
