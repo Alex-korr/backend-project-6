@@ -47,7 +47,7 @@ export function buildApp({ knexInstance } = {}) {
     cookie: { secure: false },
   });
   app.register(fastifyStatic, {
-    root: path.join(__dirname, '../public'),
+    root: path.join(__dirname, 'public'),
     prefix: '/public/',
   });
   app.register(view, {
@@ -110,7 +110,7 @@ export function buildApp({ knexInstance } = {}) {
 // Экспорт функции init для совместимости с Hexlet-тестами
 export async function init() {
   const app = buildApp();
-  await app.register(objectionPlugin);
+  // Не регистрируем objectionPlugin, чтобы app.objection.knex был доступен как ожидают тесты
   return app;
 }
 }
