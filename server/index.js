@@ -14,6 +14,9 @@ import Backend from 'i18next-fs-backend';
 import pug from 'pug';
 import path from 'path';
 import { fileURLToPath } from 'url';
+// ESM-compatible __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { Model } from 'objection';
 import knex from 'knex';
 import knexConfig from '../knexfile.js';
