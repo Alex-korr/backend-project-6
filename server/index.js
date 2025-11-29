@@ -21,7 +21,7 @@ import fastifyPassport from '@fastify/passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import fastifySecureSession from '@fastify/secure-session';
 import User from './models/User.js';
-import statusesRoutes from '../routes/statuses.js';
+import statusesRoutes from './routes/statuses.js';
 
 // Get __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -33,9 +33,9 @@ await db.migrate.latest();
 Model.knex(db);
 
 // Import routes
-import indexRoutes from '../routes/index.js';
+import indexRoutes from './routes/index.js';
 import labelsRoutes from './routes/labels.js';
-import tasksRoutes from '../routes/tasks.js';
+import tasksRoutes from './routes/tasks.js';
 
 // Import locales
 import en from './locales/en.js';
