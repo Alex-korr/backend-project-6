@@ -1,4 +1,5 @@
-import { describe, beforeAll, beforeEach, afterAll, it, expect } from '@jest/globals';
+
+import { describe, beforeEach, afterEach, it, expect } from '@jest/globals';
 import fastify from 'fastify';
 import init from '../server/plugin.js';
 import User from '../server/models/User.js';
@@ -7,18 +8,15 @@ import { faker } from '@faker-js/faker';
 let app;
 let knex;
 
-beforeAll(async () => {
+beforeEach(async () => {
   app = fastify({ logger: false });
   await init(app);
   knex = app.objection.knex;
   await knex.migrate.latest();
-});
-
-beforeEach(async () => {
   await knex('users').truncate();
 });
 
-afterAll(async () => {
+afterEach(async () => {
   await app.close();
   await knex.destroy();
 });

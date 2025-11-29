@@ -4,7 +4,7 @@ import knex from 'knex';
 import knexConfig from '../knexfile.js';
 import { Model } from 'objection';
 
-// Используем тестовую конфигурацию
+// Using test configuration
 const db = knex(knexConfig.test);
 Model.knex(db);
 

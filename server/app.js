@@ -33,16 +33,15 @@ const __dirname = path.dirname(__filename);
 
 
 export function buildApp({ knexInstance } = {}) {
-  // Only use passed knexInstance for Jest/ESM compatibility
+  // Always use passed knexInstance for Jest/ESM compatibility
   if (!knexInstance) {
     throw new Error('buildApp must be called with knexInstance in Jest/ESM environment');
   }
   const db = knexInstance;
   Model.knex(db);
   const app = Fastify({ logger: false });
-  // Добавляем объект objection для тестов
-  app.objection = { knex: db };
 
+  // Register plugins
   app.register(fastifyFormbody);
   app.register(fastifyCookie);
   app.register(fastifySession, {
@@ -61,6 +60,12 @@ export function buildApp({ knexInstance } = {}) {
       error: [],
       success: [],
     },
+  });
+
+  // Register objection plugin (Fastify/Objection integration)
+  app.register(objectionPlugin, {
+    knexConfig: knexConfig[process.env.NODE_ENV || 'development'],
+    models: [User], // Add other models as needed
   });
 
   // Passport setup
@@ -89,26 +94,25 @@ export function buildApp({ knexInstance } = {}) {
 
   app.register(routes);
 
-  // Fallback error handler for all requests
+  // Global error handler for all requests
   app.setErrorHandler((error, request, reply) => {
     rollbar.error(error, request);
     console.error('GLOBAL ERROR:', error);
     reply.type('text/html').code(500).send('<h1>Internal Server Error</h1><pre>' + error.stack + '</pre>');
   });
 
-  // Fallback not found handler for all requests
+  // Global not found handler for all requests
   app.setNotFoundHandler((request, reply) => {
     reply.type('text/html').code(404).send('<h1>404 Not Found</h1>');
   });
 
-
   return app;
 }
 
-// Экспорт функции init для совместимости с Hexlet-тестами
+// Export init function for Hexlet test compatibility
 export async function init() {
   const app = buildApp();
-  // Не регистрируем objectionPlugin, чтобы app.objection.knex был доступен как ожидают тесты
+  // Do not register objectionPlugin so app.objection.knex is available as expected by tests
   return app;
 }
 

@@ -1,1 +1,1 @@
-// Этот комментарий добавлен для теста коммита. Никак не влияет на работу приложения.
+// This comment is added for commit test. Does not affect application functionality.
