@@ -1,6 +1,6 @@
-import Task from '../models/Task.js';
-import TaskStatus from '../models/TaskStatus.js';
-import User from '../models/User.js';
+import Task from '../models/Task.cjs';
+import TaskStatus from '../models/TaskStatus.cjs';
+import User from '../models/User.cjs';
 
 export const index = async (req, reply) => {
   try {

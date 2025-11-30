@@ -2,7 +2,8 @@
 import { describe, beforeEach, afterEach, it, expect } from '@jest/globals';
 import fastify from 'fastify';
 import init from '../server/plugin.js';
-import User from '../server/models/User.js';
+import * as knexConfig from '../knexfile.js';
+import User from '../server/models/User.cjs';
 import { faker } from '@faker-js/faker';
 
 let app;

@@ -10,14 +10,15 @@ import fastifyPassport from '@fastify/passport';
 import { Model } from 'objection';
 import routes from './routes/index.js';
 import knex from 'knex';
-import knexConfig from '../knexfile.js';
-import User from './models/User.js';
+// @ts-ignore
+import * as knexConfig from '../knexfile.js';
+import User from './models/User.cjs';
 import pug from 'pug';
 import dotenv from 'dotenv';
 dotenv.config();
 
 /**
- * @typedef {typeof import('./models/User.js').default} UserClass
+ * @typedef {typeof import('./models/User.cjs')} UserClass
  * @typedef {import('knex').Knex} KnexInstance
  * @typedef {import('fastify').FastifyInstance & { objection: { knex: KnexInstance, models: { user: UserClass } } }} AppWithObjection
  */

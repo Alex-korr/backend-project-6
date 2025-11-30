@@ -1,5 +1,5 @@
 // Statuses controller
-import TaskStatus from '../models/TaskStatus.js';
+import TaskStatus from '../models/TaskStatus.cjs';
 
 export const index = async (req, reply) => {
   const statuses = await TaskStatus.query();

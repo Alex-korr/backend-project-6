@@ -1,4 +1,4 @@
-import User from '../server/models/User.js';
+import User from '../server/models/User.cjs';
 
 export async function createTestUser(data = {}) {
   const defaultData = {

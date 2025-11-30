@@ -1,5 +1,5 @@
 
-import User from '../models/User.js';
+import User from '../models/User.cjs';
 
 function getLang(request) {
   return request.cookies?.lang || request.query.lang || request.session?.lang || 'en';

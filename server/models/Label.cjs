@@ -1,13 +1,9 @@
-// Task status model
-import { Model } from 'objection';
+// @ts-check
+const BaseModel = require('./BaseModel.cjs');
 
-class TaskStatus extends Model {
+module.exports = class Label extends BaseModel {
   static get tableName() {
-    return 'task_statuses';
-  }
-
-  static get idColumn() {
-    return 'id';
+    return 'labels';
   }
 
   static get jsonSchema() {
@@ -20,6 +16,4 @@ class TaskStatus extends Model {
       },
     };
   }
-}
-
-export default TaskStatus;
+};

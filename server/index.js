@@ -19,11 +19,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import { Model } from 'objection';
 import knex from 'knex';
-import knexConfig from '../knexfile.js';
+import * as knexConfig from '../knexfile.js';
 import fastifyPassport from '@fastify/passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import fastifySecureSession from '@fastify/secure-session';
-import User from './models/User.js';
+import User from './models/User.cjs';
 import statusesRoutes from './routes/statuses.js';
 
 // Set up database

@@ -8,7 +8,8 @@ export async function up(knex) {
     table.string('firstName').notNullable();
     table.string('lastName').notNullable();
     table.string('email').notNullable().unique();
-    table.string('password').notNullable();
+    table.string('password');
+    table.string('passwordDigest');
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });

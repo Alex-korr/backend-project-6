@@ -1,4 +1,4 @@
-import Label from '../models/Label.js';
+import Label from '../models/Label.cjs';
 
 export const index = async (req, reply) => {
   if (!req.user) {

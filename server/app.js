@@ -14,7 +14,7 @@ import knexConfig from '../knexfile.js';
 import { Model } from 'objection';
 import fastifyPassport from '@fastify/passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import User from './models/User.js';
+import User from './models/User.cjs';
 
 import dotenv from 'dotenv';
 import Rollbar from 'rollbar';

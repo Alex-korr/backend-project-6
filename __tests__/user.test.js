@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import knex from 'knex';
-import knexConfig from '../knexfile.js';
-import User from '../server/models/User.js';
+import * as knexConfig from '../knexfile.js';
+import User from '../server/models/User.cjs';
 import { createTestUser } from '../__fixtures__/users.js';
 
 const db = knex(knexConfig.test);
@@ -16,6 +16,10 @@ describe('User model', () => {
   afterEach(async () => {
     await db.migrate.rollback();
   });
+  
+    afterAll(async () => {
+      await db.destroy();
+    });
 
   it('should create a user with valid data', async () => {
     const userData = {
