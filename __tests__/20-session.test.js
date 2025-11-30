@@ -12,6 +12,7 @@ let knex;
 beforeEach(async () => {
   app = fastify({ logger: false });
   await init(app);
+  await app.ready();
   knex = app.objection.knex;
   await knex.migrate.latest();
   await knex('users').truncate();
@@ -20,6 +21,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await app.close();
   await knex.destroy();
+  await new Promise(resolve => setTimeout(resolve, 50));
 });
 
 describe('test session', () => {
