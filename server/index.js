@@ -119,7 +119,4 @@ export default async function (fastify, opts) {
   fastify.register(fastifyPassport.secureSession());
 
   await fastify.register(indexRoutes);
-  await fastify.register(labelsRoutes);
-  await fastify.register(tasksRoutes);
-  await fastify.register(statusesRoutes);
 }
