@@ -31,18 +31,13 @@ const __dirname = path.dirname(__filename);
 
 
 
-export async function buildApp({ knexInstance } = {}) {
-  // Always use passed knexInstance for Jest/ESM compatibility
-  if (!knexInstance) {
-    throw new Error('buildApp must be called with knexInstance in Jest/ESM environment');
-  }
-  const db = knexInstance;
+
+export async function init() {
+  const db = knex(knexConfig[process.env.NODE_ENV || 'development']);
   Model.knex(db);
   const app = Fastify({ logger: false });
   app.objection = { knex: db };
-  console.log('app.objection set:', !!app.objection, 'knex:', !!app.objection.knex);
 
-  // Register plugins
   app.register(fastifyFormbody);
   app.register(fastifyCookie);
   app.register(fastifySession, {
@@ -59,14 +54,6 @@ export async function buildApp({ knexInstance } = {}) {
     },
   });
 
-  // Register objection plugin (Fastify/Objection integration)
-  await app.register(fastifyMethodOverride);
-  await app.register(fastifyObjectionjs, {
-    knexConfig: knexConfig[mode],
-    models,
-  });
-
-  // Passport setup
   app.register(fastifyPassport.initialize());
   app.register(fastifyPassport.secureSession());
 
@@ -92,14 +79,12 @@ export async function buildApp({ knexInstance } = {}) {
 
   app.register(routes);
 
-  // Global error handler for all requests
   app.setErrorHandler((error, request, reply) => {
     rollbar.error(error, request);
     console.error('GLOBAL ERROR:', error);
     reply.type('text/html').code(500).send('<h1>Internal Server Error</h1><pre>' + error.stack + '</pre>');
   });
 
-  // Global not found handler for all requests
   app.setNotFoundHandler((request, reply) => {
     reply.type('text/html').code(404).send('<h1>404 Not Found</h1>');
   });
