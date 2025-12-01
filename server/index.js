@@ -53,8 +53,6 @@ export default async function (fastify, opts) {
   rollbar.log('Hello world from server startup!');
   fastify.decorate('rollbar', rollbar);
 
-  // Add objection object for tests
-  fastify.objection = { knex: db };
 
   // Configure i18next
   i18next
