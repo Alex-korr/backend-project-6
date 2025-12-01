@@ -48,10 +48,6 @@ export function buildApp({ knexInstance } = {}) {
     secret: 'supersecretkeysupersecretkey123456',
     cookie: { secure: false },
   });
-  app.register(fastifyStatic, {
-    root: path.join(__dirname, 'public'),
-    prefix: '/public/',
-  });
   app.register(view, {
     engine: { pug },
     root: path.join(__dirname, '../views'),

@@ -67,10 +67,6 @@ export default async function (fastify, opts) {
       debug: false,
     });
 
-  fastify.register(fastifyStatic, {
-    root: path.join(__dirname, '..', 'code', 'public'),
-    prefix: '/',
-  });
 
   fastify.register(view, {
     engine: { pug },
