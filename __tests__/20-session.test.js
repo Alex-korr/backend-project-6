@@ -11,7 +11,7 @@ let knex;
 
 beforeEach(async () => {
   app = fastify({ logger: false });
-  await init(app);
+  app = await init(app);
   await app.ready();
   knex = app.objection.knex;
   await knex.migrate.latest();
