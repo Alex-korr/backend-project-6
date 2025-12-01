@@ -40,6 +40,7 @@ export async function buildApp({ knexInstance } = {}) {
   Model.knex(db);
   const app = Fastify({ logger: false });
   app.objection = { knex: db };
+  console.log('app.objection set:', !!app.objection, 'knex:', !!app.objection.knex);
 
   // Register plugins
   app.register(fastifyFormbody);
