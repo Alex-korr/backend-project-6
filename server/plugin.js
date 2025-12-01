@@ -27,8 +27,13 @@ dotenv.config();
  * @param {AppWithObjection} app
  */
 export default async function init(app) {
-  const env = /** @type {keyof typeof knexConfig} */ (process.env.NODE_ENV || 'development');
-  const db = knex(knexConfig[env]);
+  const env = /** @type {keyof typeof knexConfig} */ (process.env.NODE_ENV || 'test');
+  let dbConfig = knexConfig[env];
+  if (!dbConfig) {
+    console.warn(`Knex config for env "${env}" not found, using "test"`);
+    dbConfig = knexConfig.test;
+  }
+  const db = knex(dbConfig);
   Model.knex(db);
   app.objection = { knex: db, models: { user: User } };
 
