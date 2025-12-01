@@ -12,6 +12,7 @@ let knex;
 beforeEach(async () => {
   app = fastify({ logger: false });
   app = await init(app);
+  if (!app.objection) throw new Error('app.objection is not defined after init(app)');
   await app.ready();
   knex = app.objection.knex;
   await knex.migrate.latest();
