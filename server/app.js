@@ -31,7 +31,7 @@ const __dirname = path.dirname(__filename);
 
 
 
-export function buildApp({ knexInstance } = {}) {
+export async function buildApp({ knexInstance } = {}) {
   // Always use passed knexInstance for Jest/ESM compatibility
   if (!knexInstance) {
     throw new Error('buildApp must be called with knexInstance in Jest/ESM environment');
@@ -58,9 +58,10 @@ export function buildApp({ knexInstance } = {}) {
   });
 
   // Register objection plugin (Fastify/Objection integration)
-  app.register(objectionPlugin, {
-    knexConfig: knexConfig[process.env.NODE_ENV || 'development'],
-    models: [User], // Add other models as needed
+  await app.register(fastifyMethodOverride);
+  await app.register(fastifyObjectionjs, {
+    knexConfig: knexConfig[mode],
+    models,
   });
 
   // Passport setup
