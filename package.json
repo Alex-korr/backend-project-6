@@ -9,7 +9,7 @@
     "dev": "nodemon server/index.js",
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development --watch",
-    "test": "jest --verbose --runInBand",
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --verbose --runInBand",
     "migrate": "NODE_ENV=development knex migrate:latest"
   },
   "repository": {
