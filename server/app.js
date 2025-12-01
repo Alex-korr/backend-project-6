@@ -5,7 +5,6 @@ import Fastify from 'fastify'; // Fastify v4+
 import fastifyFormbody from '@fastify/formbody';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
-import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import routes from './routes/index.js';

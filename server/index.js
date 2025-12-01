@@ -7,7 +7,6 @@ console.log('Step 2: .env loaded, ROLLBAR_ACCESS_TOKEN:', process.env.ROLLBAR_AC
 import Fastify from 'fastify'; // Fastify v4+
 import view from '@fastify/view';
 import formbody from '@fastify/formbody';
-import fastifyStatic from '@fastify/static';
 import i18next from 'i18next';
 import i18nextMiddleware from 'i18next-http-middleware';
 import Backend from 'i18next-fs-backend';

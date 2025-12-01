@@ -1,7 +1,6 @@
 // @ts-check
 import { fileURLToPath } from 'url';
 import path from 'path';
-import fastifyStatic from '@fastify/static';
 import fastifyView from '@fastify/view';
 import fastifyFormbody from '@fastify/formbody';
 import fastifyCookie from '@fastify/cookie';
