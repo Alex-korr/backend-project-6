@@ -1,8 +1,6 @@
-
 import { describe, beforeEach, afterEach, it, expect } from '@jest/globals';
 import fastify from 'fastify';
 import init from '../server/plugin.js';
-import * as knexConfig from '../knexfile.js';
 import User from '../server/models/User.cjs';
 import { faker } from '@faker-js/faker';
 
@@ -11,18 +9,22 @@ let knex;
 
 beforeEach(async () => {
   app = fastify({ logger: false });
-  app = await init(app);
-  if (!app.objection) throw new Error('app.objection is not defined after init(app)');
+  await init(app);
   await app.ready();
+  
+  if (!app.objection) {
+    throw new Error('app.objection is undefined. Check plugin initialization.');
+  }
+  
   knex = app.objection.knex;
   await knex.migrate.latest();
   await knex('users').truncate();
 });
 
 afterEach(async () => {
-  await app.close();
+  await knex('users').truncate();
   await knex.destroy();
-  await new Promise(resolve => setTimeout(resolve, 50));
+  await app.close();
 });
 
 describe('test session', () => {

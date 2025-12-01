@@ -43,10 +43,6 @@ export default async function init(app) {
     secret: 'supersecretkeysupersecretkey123456',
     cookie: { secure: false },
   });
-  app.register(fastifyStatic, {
-    root: path.resolve(process.cwd(), 'public'),
-    prefix: '/public/',
-  });
   app.register(fastifyView, {
     engine: { pug },
     root: path.resolve(process.cwd(), 'views'),
