@@ -8,10 +8,10 @@ export default async (app, options) => {
   console.log('ROUTES INDEX.JS LOADED');
   // Home page
   app.get('/', (request, reply) => {
-    let currentLang = request.cookies?.lang || request.query.lang || 'en';
+    let currentLang = request.cookies?.lang || request.query.lang || 'ru';
     if (!request.cookies?.lang) {
-      reply.setCookie('lang', 'en', { path: '/' });
-      currentLang = 'en';
+      reply.setCookie('lang', 'ru', { path: '/' });
+      currentLang = 'ru';
     }
     const error = request.session?.flash?.error || [];
     const success = request.session?.flash?.success || [];
