@@ -103,7 +103,7 @@ export default {
         tasks: 'Задачи',
         labels: 'Теги',
         signIn: 'Вход',
-        signUp: 'Создать аккаунт',
+        signUp: 'Регистрация',
         edit: 'Редактировать',
         delete: 'Удалить',
         signOut: 'Выйти'
