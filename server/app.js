@@ -93,8 +93,9 @@ export async function buildApp() {
 
 }
 
+console.log('App.js loaded');
 // Export init function for Hexlet test compatibility
-export async function init(arg1, arg2) {
+export default async function init(arg1, arg2) {
 console.log('Init function called in app.js');
 console.log('arg1:', arg1); 
 console.log('arg2:', arg2);
