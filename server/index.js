@@ -42,7 +42,7 @@ import ru from './locales/ru.js';
 // Fastify CLI plugin export
 export default async function (fastify, opts) {
   const mode = process.env.NODE_ENV || 'development';
-  const models = { User, Label, Task, TaskStatus };
+  const models = [User, Label, Task, TaskStatus];
   // Step 5: Initializing Rollbar
   const rollbar = new Rollbar({
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
