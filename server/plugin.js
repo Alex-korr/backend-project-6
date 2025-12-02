@@ -25,7 +25,11 @@ dotenv.config();
 /**
  * @param {AppWithObjection} app
  */
-export default async function init(app) {
+// eslint-disable-next-line no-unused-vars
+export default async function (app, _options) {
+  console.log('Init function called in app.js');
+  console.log('app options:', _options);
+  console.log('app instance:', app);
   const env = /** @type {keyof typeof knexConfig} */ (process.env.NODE_ENV || 'test');
   let dbConfig = knexConfig[env];
   if (!dbConfig) {
