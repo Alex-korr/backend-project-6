@@ -87,10 +87,10 @@ export default {
     sessions: {
       new: {
         title: 'Войдите в аккаунт',
-        emailLabel: 'Электронная почта',
+        emailLabel: 'Email',
         emailPlaceholder: 'name@example.com',
-        passwordLabel: 'Пароль',
-        passwordPlaceholder: 'Пароль',
+        passwordLabel: 'Password',
+        passwordPlaceholder: 'Password',
         submit: 'Вход'
       }
     },

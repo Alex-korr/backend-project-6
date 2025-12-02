@@ -75,7 +75,7 @@ export default async function (fastify, opts) {
 
   fastify.decorateRequest('i18next', null);
   fastify.addHook('preHandler', (req, reply, done) => {
-    const lang = req.query.lang || req.cookies?.lang || req.session?.lang || 'ru';
+    const lang = req.query.lang || req.cookies?.lang || req.session?.lang || 'en';
     req.i18next = i18next.cloneInstance({ lng: lang });
     done();
   });
