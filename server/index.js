@@ -16,19 +16,17 @@ import { fileURLToPath } from 'url';
 // ESM-compatible __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-import { Model } from 'objection';
-import knex from 'knex';
+import fastifyObjectionjs from 'fastify-objectionjs';
 import * as knexConfig from '../knexfile.js';
 import fastifyPassport from '@fastify/passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import fastifySecureSession from '@fastify/secure-session';
 import User from './models/User.cjs';
-import statusesRoutes from './routes/statuses.js';
+import Label from './models/Label.cjs';
+import Task from './models/Task.cjs';
+import TaskStatus from './models/TaskStatus.cjs';
 
-// Set up database
-const db = knex(knexConfig[process.env.NODE_ENV || 'development']);
-await db.migrate.latest();
-Model.knex(db);
+// Миграции можно запускать отдельно, если нужно
 
 // Import routes
 import indexRoutes from './routes/index.js';
@@ -43,6 +41,8 @@ import ru from './locales/ru.js';
 
 // Fastify CLI plugin export
 export default async function (fastify, opts) {
+  const mode = process.env.NODE_ENV || 'development';
+  const models = { User, Label, Task, TaskStatus };
   // Step 5: Initializing Rollbar
   const rollbar = new Rollbar({
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
@@ -53,7 +53,6 @@ export default async function (fastify, opts) {
   rollbar.log('Hello world from server startup!');
   fastify.decorate('rollbar', rollbar);
 
-
   // Configure i18next
   i18next
     .use(Backend)
@@ -63,7 +62,6 @@ export default async function (fastify, opts) {
       lng: 'en',
       debug: false,
     });
-
 
   fastify.register(view, {
     engine: { pug },
@@ -93,9 +91,15 @@ export default async function (fastify, opts) {
     },
   });
 
+  // Подключение fastify-objectionjs
+  await fastify.register(fastifyObjectionjs, {
+    knexConfig: knexConfig[mode],
+    models,
+  });
+
   fastifyPassport.use('local', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
-      const user = await User.query().findOne({ email });
+      const user = await fastify.objection.models.User.query().findOne({ email });
       if (!user) return done(null, false, { message: 'User not found' });
       const isValid = await user.verifyPassword(password);
       if (!isValid) return done(null, false, { message: 'Invalid password' });
@@ -106,13 +110,13 @@ export default async function (fastify, opts) {
   }));
 
   fastifyPassport.registerUserSerializer(async (user, req) => user.id);
-  fastifyPassport.registerUserDeserializer(async (id, req) => await User.query().findById(id));
+  fastifyPassport.registerUserDeserializer(async (id, req) => await fastify.objection.models.User.query().findById(id));
 
   fastify.register(fastifyPassport.initialize());
   fastify.register(fastifyPassport.secureSession());
 
   await fastify.register(indexRoutes);
   
-  console.log('Default export function in app.js', 'returned fastify instance:', fastify);
+  console.log('Default export function in Index.js', 'returned fastify instance:', fastify);
   return fastify;
 }
