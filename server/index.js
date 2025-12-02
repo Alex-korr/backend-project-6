@@ -112,4 +112,7 @@ export default async function (fastify, opts) {
   fastify.register(fastifyPassport.secureSession());
 
   await fastify.register(indexRoutes);
+  
+  console.log('Default export function in app.js', 'returned fastify instance:', fastify);
+  return fastify;
 }
