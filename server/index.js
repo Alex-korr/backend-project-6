@@ -58,8 +58,8 @@ export default async function (fastify, opts) {
     .use(Backend)
     .init({
       resources: { en, ru },
-      fallbackLng: 'en',
-      lng: 'en',
+      fallbackLng: 'ru',
+      lng: 'ru',
       debug: false,
     });
 
