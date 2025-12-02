@@ -80,7 +80,8 @@ export default async (app, options) => {
   await tasksRoutes(app);
   await statusesRoutes(app);
   await labelsRoutes(app);
-
-
+  
+  console.log('Routes have been registered', app);
+  return app;
 
 };
