@@ -9,9 +9,13 @@ export default async (app, options) => {
   // Home page
   app.get('/', (request, reply) => {
     let currentLang = request.cookies?.lang || request.query.lang || 'ru';
+    // Always set Russian as default for new sessions
     if (!request.cookies?.lang && !request.query.lang) {
-      reply.setCookie('lang', 'ru', { path: '/' });
       currentLang = 'ru';
+      reply.setCookie('lang', 'ru', { path: '/' });
+    } else if (request.cookies?.lang !== 'ru' && !request.query.lang) {
+      currentLang = 'ru';
+      reply.setCookie('lang', 'ru', { path: '/' });
     }
     const error = request.session?.flash?.error || [];
     const success = request.session?.flash?.success || [];
