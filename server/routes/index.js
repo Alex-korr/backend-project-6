@@ -9,7 +9,7 @@ export default async (app, options) => {
   // Home page
   app.get('/', (request, reply) => {
     let currentLang = request.cookies?.lang || request.query.lang || 'ru';
-    if (!request.cookies?.lang) {
+    if (!request.cookies?.lang && !request.query.lang) {
       reply.setCookie('lang', 'ru', { path: '/' });
       currentLang = 'ru';
     }
