@@ -1,4 +1,3 @@
-// useless test comment for git push
 import dotenv from 'dotenv';
 import Rollbar from 'rollbar';
 console.log('Step 1: Loading .env');
@@ -6,6 +5,7 @@ dotenv.config();
 console.log('Step 2: .env loaded, ROLLBAR_ACCESS_TOKEN:', process.env.ROLLBAR_ACCESS_TOKEN);
 import Fastify from 'fastify'; // Fastify v4+
 import view from '@fastify/view';
+import fastifyStatic from '@fastify/static';
 import formbody from '@fastify/formbody';
 import i18next from 'i18next';
 import i18nextMiddleware from 'i18next-http-middleware';
@@ -13,7 +13,6 @@ import Backend from 'i18next-fs-backend';
 import pug from 'pug';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// ESM-compatible __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import fastifyObjectionjs from 'fastify-objectionjs';
@@ -26,8 +25,6 @@ import Label from './models/Label.cjs';
 import Task from './models/Task.cjs';
 import TaskStatus from './models/TaskStatus.cjs';
 
-// Миграции можно запускать отдельно, если нужно
-
 // Import routes
 import indexRoutes from './routes/index.js';
 import labelsRoutes from './routes/labels.js';
@@ -37,13 +34,10 @@ import tasksRoutes from './routes/tasks.js';
 import en from './locales/en.js';
 import ru from './locales/ru.js';
 
-
-
 // Fastify CLI plugin export
 export default async function (fastify, opts) {
   const mode = process.env.NODE_ENV || 'development';
   const models = [User, Label, Task, TaskStatus];
-  // Step 5: Initializing Rollbar
   const rollbar = new Rollbar({
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
     environment: process.env.NODE_ENV || 'development',
@@ -53,6 +47,11 @@ export default async function (fastify, opts) {
   rollbar.log('Hello world from server startup!');
   fastify.decorate('rollbar', rollbar);
 
+  // Serve static assets from server/public/
+  fastify.register(fastifyStatic, {
+    root: path.join(__dirname, 'public'),
+    prefix: '/',
+  });
   // Configure i18next
   i18next
     .use(Backend)
@@ -82,8 +81,29 @@ export default async function (fastify, opts) {
 
   fastify.register(formbody);
 
+  const sessionKey = process.env.SECURE_SESSION_KEY;
+  
+  if (!sessionKey && process.env.NODE_ENV === 'production') {
+    throw new Error('SECURE_SESSION_KEY environment variable is required in production');
+  }
+
+  // Create session key - use environment variable or generate one for development
+  let sessionKeyBuffer;
+  if (sessionKey) {
+    try {
+      sessionKeyBuffer = Buffer.from(sessionKey, 'hex');
+    } catch (error) {
+      console.error('Invalid SECURE_SESSION_KEY format. Expected hex string.');
+      throw new Error('Invalid SECURE_SESSION_KEY format');
+    }
+  } else {
+    // Generate a temporary key for development
+    console.warn('No SECURE_SESSION_KEY provided. Using temporary key for development only.');
+    sessionKeyBuffer = Buffer.alloc(32);
+  }
+
   fastify.register(fastifySecureSession, {
-    key: Buffer.from(process.env.SESSION_KEY, 'hex'),
+    key: sessionKeyBuffer,
     cookie: {
       path: '/',
       httpOnly: true,
@@ -91,7 +111,7 @@ export default async function (fastify, opts) {
     },
   });
 
-  // Подключение fastify-objectionjs
+  // Register fastify-objectionjs
   await fastify.register(fastifyObjectionjs, {
     knexConfig: knexConfig[mode],
     models,

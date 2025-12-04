@@ -6,6 +6,13 @@ const mode = process.env.NODE_ENV || 'development';
 
 export default {
   mode,
+  entry: {
+    app: './src/index.js',
+  },
+  output: {
+    filename: 'app.js',
+    path: new URL('./server/public', import.meta.url).pathname,
+  },
   module: {
     rules: [
       {
@@ -14,5 +21,7 @@ export default {
       },
     ],
   },
-  plugins: [new MiniCssExtractPlugin()],
+  plugins: [
+    new MiniCssExtractPlugin({ filename: 'app.css' })
+  ],
 };
