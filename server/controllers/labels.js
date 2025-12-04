@@ -16,6 +16,7 @@ export const index = async (req, reply) => {
     currentLang: req.cookies?.lang || req.query.lang || 'en',
     isAuthenticated: !!req.user,
     user: req.user,
+    currentUrl: req.raw.url,
   });
 };
 
@@ -25,6 +26,7 @@ export const newLabel = async (req, reply) => {
     currentLang: req.cookies?.lang || req.query.lang || 'en',
     isAuthenticated: !!req.user,
     user: req.user,
+    currentUrl: req.raw.url,
   });
 };
 
@@ -43,6 +45,7 @@ export const edit = async (req, reply) => {
     currentLang: req.cookies?.lang || req.query.lang || 'en',
     isAuthenticated: !!req.user,
     user: req.user,
+    currentUrl: req.raw.url,
   });
 };
 

@@ -57,8 +57,8 @@ export default async function (fastify, opts) {
     .use(Backend)
     .init({
       resources: { en, ru },
-      fallbackLng: 'ru',
-      lng: 'ru',
+      fallbackLng: 'en',
+      lng: 'en',
       debug: false,
     });
 
@@ -74,7 +74,11 @@ export default async function (fastify, opts) {
 
   fastify.decorateRequest('i18next', null);
   fastify.addHook('preHandler', (req, reply, done) => {
-    const lang = req.query.lang || req.cookies?.lang || req.session?.lang || 'en';
+    let lang = req.cookies?.lang;
+    if (!lang) {
+      lang = 'ru';
+      reply.setCookie('lang', lang, { path: '/' });
+    }
     req.i18next = i18next.cloneInstance({ lng: lang });
     done();
   });

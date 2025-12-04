@@ -15,6 +15,7 @@ export const index = async (req, reply) => {
     user: req.user,
     t: req.i18next.t.bind(req.i18next),
     currentLang,
+    currentUrl: req.raw.url,
   });
 };
 
@@ -25,6 +26,7 @@ export const newStatus = async (req, reply) => {
     user: req.user,
     t: req.i18next.t.bind(req.i18next),
     currentLang,
+    currentUrl: req.raw.url,
   });
 };
 
@@ -58,6 +60,8 @@ export const edit = async (req, reply) => {
     isAuthenticated: !!req.user,
     user: req.user,
     t: req.i18next.t.bind(req.i18next),
+    currentLang: req.cookies?.lang || req.session?.lang || 'en',
+    currentUrl: req.raw.url,
   });
 };
 

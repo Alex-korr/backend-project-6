@@ -47,6 +47,7 @@ export const index = async (req, reply) => {
       t,
       isAuthenticated: !!req.user,
       user: req.user,
+      currentUrl: req.raw.url,
     });
   } catch (err) {
     console.error('TASKS INDEX ERROR:', err);
@@ -71,6 +72,7 @@ export const show = async (req, reply) => {
     t,
     isAuthenticated: !!req.user,
     user: req.user,
+    currentUrl: req.raw.url,
   });
 };
 
@@ -94,6 +96,7 @@ export const newTask = async (req, reply) => {
     t,
     isAuthenticated: !!req.user,
     user: req.user,
+    currentUrl: req.raw.url,
   });
 };
 
@@ -162,6 +165,7 @@ export const edit = async (req, reply) => {
     t,
     isAuthenticated: !!req.user,
     user: req.user,
+    currentUrl: req.raw.url,
   });
 };
 

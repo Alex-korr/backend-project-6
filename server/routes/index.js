@@ -5,18 +5,20 @@ import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
 import fastifyPassport from '@fastify/passport';
 
 export default async (app, options) => {
+    // Language switch route
+    app.get('/change-lang/:lang', (request, reply) => {
+      const { lang } = request.params;
+      const back = request.headers.referer || '/';
+      if (['en', 'ru'].includes(lang)) {
+        reply.setCookie('lang', lang, { path: '/' });
+      }
+      reply.redirect(back);
+    });
+    
   console.log('ROUTES INDEX.JS LOADED');
   // Home page
   app.get('/', (request, reply) => {
-    let currentLang = request.cookies?.lang || request.query.lang || 'ru';
-    // Always set Russian as default for new sessions
-    if (!request.cookies?.lang && !request.query.lang) {
-      currentLang = 'ru';
-      reply.setCookie('lang', 'ru', { path: '/' });
-    } else if (request.cookies?.lang !== 'ru' && !request.query.lang) {
-      currentLang = 'ru';
-      reply.setCookie('lang', 'ru', { path: '/' });
-    }
+    let currentLang = request.cookies?.lang || 'ru';
     const error = request.session?.flash?.error || [];
     const success = request.session?.flash?.success || [];
     request.session.flash = {};
@@ -27,6 +29,7 @@ export default async (app, options) => {
       success,
       isAuthenticated: !!request.user,
       currentUser: request.user || null,
+      currentUrl: request.raw.url,
     });
   });
 
@@ -58,7 +61,7 @@ export default async (app, options) => {
   // Test route for Rollbar error tracking
 
   // Users routes
-  app.get('/change-lang/:lang', usersController.changeLang);
+  // app.get('/change-lang/:lang', usersController.changeLang);
   app.route({ method: 'GET', url: '/users', preHandler: [ensureAuthenticated], handler: usersController.index });
   app.get('/users/new', usersController.newUser);
   app.post('/users', usersController.create);

@@ -1,23 +1,23 @@
 
 import User from '../models/User.cjs';
 
-function getLang(request) {
-  return request.cookies?.lang || request.query.lang || request.session?.lang || 'en';
-}
+// function getLang(request) {
+//   return request.cookies?.lang || request.query.lang || request.session?.lang || 'en';
+// }
 
-function setLang(request, lang) {
-  request.session.lang = lang;
-  // reply.setCookie will be called in the controller, since reply is only available there
-}
+// function setLang(request, lang) {
+//   request.session.lang = lang;
+//   // reply.setCookie will be called in the controller, since reply is only available there
+// }
 
-export const changeLang = async (request, reply) => {
-  const { lang } = request.params;
-  if (['en', 'ru'].includes(lang)) {
-    setLang(request, lang);
-    reply.setCookie('lang', lang, { path: '/' });
-  }
-  reply.redirect(request.headers.referer || '/');
-};
+// export const changeLang = async (request, reply) => {
+//   const { lang } = request.params;
+//   if (['en', 'ru'].includes(lang)) {
+//     setLang(request, lang);
+//      // reply.setCookie('lang', lang, { path: '/' }); // Теперь кука устанавливается в хуке
+//   }
+//   reply.redirect(request.headers.referer || '/');
+// };
 
 export const index = async (request, reply) => {
   let users = await User.query();
@@ -28,7 +28,7 @@ export const index = async (request, reply) => {
   const error = request.session?.flash?.error || [];
   const success = request.session?.flash?.success || [];
   request.session.flash = {};
-  const currentLang = getLang(request);
+  const currentLang = request.cookies?.lang || 'en';
   return reply.view('users/index', {
     users,
     error,
@@ -37,6 +37,7 @@ export const index = async (request, reply) => {
     t: request.i18next.t.bind(request.i18next),
     isAuthenticated: !!request.user,
     user: request.user,
+    currentUrl: request.raw.url,
   });
 };
 
@@ -44,8 +45,8 @@ export const newUser = async (request, reply) => {
   const error = request.session?.flash?.error || [];
   const success = request.session?.flash?.success || [];
   request.session.flash = {};
-  const currentLang = getLang(request);
-  return reply.view('users/new', { error, success, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user });
+  const currentLang = request.cookies?.lang || 'en';
+  return reply.view('users/new', { error, success, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url });
 };
 
 export const create = async (request, reply) => {
@@ -65,29 +66,29 @@ export const create = async (request, reply) => {
 export const show = async (request, reply) => {
   const { id } = request.params;
   const user = await User.query().findById(id);
-  const currentLang = getLang(request);
+  const currentLang = request.cookies?.lang || 'en';
   if (!user) {
     request.session.flash = { error: [request.i18next.t('User not found')] };
     return reply.redirect('/users');
   }
-  return reply.view('users/show', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user });
+  return reply.view('users/show', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url });
 };
 
 export const edit = async (request, reply) => {
   const { id } = request.params;
   const user = await User.query().findById(id);
-  const currentLang = getLang(request);
+  const currentLang = request.cookies?.lang || 'en';
   if (!user) {
     request.session.flash = { error: [request.i18next.t('User not found')] };
     return reply.redirect('/users');
   }
-  return reply.view('users/edit', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user });
+  return reply.view('users/edit', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url });
 };
 
 export const update = async (request, reply) => {
   const { id } = request.params;
   const { firstName, lastName, email, password } = request.body;
-  const currentLang = getLang(request);
+  const currentLang = request.cookies?.lang || 'en';
   try {
     await User.query().findById(id).patch({ firstName, lastName, email, password });
     request.session.flash = { success: [request.i18next.t('User updated successfully')] };
@@ -101,7 +102,7 @@ export const update = async (request, reply) => {
 export const destroy = async (request, reply) => {
   const { id } = request.params;
   const user = await User.query().findById(id);
-  const currentLang = getLang(request);
+  const currentLang = request.cookies?.lang || 'en';
   // Role check
   if (!request.user || request.user.role !== 'admin') {
     request.session.flash = { error: [request.i18next.t('Only admin can delete users')] };
