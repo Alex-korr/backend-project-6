@@ -27,7 +27,7 @@ export const index = async (req, reply) => {
     }
     const statuses = await TaskStatus.query();
     const users = await User.query();
-    const labels = await import('../models/Label.js').then(m => m.default.query());
+    const labels = await import('../models/Label.cjs').then(m => m.default.query());
     const error = req.session?.flash?.error || [];
     const success = req.session?.flash?.success || [];
     req.session.flash = {};
@@ -79,7 +79,7 @@ export const show = async (req, reply) => {
 export const newTask = async (req, reply) => {
   const statuses = await TaskStatus.query();
   const users = await User.query();
-  const labels = await import('../models/Label.js').then(m => m.default.query());
+  const labels = await import('../models/Label.cjs').then(m => m.default.query());
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
@@ -148,7 +148,7 @@ export const edit = async (req, reply) => {
   if (!task) return reply.code(404).send('Task not found');
   const statuses = await TaskStatus.query();
   const users = await User.query();
-  const labels = await import('../models/Label.js').then(m => m.default.query());
+  const labels = await import('../models/Label.cjs').then(m => m.default.query());
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};

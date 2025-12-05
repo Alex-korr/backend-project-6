@@ -25,4 +25,47 @@ module.exports = class Task extends BaseModel {
       },
     };
   }
+  static get relationMappings() {
+    const TaskStatus = require('./TaskStatus.cjs');
+    const Label = require('./Label.cjs');
+    const User = require('./User.cjs');
+    return {
+      status: {
+        relation: BaseModel.BelongsToOneRelation,
+        modelClass: TaskStatus,
+        join: {
+          from: 'tasks.statusId',
+          to: 'task_statuses.id',
+        },
+      },
+      labels: {
+        relation: BaseModel.ManyToManyRelation,
+        modelClass: Label,
+        join: {
+          from: 'tasks.id',
+          through: {
+            from: 'task_labels.task_id',
+            to: 'task_labels.label_id',
+          },
+          to: 'labels.id',
+        },
+      },
+      executor: {
+        relation: BaseModel.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'tasks.executorId',
+          to: 'users.id',
+        },
+      },
+      creator: {
+        relation: BaseModel.BelongsToOneRelation,
+        modelClass: User,
+        join: {
+          from: 'tasks.creatorId',
+          to: 'users.id',
+        },
+      },
+    };
+  }
 };
