@@ -7,10 +7,10 @@ export async function up(knex) {
   const password = process.env.ADMIN_PASSWORD || 'admin123';
   const hashedPassword = await bcrypt.hash(password, 10);
   await knex('users').insert({
-    firstName: 'Admin',
-    lastName: 'User',
+    first_name: 'Admin',
+    last_name: 'User',
     email,
-    password: hashedPassword,
+    password_digest: hashedPassword,
     role: 'admin',
   });
 }

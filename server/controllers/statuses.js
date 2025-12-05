@@ -6,7 +6,8 @@ export const index = async (req, reply) => {
   const error = req.session?.flash?.status?.error || [];
   const success = req.session?.flash?.status?.success || [];
   req.session.flash = {};
-  const currentLang = req.cookies?.lang || req.session?.lang || 'en';
+    const query = req.query || {};
+    const currentLang = req.cookies?.lang || query.lang || 'en';
   return reply.view('statuses/index', {
     statuses,
     error,
@@ -20,7 +21,8 @@ export const index = async (req, reply) => {
 };
 
 export const newStatus = async (req, reply) => {
-  const currentLang = req.cookies?.lang || req.session?.lang || 'en';
+  const query = req.query || {};
+  const currentLang = req.cookies?.lang || query.lang || 'en';
   return reply.view('statuses/new', {
     isAuthenticated: !!req.user,
     user: req.user,
@@ -55,14 +57,16 @@ export const edit = async (req, reply) => {
   const { id } = req.params;
   const status = await TaskStatus.query().findById(id);
   if (!status) return reply.code(404).send('Status not found');
-  return reply.view('statuses/edit', {
-    status,
-    isAuthenticated: !!req.user,
-    user: req.user,
-    t: req.i18next.t.bind(req.i18next),
-    currentLang: req.cookies?.lang || req.session?.lang || 'en',
-    currentUrl: req.raw.url,
-  });
+    const query = req.query || {};
+    return reply.view('statuses/edit', {
+      status,
+      isAuthenticated: !!req.user,
+      user: req.user,
+      t: req.i18next.t.bind(req.i18next),
+      currentLang: req.cookies?.lang || query.lang || 'en',
+      currentUrl: req.raw.url,
+      query,
+    });
 };
 
 export const update = async (req, reply) => {

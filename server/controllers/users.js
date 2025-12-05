@@ -20,6 +20,7 @@ import User from '../models/User.cjs';
 // };
 
 export const index = async (request, reply) => {
+  const query = request.query || {};
   let users = await User.query();
   // Hide admin from regular users
   if (!request.user || request.user.role !== 'admin') {
@@ -38,15 +39,17 @@ export const index = async (request, reply) => {
     isAuthenticated: !!request.user,
     user: request.user,
     currentUrl: request.raw.url,
+    query,
   });
 };
 
 export const newUser = async (request, reply) => {
+  const query = request.query || {};
   const error = request.session?.flash?.error || [];
   const success = request.session?.flash?.success || [];
   request.session.flash = {};
   const currentLang = request.cookies?.lang || 'en';
-  return reply.view('users/new', { error, success, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url });
+  return reply.view('users/new', { error, success, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url, query });
 };
 
 export const create = async (request, reply) => {
@@ -64,6 +67,7 @@ export const create = async (request, reply) => {
 };
 
 export const show = async (request, reply) => {
+  const query = request.query || {};
   const { id } = request.params;
   const user = await User.query().findById(id);
   const currentLang = request.cookies?.lang || 'en';
@@ -71,10 +75,11 @@ export const show = async (request, reply) => {
     request.session.flash = { error: [request.i18next.t('User not found')] };
     return reply.redirect('/users');
   }
-  return reply.view('users/show', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url });
+  return reply.view('users/show', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url, query });
 };
 
 export const edit = async (request, reply) => {
+  const query = request.query || {};
   const { id } = request.params;
   const user = await User.query().findById(id);
   const currentLang = request.cookies?.lang || 'en';
@@ -82,7 +87,7 @@ export const edit = async (request, reply) => {
     request.session.flash = { error: [request.i18next.t('User not found')] };
     return reply.redirect('/users');
   }
-  return reply.view('users/edit', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url });
+  return reply.view('users/edit', { user, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url, query });
 };
 
 export const update = async (request, reply) => {

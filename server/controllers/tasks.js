@@ -4,8 +4,9 @@ import User from '../models/User.cjs';
 
 export const index = async (req, reply) => {
   try {
+    const query = req.query || {};
     let queryBuilder = Task.query().withGraphFetched('[status, labels, executor]');
-    const { status, executor, label, my } = req.query;
+    const { status, executor, label, my } = query;
     if (status) {
       queryBuilder = queryBuilder.where('statusId', status);
     }
@@ -31,7 +32,7 @@ export const index = async (req, reply) => {
     const error = req.session?.flash?.error || [];
     const success = req.session?.flash?.success || [];
     req.session.flash = {};
-    const currentLang = req.cookies?.lang || req.query.lang || 'en';
+    const currentLang = req.cookies?.lang || query.lang || 'en';
     // Fallback for i18next in tests
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     return reply.view('tasks/index', {
@@ -39,7 +40,7 @@ export const index = async (req, reply) => {
       statuses,
       users,
       labels,
-      query: req.query,
+      query,
       currentUser: req.user,
       error,
       success,
@@ -56,6 +57,7 @@ export const index = async (req, reply) => {
 };
 
 export const show = async (req, reply) => {
+  const query = req.query || {};
   const { id } = req.params;
   const task = await Task.query().findById(id).withGraphFetched('[status, labels]');
   if (!task) return reply.code(404).send('Task not found');
@@ -68,15 +70,17 @@ export const show = async (req, reply) => {
     currentUser: req.user,
     error,
     success,
-    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    currentLang: req.cookies?.lang || query.lang || 'en',
     t,
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
+    query,
   });
 };
 
 export const newTask = async (req, reply) => {
+  const query = req.query || {};
   const statuses = await TaskStatus.query();
   const users = await User.query();
   const labels = await import('../models/Label.cjs').then(m => m.default.query());
@@ -92,11 +96,12 @@ export const newTask = async (req, reply) => {
     currentUser: req.user,
     error,
     success,
-    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    currentLang: req.cookies?.lang || query.lang || 'en',
     t,
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
+    query,
   });
 };
 
@@ -143,6 +148,7 @@ export const create = async (req, reply) => {
 };
 
 export const edit = async (req, reply) => {
+  const query = req.query || {};
   const { id } = req.params;
   const task = await Task.query().findById(id).withGraphFetched('labels');
   if (!task) return reply.code(404).send('Task not found');
@@ -161,11 +167,12 @@ export const edit = async (req, reply) => {
     currentUser: req.user,
     error,
     success,
-    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    currentLang: req.cookies?.lang || query.lang || 'en',
     t,
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
+    query,
   });
 };
 

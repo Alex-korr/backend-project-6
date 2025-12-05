@@ -1,10 +1,10 @@
-import knexConfig from '../knexfile.js';
+import { development } from '../knexfile.js';
 import knex from 'knex';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const db = knex(knexConfig[process.env.NODE_ENV || 'development']);
+const db = knex(development);
 
 async function addAdmin() {
   const email = process.env.ADMIN_EMAIL || 'admin@example.com';
@@ -14,22 +14,20 @@ async function addAdmin() {
   const existing = await db('users').where({ email }).first();
   if (existing) {
     await db('users').where({ email }).update({
-      firstName: 'Admin',
-      lastName: 'User',
-      password: hashedPassword,
-      role: 'admin',
-      updatedAt: new Date().toISOString(),
+      first_name: 'Admin',
+      last_name: 'User',
+      password_digest: hashedPassword,
+      updated_at: new Date().toISOString(),
     });
     console.log('Admin user updated');
   } else {
     await db('users').insert({
-      firstName: 'Admin',
-      lastName: 'User',
+      first_name: 'Admin',
+      last_name: 'User',
       email,
-      password: hashedPassword,
-      role: 'admin',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      password_digest: hashedPassword,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     });
     console.log('Admin user added');
   }

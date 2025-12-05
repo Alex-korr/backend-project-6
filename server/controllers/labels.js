@@ -1,6 +1,7 @@
 import Label from '../models/Label.cjs';
 
 export const index = async (req, reply) => {
+  const query = req.query || {};
   if (!req.user) {
     return reply.redirect('/session/new');
   }
@@ -13,20 +14,23 @@ export const index = async (req, reply) => {
     error,
     success,
     t: req.i18next.t.bind(req.i18next),
-    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    currentLang: req.cookies?.lang || query.lang || 'en',
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
+    query,
   });
 };
 
 export const newLabel = async (req, reply) => {
+  const query = req.query || {};
   return reply.view('labels/new', {
     t: req.i18next.t.bind(req.i18next),
-    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    currentLang: req.cookies?.lang || query.lang || 'en',
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
+    query,
   });
 };
 
@@ -38,14 +42,16 @@ export const create = async (req, reply) => {
 };
 
 export const edit = async (req, reply) => {
+  const query = req.query || {};
   const label = await Label.query().findById(req.params.id);
   return reply.view('labels/edit', {
     label,
     t: req.i18next.t.bind(req.i18next),
-    currentLang: req.cookies?.lang || req.query.lang || 'en',
+    currentLang: req.cookies?.lang || query.lang || 'en',
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
+    query,
   });
 };
 
