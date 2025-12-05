@@ -89,8 +89,8 @@ export default {
         title: 'Войдите в аккаунт',
         emailLabel: 'Email',
         emailPlaceholder: 'name@example.com',
-        passwordLabel: 'Password',
-        passwordPlaceholder: 'Password',
+        passwordLabel: 'Пароль',
+        passwordPlaceholder: 'Пароль',
         submit: 'Вход'
       }
     },
