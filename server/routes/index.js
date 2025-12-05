@@ -30,6 +30,7 @@ export default async (app, options) => {
       isAuthenticated: !!request.user,
       currentUser: request.user || null,
       currentUrl: request.raw.url,
+      query: {},
     });
   });
 
