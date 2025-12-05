@@ -91,7 +91,7 @@ export default {
         emailPlaceholder: 'name@example.com',
         passwordLabel: 'Пароль',
         passwordPlaceholder: 'Пароль',
-        submit: 'Вход'
+        submit: 'Войти'
       }
     },
     appName: 'Менеджер задач',
