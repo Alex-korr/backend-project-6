@@ -1,4 +1,3 @@
-
 import User from '../models/User.cjs';
 
 // function getLang(request) {
@@ -55,9 +54,12 @@ export const newUser = async (request, reply) => {
 export const create = async (request, reply) => {
   const { firstName, lastName, email, password } = request.body;
   const role = 'user';
-  const currentLang = getLang(request);
+  const currentLang = request.cookies?.lang || 'en';
   try {
-    await User.query().insert({ firstName, lastName, email, password, role });
+    // Hash password before saving
+    const bcrypt = (await import('bcrypt')).default;
+    const password_digest = await bcrypt.hash(password, 10);
+    await User.query().insert({ firstName, lastName, email, password_digest, role });
     request.session.flash = { success: [request.i18next.t('User created successfully')] };
     return reply.redirect('/users');
   } catch (error) {
