@@ -111,7 +111,7 @@ export default {
         signUp: 'Регистрация',
         edit: 'Редактировать',
         delete: 'Удалить',
-        signOut: 'Выйти'
+        signOut: 'Выход'
       }
     },
     views: {
