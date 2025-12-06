@@ -52,6 +52,8 @@ export const newUser = async (request, reply) => {
 };
 
 export const create = async (request, reply) => {
+  console.log('[USER CREATE] Content-Type:', request.headers['content-type']);
+  console.log('[USER CREATE] request.body:', JSON.stringify(request.body));
   const { firstName, lastName, email, password } = request.body;
   const role = 'user';
   const currentLang = request.cookies?.lang || 'en';
