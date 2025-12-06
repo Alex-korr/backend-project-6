@@ -95,6 +95,7 @@ export default async (app, options) => {
   // POST /session - Login route
   app.post('/session', async (request, reply) => {
     const { email, password } = request.body;
+    console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
     // Import User model directly
     const User = (await import('../models/User.cjs')).default;
@@ -108,8 +109,11 @@ export default async (app, options) => {
       return reply.redirect('/session/new');
     }
     
+    console.log('[LOGIN] User found, password hash:', user.password?.substring(0, 10) + '...');
+    
     // Verify password
     const isValid = await user.verifyPassword(password);
+    console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
       request.session.flash = { error: ['Invalid email or password'] };
