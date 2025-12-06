@@ -52,19 +52,16 @@ export const newUser = async (request, reply) => {
 };
 
 export const create = async (request, reply) => {
-  console.log('[USER CREATE] Content-Type:', request.headers['content-type']);
-  console.log('[USER CREATE] request.body:', JSON.stringify(request.body));
-  const { firstName, lastName, email, password } = request.body;
+  // Handle both form data and JSON API requests
+  const userData = request.body.data || request.body;
+  const { firstName, lastName, email, password } = userData;
   const role = 'user';
   const currentLang = request.cookies?.lang || 'en';
-  console.log('[USER CREATE] Attempting to create user:', email, 'password length:', password?.length);
   try {
     const user = await User.query().insert({ firstName, lastName, email, password, role });
-    console.log('[USER CREATE] Success! User ID:', user.id, 'email:', user.email);
     request.session.flash = { success: [request.i18next.t('User created successfully')] };
     return reply.redirect('/users');
   } catch (error) {
-    console.log('[USER CREATE] Error:', error.message);
     request.session.flash = { error: [error.message] };
     return reply.redirect('/users/new');
   }
