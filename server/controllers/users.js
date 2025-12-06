@@ -56,10 +56,7 @@ export const create = async (request, reply) => {
   const role = 'user';
   const currentLang = request.cookies?.lang || 'en';
   try {
-    // Hash password before saving
-    const bcrypt = (await import('bcrypt')).default;
-    const password_digest = await bcrypt.hash(password, 10);
-    await User.query().insert({ firstName, lastName, email, password_digest, role });
+    await User.query().insert({ firstName, lastName, email, password, role });
     request.session.flash = { success: [request.i18next.t('User created successfully')] };
     return reply.redirect('/users');
   } catch (error) {
