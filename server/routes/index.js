@@ -69,7 +69,10 @@ export default async (app, options) => {
   app.get('/users/:id/edit', usersController.edit);
   app.patch('/users/:id', usersController.update);
   app.post('/users/:id', usersController.destroy);
-
+  // Redirect /session to /session/new to avoid empty page
+  app.get('/session', (request, reply) => {
+    reply.redirect('/session/new');
+  });
   // Sessions routes
   app.get('/session/new', sessionsController.newSession);
 
@@ -93,14 +96,16 @@ export default async (app, options) => {
   app.post('/session', {
     preHandler: fastifyPassport.authenticate('local', { failWithError: true }),
     handler: async (request, reply) => {
-      // Если дошли сюда — аутентификация успешна
+      // If we reached here, authentication was successful
       request.session.flash = { success: ['Successfully logged in!'] };
+      console.log('[LOGIN] Success, redirecting to /');
       reply.redirect('/');
     },
     errorHandler: (error, request, reply) => {
-      // Если аутентификация не удалась
+      // If authentication failed
       const message = error?.message || 'Invalid email or password';
       request.session.flash = { error: [message] };
+      console.log('[LOGIN] Failure, redirecting to /session/new');
       reply.redirect('/session/new');
     },
   });

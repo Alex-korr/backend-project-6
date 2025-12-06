@@ -72,50 +72,44 @@ export const create = async (request, reply) => {
 export const destroy = async (request, reply) => {
   try {
     console.log('Logout attempt for user:', request.user?.id);
-    
-    // Log out the user
+    // Try to log out the user (sync or async)
     if (request.logout && typeof request.logout === 'function') {
-      await new Promise((resolve, reject) => {
-        request.logout((err) => {
-          if (err) {
-            console.error('Logout error:', err);
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      });
+      try {
+        request.logout();
+        console.log('request.logout called (sync)');
+      } catch (err) {
+        console.error('Logout error (sync):', err);
+      }
+    } else {
+      console.log('No request.logout function available');
     }
-    
     // Clear session
     if (request.session) {
       if (typeof request.session.delete === 'function') {
-        await request.session.delete();
+        try {
+          await request.session.delete();
+          console.log('request.session.delete completed');
+        } catch (err) {
+          console.error('Session delete error:', err);
+        }
+      } else {
+        console.log('No request.session.delete function available');
       }
-      
-      // Create new session with message
       request.session.flash = { success: ['Successfully logged out'] };
     }
-    
-    // Clear session cookie
     reply.clearCookie('session', { 
       path: '/',
       httpOnly: true
     });
-    
     console.log('User logged out successfully');
     return reply.redirect('/');
-    
   } catch (error) {
     console.error('Error in destroy session controller:', error);
-    
-    // Even on error, try to redirect
     if (request.session) {
       request.session.flash = { 
         error: ['Error during logout. Please try again.'] 
       };
     }
-    
     return reply.redirect('/');
   }
 };
