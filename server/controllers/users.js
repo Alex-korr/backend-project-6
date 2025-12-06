@@ -55,11 +55,14 @@ export const create = async (request, reply) => {
   const { firstName, lastName, email, password } = request.body;
   const role = 'user';
   const currentLang = request.cookies?.lang || 'en';
+  console.log('[USER CREATE] Attempting to create user:', email, 'password length:', password?.length);
   try {
-    await User.query().insert({ firstName, lastName, email, password, role });
+    const user = await User.query().insert({ firstName, lastName, email, password, role });
+    console.log('[USER CREATE] Success! User ID:', user.id, 'email:', user.email);
     request.session.flash = { success: [request.i18next.t('User created successfully')] };
     return reply.redirect('/users');
   } catch (error) {
+    console.log('[USER CREATE] Error:', error.message);
     request.session.flash = { error: [error.message] };
     return reply.redirect('/users/new');
   }
