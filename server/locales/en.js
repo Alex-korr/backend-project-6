@@ -5,6 +5,9 @@ export default {
         create: {
           success: 'You are logged in',
         },
+        delete: {
+          success: 'You are logged out',
+        },
       },
       tasks: {
         create: {

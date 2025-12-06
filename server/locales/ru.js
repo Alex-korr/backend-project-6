@@ -5,6 +5,9 @@ export default {
         create: {
           success: 'Вы залогинены',
         },
+        delete: {
+          success: 'Вы разлогинены',
+        },
       },
       tasks: {
         create: {

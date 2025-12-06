@@ -72,7 +72,13 @@ export const create = async (request, reply) => {
 export const destroy = async (request, reply) => {
   try {
     console.log('Logout attempt for user:', request.user?.id);
-    // Try to log out the user (sync or async)
+    
+    // Set flash message BEFORE clearing session
+    if (request.session) {
+      request.session.flash = { session: { success: [request.i18next.t('flash.session.delete.success')] } };
+    }
+    
+    // Log out the user (this clears user from session but keeps session alive)
     if (request.logout && typeof request.logout === 'function') {
       try {
         request.logout();
@@ -83,24 +89,7 @@ export const destroy = async (request, reply) => {
     } else {
       console.log('No request.logout function available');
     }
-    // Clear session
-    if (request.session) {
-      if (typeof request.session.delete === 'function') {
-        try {
-          await request.session.delete();
-          console.log('request.session.delete completed');
-        } catch (err) {
-          console.error('Session delete error:', err);
-        }
-      } else {
-        console.log('No request.session.delete function available');
-      }
-      request.session.flash = { success: ['Successfully logged out'] };
-    }
-    reply.clearCookie('session', { 
-      path: '/',
-      httpOnly: true
-    });
+    
     console.log('User logged out successfully');
     return reply.redirect('/');
   } catch (error) {
