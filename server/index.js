@@ -204,12 +204,12 @@ export default async function (fastify, opts) {
       
       // Debug user information
       console.log('=== USER DEBUG INFO ===');
-      console.log('Has passwordDigest:', !!user.passwordDigest);
-      console.log('passwordDigest length:', user.passwordDigest?.length);
-      console.log('passwordDigest preview:', user.passwordDigest?.substring(0, 20) + '...');
+      console.log('Has password:', !!user.password);
+      console.log('password length:', user.password?.length);
+      console.log('password preview:', user.password?.substring(0, 20) + '...');
 
-      if (!user.passwordDigest) {
-        console.error('❌ CRITICAL: User has no passwordDigest field!');
+      if (!user.password) {
+        console.error('❌ CRITICAL: User has no password field!');
         return done(null, false, { message: 'Account error - no password set' });
       }
       

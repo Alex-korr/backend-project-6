@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import bcrypt from 'bcrypt';
 import knex from 'knex';
 import * as knexConfig from '../knexfile.js';
 import User from '../server/models/User.cjs';

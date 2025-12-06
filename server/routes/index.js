@@ -92,22 +92,36 @@ export default async (app, options) => {
     });
   });
 
-  // POST /session - Login route (Fastify style)
-  app.post('/session', {
-    preHandler: fastifyPassport.authenticate('local', { failWithError: true }),
-    handler: async (request, reply) => {
-      // If we reached here, authentication was successful
-      request.session.flash = { success: ['Successfully logged in!'] };
-      console.log('[LOGIN] Success, redirecting to /');
-      reply.redirect('/');
-    },
-    errorHandler: (error, request, reply) => {
-      // If authentication failed
-      const message = error?.message || 'Invalid email or password';
-      request.session.flash = { error: [message] };
-      console.log('[LOGIN] Failure, redirecting to /session/new');
-      reply.redirect('/session/new');
-    },
+  // POST /session - Login route
+  app.post('/session', async (request, reply) => {
+    const { email, password } = request.body;
+    
+    // Import User model directly
+    const User = (await import('../models/User.cjs')).default;
+    
+    // Find user
+    const user = await User.query().findOne({ email });
+    
+    if (!user) {
+      request.session.flash = { error: ['Invalid email or password'] };
+      console.log('[LOGIN] Failure - user not found, redirecting to /session/new');
+      return reply.redirect('/session/new');
+    }
+    
+    // Verify password
+    const isValid = await user.verifyPassword(password);
+    
+    if (!isValid) {
+      request.session.flash = { error: ['Invalid email or password'] };
+      console.log('[LOGIN] Failure - invalid password, redirecting to /session/new');
+      return reply.redirect('/session/new');
+    }
+    
+    // Authentication successful
+    await request.logIn(user);
+    request.session.flash = { success: ['Successfully logged in!'] };
+    console.log('[LOGIN] Success, user:', user?.email, 'redirecting to /');
+    return reply.redirect('/');
   });
 
   // Logout route

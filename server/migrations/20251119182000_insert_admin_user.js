@@ -10,7 +10,7 @@ export async function up(knex) {
     first_name: 'Admin',
     last_name: 'User',
     email,
-    password_digest: hashedPassword,
+    password: hashedPassword,
     role: 'admin',
   });
 }
