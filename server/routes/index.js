@@ -25,13 +25,35 @@ export default async (app, options) => {
     const allSuccess = [];
     
     if (request.session?.flash) {
+      // Helper function to translate flash keys
+      const translateMsg = (msg) => {
+        if (msg === 'flash.session.create.success') {
+          return currentLang === 'ru' ? 'Вы залогинены' : 'You are logged in';
+        }
+        if (msg === 'flash.session.delete.success') {
+          return currentLang === 'ru' ? 'Вы разлогинены' : 'You are logged out';
+        }
+        if (msg === 'flash.session.create.error') {
+          return currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
+        }
+        return msg;
+      };
+      
       // Global messages
-      if (request.session.flash.error) allErrors.push(...request.session.flash.error);
-      if (request.session.flash.success) allSuccess.push(...request.session.flash.success);
+      if (request.session.flash.error) {
+        allErrors.push(...request.session.flash.error.map(translateMsg));
+      }
+      if (request.session.flash.success) {
+        allSuccess.push(...request.session.flash.success.map(translateMsg));
+      }
       
       // Session messages
-      if (request.session.flash.session?.error) allErrors.push(...request.session.flash.session.error);
-      if (request.session.flash.session?.success) allSuccess.push(...request.session.flash.session.success);
+      if (request.session.flash.session?.error) {
+        allErrors.push(...request.session.flash.session.error.map(translateMsg));
+      }
+      if (request.session.flash.session?.success) {
+        allSuccess.push(...request.session.flash.session.success.map(translateMsg));
+      }
       
       request.session.flash = {};
     }
@@ -117,7 +139,7 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      request.session.flash = { error: ['Invalid email or password'] };
+      request.session.flash = { error: ['flash.session.create.error'] };
       console.log('[LOGIN] Failure - user not found, redirecting to /session/new');
       return reply.redirect('/session/new');
     }
@@ -129,7 +151,7 @@ export default async (app, options) => {
     console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
-      request.session.flash = { error: ['Invalid email or password'] };
+      request.session.flash = { error: ['flash.session.create.error'] };
       console.log('[LOGIN] Failure - invalid password, redirecting to /session/new');
       return reply.redirect('/session/new');
     }

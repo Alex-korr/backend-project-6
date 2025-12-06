@@ -4,6 +4,7 @@ export default {
       session: {
         create: {
           success: 'You are logged in',
+          error: 'Invalid email or password',
         },
         delete: {
           success: 'You are logged out',

@@ -5,28 +5,44 @@ export const newSession = async (request, reply) => {
     // Safely get query params
     const query = request.query ? { ...request.query } : {};
     
-    // Safely get flash messages
+    // Determine current language
+    const currentLang = request.cookies?.lang || query.lang || 'ru';
+    
+    // Safely get flash messages and translate if needed
     let error = [];
     let success = [];
     
     if (request.session && 
         request.session.flash && 
         Array.isArray(request.session.flash.error)) {
-      error = [...request.session.flash.error];
+      error = request.session.flash.error.map(msg => {
+        // If it's a translation key, translate it
+        if (msg === 'flash.session.create.error') {
+          return currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
+        }
+        return msg;
+      });
     }
     
     if (request.session && 
         request.session.flash && 
         Array.isArray(request.session.flash.success)) {
-      success = [...request.session.flash.success];
+      success = request.session.flash.success.map(msg => {
+        // If it's a translation key, translate it
+        if (msg === 'flash.session.create.success') {
+          return currentLang === 'ru' ? 'Вы залогинены' : 'You are logged in';
+        }
+        if (msg === 'flash.session.delete.success') {
+          return currentLang === 'ru' ? 'Вы разлогинены' : 'You are logged out';
+        }
+        return msg;
+      });
     }
     
     // Clear flash messages after reading
     if (request.session && request.session.flash) {
       request.session.flash = {};
     }
-    
-    const currentLang = request.cookies?.lang || query.lang || 'en';
     
     return reply.view('sessions/new', {
       error,
