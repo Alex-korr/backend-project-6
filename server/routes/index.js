@@ -20,14 +20,27 @@ export default async (app, options) => {
   // Home page
   app.get('/', (request, reply) => {
     let currentLang = request.cookies?.lang || 'ru';
-    const error = request.session?.flash?.error || [];
-    const success = request.session?.flash?.success || [];
-    request.session.flash = {};
+    // Collect all flash messages from different sections
+    const allErrors = [];
+    const allSuccess = [];
+    
+    if (request.session?.flash) {
+      // Global messages
+      if (request.session.flash.error) allErrors.push(...request.session.flash.error);
+      if (request.session.flash.success) allSuccess.push(...request.session.flash.success);
+      
+      // Session messages
+      if (request.session.flash.session?.error) allErrors.push(...request.session.flash.session.error);
+      if (request.session.flash.session?.success) allSuccess.push(...request.session.flash.session.success);
+      
+      request.session.flash = {};
+    }
+    
     reply.view('index', {
       t: request.i18next.t.bind(request.i18next),
       currentLang,
-      error,
-      success,
+      layoutError: allErrors,
+      layoutSuccess: allSuccess,
       isAuthenticated: !!request.user,
       currentUser: request.user || null,
       currentUrl: request.raw.url,
@@ -123,7 +136,7 @@ export default async (app, options) => {
     
     // Authentication successful
     await request.logIn(user);
-    request.session.flash = { success: ['Successfully logged in!'] };
+    request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
     console.log('[LOGIN] Success, user:', user?.email, 'redirecting to /');
     return reply.redirect('/');
   });

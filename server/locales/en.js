@@ -1,6 +1,11 @@
 export default {
   translation: {
     flash: {
+      session: {
+        create: {
+          success: 'You are logged in',
+        },
+      },
       tasks: {
         create: {
           success: 'Success',
