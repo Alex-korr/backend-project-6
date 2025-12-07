@@ -60,7 +60,7 @@ export const create = async (request, reply) => {
   try {
     const user = await User.query().insert({ firstName, lastName, email, password, role });
     request.session.flash = { success: [request.i18next.t('User created successfully')] };
-    return reply.redirect('/users');
+    return reply.redirect('/');
   } catch (error) {
     request.session.flash = { error: [error.message] };
     return reply.redirect('/users/new');
