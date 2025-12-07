@@ -11,10 +11,10 @@ block content
       .form-floating.mb-3
         input.form-control(type='email', name='email', id='floatingInput', placeholder=t('sessions.new.emailPlaceholder'), required, class=(error && error.length ? 'is-invalid' : ''))
         label(for='floatingInput')= t('sessions.new.emailLabel')
-        .invalid-feedback #{error && error.length ? error[0] : ''}
+        if error && error.length
+          .invalid-feedback.d-block #{error[0]}
       .form-floating.mb-3
         input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('sessions.new.passwordPlaceholder'), required)
         label(for='floatingPassword')= t('sessions.new.passwordLabel')
-        .invalid-feedback
       button.w-100.btn.btn-lg.btn-primary(type='submit')= t('sessions.new.submit')
       // ...existing code...
