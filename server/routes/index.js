@@ -132,6 +132,19 @@ export default async (app, options) => {
     const { email, password } = request.body;
     console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
+    // Server-side validation
+    if (!email || !email.trim()) {
+      request.session.flash = { error: ['flash.session.create.error'] };
+      console.log('[LOGIN] Failure - email is empty, redirecting to /session/new');
+      return reply.redirect('/session/new');
+    }
+    
+    if (!password || !password.trim()) {
+      request.session.flash = { error: ['flash.session.create.error'] };
+      console.log('[LOGIN] Failure - password is empty, redirecting to /session/new');
+      return reply.redirect('/session/new');
+    }
+    
     // Import User model directly
     const User = (await import('../models/User.cjs')).default;
     
