@@ -129,15 +129,11 @@ export default async (app, options) => {
     const { email, password } = request.body;
     console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
-    // Determine redirect URL based on referer to preserve original URL
-    const referer = request.headers.referer || '';
-    const redirectUrl = referer.includes('/session/new') ? '/session/new' : '/session';
-    
     // Server-side validation
     if (!email || !email.trim() || !password || !password.trim()) {
-      console.log(`[LOGIN] Failure - empty fields, redirecting to ${redirectUrl} with error`);
+      console.log('[LOGIN] Failure - empty fields, redirecting to /session with error');
       request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect(redirectUrl);
+      return reply.redirect('/session');
     }
     
     // Import User model directly
@@ -147,9 +143,9 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      console.log(`[LOGIN] Failure - user not found, redirecting to ${redirectUrl} with error`);
+      console.log('[LOGIN] Failure - user not found, redirecting to /session with error');
       request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect(redirectUrl);
+      return reply.redirect('/session');
     }
     
     console.log('[LOGIN] User found, password hash:', user.password?.substring(0, 10) + '...');
@@ -159,9 +155,9 @@ export default async (app, options) => {
     console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
-      console.log(`[LOGIN] Failure - invalid password, redirecting to ${redirectUrl} with error`);
+      console.log('[LOGIN] Failure - wrong password, redirecting to /session with error');
       request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect(redirectUrl);
+      return reply.redirect('/session');
     }
     
     // Authentication successful
