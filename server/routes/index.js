@@ -166,6 +166,73 @@ export default async (app, options) => {
     console.log('[LOGIN] Success, user:', user?.email, 'redirecting to /');
     return reply.redirect('/');
   });
+  
+  // POST /session/new - Login from /session/new page (no redirect, render directly)
+  app.post('/session/new', async (request, reply) => {
+    const { email, password } = request.body;
+    console.log('[LOGIN /session/new] Attempt - email:', email, 'password length:', password?.length);
+    
+    const currentLang = request.cookies?.lang || 'ru';
+    const translateError = () => currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
+    
+    // Server-side validation - render form with error (NO redirect)
+    if (!email || !email.trim() || !password || !password.trim()) {
+      console.log('[LOGIN /session/new] Failure - empty fields, rendering form with error');
+      return reply.view('sessions/new', {
+        error: [translateError()],
+        success: [],
+        layoutError: [],
+        layoutSuccess: [],
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: '/session/new'
+      });
+    }
+    
+    // Import User model
+    const User = (await import('../models/User.cjs')).default;
+    const user = await User.query().findOne({ email });
+    
+    if (!user) {
+      console.log('[LOGIN /session/new] Failure - user not found, rendering form with error');
+      return reply.view('sessions/new', {
+        error: [translateError()],
+        success: [],
+        layoutError: [],
+        layoutSuccess: [],
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: '/session/new'
+      });
+    }
+    
+    const isValid = await user.verifyPassword(password);
+    
+    if (!isValid) {
+      console.log('[LOGIN /session/new] Failure - wrong password, rendering form with error');
+      return reply.view('sessions/new', {
+        error: [translateError()],
+        success: [],
+        layoutError: [],
+        layoutSuccess: [],
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: '/session/new'
+      });
+    }
+    
+    // Success - redirect to home
+    await request.logIn(user);
+    request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
+    console.log('[LOGIN /session/new] Success, user:', user?.email, 'redirecting to /');
+    return reply.redirect('/');
+  });
 
   // Logout route
   app.post('/session/logout', sessionsController.destroy);

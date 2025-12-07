@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
-    form(action='/session', method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
+    form(method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
       if error && error.length && error[0] && error[0].trim()
         .alert.alert-danger.alert-dismissible.fade.show(role='alert') #{error[0]}
       if success && success.length && success[0] && success[0].trim()
