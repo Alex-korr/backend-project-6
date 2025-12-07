@@ -63,7 +63,7 @@ export default {
         firstNamePlaceholder: 'Имя',
         lastNameLabel: 'Фамилия',
         lastNamePlaceholder: 'Фамилия',
-        emailLabel: 'Электронная почта',
+        emailLabel: 'Email',
         emailPlaceholder: 'name@example.com',
         passwordLabel: 'Пароль',
         passwordPlaceholder: 'Пароль',
