@@ -67,7 +67,7 @@ export default {
         emailPlaceholder: 'name@example.com',
         passwordLabel: 'Пароль',
         passwordPlaceholder: 'Пароль',
-        submit: 'Создать пользователя'
+        submit: 'Сохранить'
       },
       index: {
         Name: 'Имя',
