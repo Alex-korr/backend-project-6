@@ -11,7 +11,7 @@ block content
       .form-floating.mb-3
         input.form-control(type='email', name='email', id='floatingInput', placeholder=t('sessions.new.emailPlaceholder'), required, class=(error && error.length ? 'is-invalid' : ''))
         label(for='floatingInput')= t('sessions.new.emailLabel')
-        .invalid-feedback= error && error.length ? error[0] : ''
+        .invalid-feedback #{error && error.length ? error[0] : 'Required field'}
       .form-floating.mb-3
         input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('sessions.new.passwordPlaceholder'), required)
         label(for='floatingPassword')= t('sessions.new.passwordLabel')
