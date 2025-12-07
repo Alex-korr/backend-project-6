@@ -8,10 +8,12 @@ block content
         tr
           if typeof currentLang !== 'undefined' && currentLang === 'ru'
             th Имя
+            th Email
             th
             th
           else
             th Name
+            th Email
             th
             th
       tbody
@@ -19,6 +21,7 @@ block content
           tr
             td
               | #{user.firstName} #{user.lastName}
+            td= user.email
             if user.role === 'user' && currentUser && currentUser.role === 'admin'
               td(colspan=2)
                 .d-flex.gap-2.justify-content-end
