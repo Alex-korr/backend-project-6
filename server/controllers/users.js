@@ -59,7 +59,7 @@ export const create = async (request, reply) => {
   const currentLang = request.cookies?.lang || 'en';
   try {
     const user = await User.query().insert({ firstName, lastName, email, password, role });
-    request.session.flash = { success: [request.i18next.t('User created successfully')] };
+    request.session.flash = { success: [request.i18next.t('flash.users.create.success')] };
     return reply.redirect('/');
   } catch (error) {
     request.session.flash = { error: [error.message] };

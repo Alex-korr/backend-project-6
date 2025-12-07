@@ -10,6 +10,11 @@ export default {
           success: 'Вы разлогинены',
         },
       },
+      users: {
+        create: {
+          success: 'Пользователь успешно зарегистрирован',
+        },
+      },
       tasks: {
         create: {
           success: 'Задача успешно создана!',
