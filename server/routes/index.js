@@ -131,19 +131,12 @@ export default async (app, options) => {
     console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
     const currentLang = request.cookies?.lang || 'ru';
-    const errorMsg = currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
     
     // Server-side validation
     if (!email || !email.trim() || !password || !password.trim()) {
-      console.log('[LOGIN] Failure - empty fields, showing form with error');
-      return reply.view('sessions/new', {
-        t: request.i18next.t.bind(request.i18next),
-        currentLang,
-        error: [errorMsg],
-        isAuthenticated: false,
-        currentUser: null,
-        currentUrl: request.raw.url,
-      });
+      console.log('[LOGIN] Failure - empty fields, redirecting to /session with error');
+      request.session.flash = { error: ['flash.session.create.error'] };
+      return reply.redirect('/session');
     }
     
     // Import User model directly
@@ -153,15 +146,9 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      console.log('[LOGIN] Failure - user not found, showing form with error');
-      return reply.view('sessions/new', {
-        t: request.i18next.t.bind(request.i18next),
-        currentLang,
-        error: [errorMsg],
-        isAuthenticated: false,
-        currentUser: null,
-        currentUrl: request.raw.url,
-      });
+      console.log('[LOGIN] Failure - user not found, redirecting to /session with error');
+      request.session.flash = { error: ['flash.session.create.error'] };
+      return reply.redirect('/session');
     }
     
     console.log('[LOGIN] User found, password hash:', user.password?.substring(0, 10) + '...');
@@ -171,15 +158,9 @@ export default async (app, options) => {
     console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
-      console.log('[LOGIN] Failure - invalid password, showing form with error');
-      return reply.view('sessions/new', {
-        t: request.i18next.t.bind(request.i18next),
-        currentLang,
-        error: [errorMsg],
-        isAuthenticated: false,
-        currentUser: null,
-        currentUrl: request.raw.url,
-      });
+      console.log('[LOGIN] Failure - invalid password, redirecting to /session with error');
+      request.session.flash = { error: ['flash.session.create.error'] };
+      return reply.redirect('/session');
     }
     
     // Authentication successful
