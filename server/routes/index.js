@@ -92,12 +92,7 @@ export default async (app, options) => {
   });
 
   // Users routes
-  app.route({ 
-    method: 'GET', 
-    url: '/users', 
-    preHandler: [ensureAuthenticated], 
-    handler: usersController.index 
-  });
+  app.get('/users', usersController.index); // Public route - no auth required
   app.get('/users/new', usersController.newUser);
   app.post('/users', usersController.create);
   app.get('/users/:id', usersController.show);
