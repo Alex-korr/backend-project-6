@@ -104,12 +104,13 @@ export default async (app, options) => {
   app.get('/users/:id/edit', usersController.edit);
   app.patch('/users/:id', usersController.update);
   app.post('/users/:id', usersController.destroy);
-  // Redirect /session to /session/new to avoid empty page
-  app.get('/session', (request, reply) => {
-    reply.redirect('/session/new');
+  
+  // Sessions routes - /session shows login form
+  app.get('/session', sessionsController.newSession);
+  // Keep /session/new as alias for backward compatibility
+  app.get('/session/new', (request, reply) => {
+    reply.redirect('/session');
   });
-  // Sessions routes
-  app.get('/session/new', sessionsController.newSession);
 
   // Debug session route for authentication troubleshooting
   app.get('/debug-session', async (request, reply) => {
