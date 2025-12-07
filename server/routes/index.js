@@ -102,15 +102,11 @@ export default async (app, options) => {
   app.post('/users', usersController.create);
   app.get('/users/:id', usersController.show);
   app.get('/users/:id/edit', usersController.edit);
-  app.patch('/users/:id', usersController.update);
-  app.post('/users/:id', usersController.destroy);
+  app.patch('/users/:id', usersController.destroy);
   
-  // Sessions routes
+  // Sessions routes - both URLs show login form directly (no redirects)
   app.get('/session', sessionsController.newSession);
-  // Redirect /session/new to /session for URL consistency
-  app.get('/session/new', (request, reply) => {
-    reply.redirect('/session');
-  });
+  app.get('/session/new', sessionsController.newSession);
 
   // Debug session route for authentication troubleshooting
   app.get('/debug-session', async (request, reply) => {
@@ -133,13 +129,15 @@ export default async (app, options) => {
     const { email, password } = request.body;
     console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
-    const currentLang = request.cookies?.lang || 'ru';
+    // Determine redirect URL based on referer to preserve original URL
+    const referer = request.headers.referer || '';
+    const redirectUrl = referer.includes('/session/new') ? '/session/new' : '/session';
     
     // Server-side validation
     if (!email || !email.trim() || !password || !password.trim()) {
-      console.log('[LOGIN] Failure - empty fields, redirecting to /session with error');
+      console.log(`[LOGIN] Failure - empty fields, redirecting to ${redirectUrl} with error`);
       request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect('/session');
+      return reply.redirect(redirectUrl);
     }
     
     // Import User model directly
@@ -149,9 +147,9 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      console.log('[LOGIN] Failure - user not found, redirecting to /session with error');
+      console.log(`[LOGIN] Failure - user not found, redirecting to ${redirectUrl} with error`);
       request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect('/session');
+      return reply.redirect(redirectUrl);
     }
     
     console.log('[LOGIN] User found, password hash:', user.password?.substring(0, 10) + '...');
@@ -161,9 +159,9 @@ export default async (app, options) => {
     console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
-      console.log('[LOGIN] Failure - invalid password, redirecting to /session with error');
+      console.log(`[LOGIN] Failure - invalid password, redirecting to ${redirectUrl} with error`);
       request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect('/session');
+      return reply.redirect(redirectUrl);
     }
     
     // Authentication successful
