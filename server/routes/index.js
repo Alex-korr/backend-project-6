@@ -132,17 +132,20 @@ export default async (app, options) => {
     const { email, password } = request.body;
     console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
-    // Server-side validation
-    if (!email || !email.trim()) {
-      request.session.flash = { error: ['flash.session.create.error'] };
-      console.log('[LOGIN] Failure - email is empty, redirecting to /session/new');
-      return reply.redirect('/session/new');
-    }
+    const currentLang = request.cookies?.lang || 'ru';
+    const errorMsg = currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
     
-    if (!password || !password.trim()) {
-      request.session.flash = { error: ['flash.session.create.error'] };
-      console.log('[LOGIN] Failure - password is empty, redirecting to /session/new');
-      return reply.redirect('/session/new');
+    // Server-side validation
+    if (!email || !email.trim() || !password || !password.trim()) {
+      console.log('[LOGIN] Failure - empty fields, showing form with error');
+      return reply.view('sessions/new', {
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        error: [errorMsg],
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: request.raw.url,
+      });
     }
     
     // Import User model directly
@@ -152,9 +155,15 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      request.session.flash = { error: ['flash.session.create.error'] };
-      console.log('[LOGIN] Failure - user not found, redirecting to /session/new');
-      return reply.redirect('/session/new');
+      console.log('[LOGIN] Failure - user not found, showing form with error');
+      return reply.view('sessions/new', {
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        error: [errorMsg],
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: request.raw.url,
+      });
     }
     
     console.log('[LOGIN] User found, password hash:', user.password?.substring(0, 10) + '...');
@@ -164,9 +173,15 @@ export default async (app, options) => {
     console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
-      request.session.flash = { error: ['flash.session.create.error'] };
-      console.log('[LOGIN] Failure - invalid password, redirecting to /session/new');
-      return reply.redirect('/session/new');
+      console.log('[LOGIN] Failure - invalid password, showing form with error');
+      return reply.view('sessions/new', {
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        error: [errorMsg],
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: request.raw.url,
+      });
     }
     
     // Authentication successful
