@@ -105,9 +105,12 @@ export default async (app, options) => {
   app.patch('/users/:id', usersController.update);
   app.post('/users/:id', usersController.destroy);
   
-  // Sessions routes - both URLs show the same login form
+  // Sessions routes
   app.get('/session', sessionsController.newSession);
-  app.get('/session/new', sessionsController.newSession);
+  // Redirect /session/new to /session for URL consistency
+  app.get('/session/new', (request, reply) => {
+    reply.redirect('/session');
+  });
 
   // Debug session route for authentication troubleshooting
   app.get('/debug-session', async (request, reply) => {
