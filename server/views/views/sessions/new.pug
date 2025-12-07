@@ -9,11 +9,11 @@ block content
         .alert.alert-success.alert-dismissible.fade.show(role='alert' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;') #{success[0]}
       h1.h3.mb-3.fw-normal.text-center= t('sessions.new.title')
       .form-floating.mb-3
-        input.form-control(type='email', name='email', id='floatingInput', placeholder=t('sessions.new.emailPlaceholder'), required, class=(error && error.length ? 'is-invalid' : ''))
+        input.form-control(type='email', name='email', id='floatingInput', placeholder=t('sessions.new.emailPlaceholder'), class=(error && error.length ? 'is-invalid' : ''))
         label(for='floatingInput')= t('sessions.new.emailLabel')
         .invalid-feedback #{error && error.length ? error[0] : 'Required field'}
       .form-floating.mb-3
-        input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('sessions.new.passwordPlaceholder'), required)
+        input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('sessions.new.passwordPlaceholder'))
         label(for='floatingPassword')= t('sessions.new.passwordLabel')
       button.w-100.btn.btn-lg.btn-primary(type='submit')= t('sessions.new.submit')
       // ...existing code...
