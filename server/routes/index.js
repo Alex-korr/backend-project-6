@@ -129,11 +129,23 @@ export default async (app, options) => {
     const { email, password } = request.body;
     console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
-    // Server-side validation
+    const currentLang = request.cookies?.lang || 'ru';
+    const translateError = () => currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
+    
+    // Server-side validation - render form directly (NO redirect)
     if (!email || !email.trim() || !password || !password.trim()) {
-      console.log('[LOGIN] Failure - empty fields, redirecting to /session with error');
-      request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect('/session');
+      console.log('[LOGIN] Failure - empty fields, rendering /session with error');
+      return reply.view('sessions/new', {
+        error: [translateError()],
+        success: [],
+        layoutError: [],
+        layoutSuccess: [],
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: '/session'
+      });
     }
     
     // Import User model directly
@@ -143,9 +155,18 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      console.log('[LOGIN] Failure - user not found, redirecting to /session with error');
-      request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect('/session');
+      console.log('[LOGIN] Failure - user not found, rendering /session with error');
+      return reply.view('sessions/new', {
+        error: [translateError()],
+        success: [],
+        layoutError: [],
+        layoutSuccess: [],
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: '/session'
+      });
     }
     
     console.log('[LOGIN] User found, password hash:', user.password?.substring(0, 10) + '...');
@@ -155,9 +176,18 @@ export default async (app, options) => {
     console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
-      console.log('[LOGIN] Failure - wrong password, redirecting to /session with error');
-      request.session.flash = { error: ['flash.session.create.error'] };
-      return reply.redirect('/session');
+      console.log('[LOGIN] Failure - wrong password, rendering /session with error');
+      return reply.view('sessions/new', {
+        error: [translateError()],
+        success: [],
+        layoutError: [],
+        layoutSuccess: [],
+        t: request.i18next.t.bind(request.i18next),
+        currentLang,
+        isAuthenticated: false,
+        currentUser: null,
+        currentUrl: '/session'
+      });
     }
     
     // Authentication successful
