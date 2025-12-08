@@ -3,6 +3,7 @@ import TaskStatus from '../models/TaskStatus.cjs';
 
 export const index = async (req, reply) => {
   const statuses = await TaskStatus.query();
+  console.log('DEBUG statuses/index: Found', statuses.length, 'statuses:', statuses.map(s => s.name));
   const error = req.session?.flash?.status?.error || [];
   const success = req.session?.flash?.status?.success || [];
   req.session.flash = {};
