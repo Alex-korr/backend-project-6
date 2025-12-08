@@ -65,7 +65,7 @@ export const create = async (request, reply) => {
   
   if (hasErrors) {
     request.session.flash = { error: [request.i18next.t('flash.users.create.error')], validationErrors: errors };
-    return reply.redirect('/users/new');
+    return reply.redirect('/users');
   }
   
   try {
