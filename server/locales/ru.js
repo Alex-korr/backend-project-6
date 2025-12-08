@@ -14,6 +14,9 @@ export default {
         create: {
           success: 'Пользователь успешно зарегистрирован',
         },
+        update: {
+          success: 'Пользователь успешно изменён',
+        },
       },
       tasks: {
         create: {

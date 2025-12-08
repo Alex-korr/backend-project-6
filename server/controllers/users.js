@@ -102,7 +102,7 @@ export const update = async (request, reply) => {
       updateData.password = password;
     }
     await User.query().findById(id).patch(updateData);
-    request.session.flash = { success: [request.i18next.t('User updated successfully')] };
+    request.session.flash = { success: [request.i18next.t('flash.users.update.success')] };
     return reply.redirect('/users');
   } catch (error) {
     request.session.flash = { error: [error.message] };
