@@ -76,9 +76,10 @@ export default {
       },
       index: {
         Name: 'Имя',
-        Edit: 'Редактировать',
+        Edit: 'Изменить',
         Delete: 'Удалить',
-        noUsersYet: 'Пользователей пока нет'
+        noUsersYet: 'Пользователей пока нет',
+        newUser: 'Создать пользователя'
       }
     },
     labels: {

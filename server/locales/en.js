@@ -61,6 +61,7 @@ export default {
         Name: 'Name',
         Edit: 'Edit',
         Delete: 'Delete',
+        newUser: 'Create user',
       },
     },
     labels: {

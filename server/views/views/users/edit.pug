@@ -12,24 +12,24 @@ block content
       input(type='hidden', name='_method', value='patch')
       .form-floating.mb-3
         if typeof currentLang !== 'undefined' && currentLang === 'ru'
-          input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder='Имя', value=user.firstName, required)
+          input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder='Имя', value=user.firstName)
           label(for='floatingFirstName') Имя
         else
-          input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder='First Name', value=user.firstName, required)
+          input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder='First Name', value=user.firstName)
           label(for='floatingFirstName') First Name
       .form-floating.mb-3
         if typeof currentLang !== 'undefined' && currentLang === 'ru'
-          input.form-control(type='text', name='lastName', id='floatingLastName', placeholder='Фамилия', value=user.lastName, required)
+          input.form-control(type='text', name='lastName', id='floatingLastName', placeholder='Фамилия', value=user.lastName)
           label(for='floatingLastName') Фамилия
         else
-          input.form-control(type='text', name='lastName', id='floatingLastName', placeholder='Last Name', value=user.lastName, required)
+          input.form-control(type='text', name='lastName', id='floatingLastName', placeholder='Last Name', value=user.lastName)
           label(for='floatingLastName') Last Name
       .form-floating.mb-3
         if typeof currentLang !== 'undefined' && currentLang === 'ru'
-          input.form-control(type='email', name='email', id='floatingEmail', placeholder='Электронная почта', value=user.email, required)
-          label(for='floatingEmail') Электронная почта
+          input.form-control(type='email', name='email', id='floatingEmail', placeholder='Email', value=user.email)
+          label(for='floatingEmail') Email
         else
-          input.form-control(type='email', name='email', id='floatingEmail', placeholder='Email', value=user.email, required)
+          input.form-control(type='email', name='email', id='floatingEmail', placeholder='Email', value=user.email)
           label(for='floatingEmail') Email
       .form-floating.mb-3
         if typeof currentLang !== 'undefined' && currentLang === 'ru'
@@ -39,6 +39,6 @@ block content
           input.form-control(type='password', name='password', id='floatingPassword', placeholder='Password (leave blank to keep current)')
           label(for='floatingPassword') Password
       if typeof currentLang !== 'undefined' && currentLang === 'ru'
-        button.w-100.btn.btn-lg.btn-primary(type='submit') Сохранить
+        button.w-100.btn.btn-lg.btn-primary(type='submit') Изменить
       else
-        button.w-100.btn.btn-lg.btn-primary(type='submit') Update User
+        button.w-100.btn.btn-lg.btn-primary(type='submit') Update

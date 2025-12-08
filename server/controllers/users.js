@@ -36,7 +36,7 @@ export const index = async (request, reply) => {
     currentLang,
     t: request.i18next.t.bind(request.i18next),
     isAuthenticated: !!request.user,
-    user: request.user,
+    currentUser: request.user,
     currentUrl: request.raw.url,
     query,
   });
@@ -96,7 +96,12 @@ export const update = async (request, reply) => {
   const { firstName, lastName, email, password } = request.body;
   const currentLang = request.cookies?.lang || 'en';
   try {
-    await User.query().findById(id).patch({ firstName, lastName, email, password });
+    const updateData = { firstName, lastName, email };
+    // Only update password if provided
+    if (password && password.trim()) {
+      updateData.password = password;
+    }
+    await User.query().findById(id).patch(updateData);
     request.session.flash = { success: [request.i18next.t('User updated successfully')] };
     return reply.redirect('/users');
   } catch (error) {
