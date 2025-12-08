@@ -97,6 +97,7 @@ export default async (app, options) => {
   app.post('/users', usersController.create);
   app.get('/users/:id', usersController.show);
   app.get('/users/:id/edit', usersController.edit);
+  app.post('/users/:id/update', usersController.update);
   app.patch('/users/:id', usersController.update);
   app.delete('/users/:id', usersController.destroy);
   

@@ -1,22 +1,5 @@
 import User from '../models/User.cjs';
 
-// function getLang(request) {
-//   return request.cookies?.lang || request.query.lang || request.session?.lang || 'en';
-// }
-
-// function setLang(request, lang) {
-//   request.session.lang = lang;
-//   // reply.setCookie will be called in the controller, since reply is only available there
-// }
-
-// export const changeLang = async (request, reply) => {
-//   const { lang } = request.params;
-//   if (['en', 'ru'].includes(lang)) {
-//     setLang(request, lang);
-//      // reply.setCookie('lang', lang, { path: '/' }); // Теперь кука устанавливается в хуке
-//   }
-//   reply.redirect(request.headers.referer || '/');
-// };
 
 export const index = async (request, reply) => {
   const query = request.query || {};
@@ -92,8 +75,13 @@ export const edit = async (request, reply) => {
 };
 
 export const update = async (request, reply) => {
+  console.log('=== UPDATE USER CALLED ===');
+  console.log('Request method:', request.method);
+  console.log('Request URL:', request.url);
   const { id } = request.params;
+  console.log('User ID:', id);
   const { firstName, lastName, email, password } = request.body;
+  console.log('Body data:', { firstName, lastName, email, passwordLength: password?.length });
   const currentLang = request.cookies?.lang || 'en';
   try {
     const updateData = { firstName, lastName, email };
@@ -105,6 +93,10 @@ export const update = async (request, reply) => {
     request.session.flash = { success: [request.i18next.t('flash.users.update.success')] };
     return reply.redirect('/users');
   } catch (error) {
+    console.error('=== UPDATE ERROR ===');
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    console.error('Error data:', error.data);
     request.session.flash = { error: [error.message] };
     return reply.redirect(`/users/${id}/edit`);
   }

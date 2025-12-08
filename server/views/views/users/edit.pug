@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
-    form(action=`/users/${user.id}?_method=PATCH`, method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
+    form(action=`/users/${user.id}/update`, method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
       if typeof currentLang !== 'undefined' && currentLang === 'ru'
         h1.h3.mb-3.fw-normal.text-center Редактировать
       else

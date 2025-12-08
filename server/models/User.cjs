@@ -19,7 +19,7 @@ module.exports = class User extends BaseModel {
       properties: {
         id: { type: 'integer' },
         email: { type: 'string', minLength: 1, format: 'email' },
-        password: { type: 'string', minLength: 8 },
+        password: { type: 'string', minLength: 1 },
         first_name: { type: 'string' },
         last_name: { type: 'string' },
         created_at: { type: 'string', format: 'date-time' },

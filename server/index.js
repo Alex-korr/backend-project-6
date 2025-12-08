@@ -92,16 +92,17 @@ export default async function (fastify, opts) {
     done();
   });
 
-  // Register form body parser
-  fastify.register(formbody);
-
   // Method override support for HTML forms (PATCH, DELETE, etc.)
-  fastify.addHook('preHandler', (req, reply, done) => {
-    if (req.method === 'POST' && req.query._method) {
-      req.method = req.query._method.toUpperCase();
+  // Must be registered BEFORE formbody parser
+  fastify.addHook('onRequest', (req, reply, done) => {
+    if (req.raw.method === 'POST' && req.query._method) {
+      req.raw.method = req.query._method.toUpperCase();
     }
     done();
   });
+
+  // Register form body parser
+  fastify.register(formbody);
 
   // Configure session security
   const sessionKey = process.env.SECURE_SESSION_KEY;
