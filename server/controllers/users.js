@@ -10,12 +10,14 @@ export const index = async (request, reply) => {
   }
   const error = request.session?.flash?.error || [];
   const success = request.session?.flash?.success || [];
+  const validationErrors = request.session?.flash?.validationErrors || {};
   request.session.flash = {};
   const currentLang = request.cookies?.lang || 'en';
   return reply.view('users/index', {
     users,
     error,
     success,
+    validationErrors,
     currentLang,
     t: request.i18next.t.bind(request.i18next),
     isAuthenticated: !!request.user,
