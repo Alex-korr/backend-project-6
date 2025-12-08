@@ -137,13 +137,13 @@ export const destroy = async (request, reply) => {
   
   await User.query().deleteById(id);
   
-  // If user deleted themselves, clear the session
+  // Set flash message
+  request.session.flash = { success: [request.i18next.t('flash.users.delete.success')] };
+  
+  // If user deleted themselves, logout (clear session after flash is set)
   if (request.user.id === parseInt(id)) {
-    request.session.delete();
-    request.session.flash = { success: [request.i18next.t('flash.users.delete.success')] };
-    return reply.redirect('/users');
+    await request.logOut();
   }
   
-  request.session.flash = { success: [request.i18next.t('flash.users.delete.success')] };
   return reply.redirect('/users');
 };
