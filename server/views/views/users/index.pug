@@ -34,7 +34,7 @@ block content
               if currentUser && (currentUser.id === user.id || currentUser.role === 'admin')
                 a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('users.index.Edit')
             td
-              if currentUser && currentUser.role === 'admin' && user.role === 'user'
+              if currentUser && (currentUser.id === user.id || (currentUser.role === 'admin' && user.role === 'user'))
                 form(action=`/users/${user.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
                   input(type='hidden', name='_method', value='delete')
                   button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.Delete')
