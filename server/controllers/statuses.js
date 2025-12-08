@@ -92,8 +92,8 @@ export const update = async (req, reply) => {
 export const remove = async (req, reply) => {
   const { id } = req.params;
   // Use Task model to check for related tasks
-  const Task = (await import('../models/Task.js')).default;
-  const relatedTasks = await Task.query().where('statusId', id);
+  const Task = (await import('../models/Task.cjs')).default;
+  const relatedTasks = await Task.query().whereRaw('statusId = ?', [id]);
   if (relatedTasks.length > 0) {
     const errorMsg = req.i18next.t('flash.statuses.delete.error');
     console.log('DEBUG: Translation for flash.statuses.delete.error:', errorMsg, 'lang:', req.i18next.language);
