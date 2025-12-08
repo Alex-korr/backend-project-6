@@ -7,16 +7,24 @@ block content
       if (typeof error === 'string' && error.trim()) || (Array.isArray(error) && error.length && error[0] && error[0].trim())
         .alert.alert-danger.alert-dismissible.fade.show(role='alert')= Array.isArray(error) ? error[0] : error
       .form-floating.mb-3
-        input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder=t('users.new.firstNamePlaceholder'), required)
+        input.form-control(type='text', name='firstName', id='floatingFirstName', placeholder=t('users.new.firstNamePlaceholder'))
         label(for='floatingFirstName')= t('users.new.firstNameLabel')
+        if validationErrors.firstName
+          .invalid-feedback.d-block= validationErrors.firstName
       .form-floating.mb-3
-        input.form-control(type='text', name='lastName', id='floatingLastName', placeholder=t('users.new.lastNamePlaceholder'), required)
+        input.form-control(type='text', name='lastName', id='floatingLastName', placeholder=t('users.new.lastNamePlaceholder'))
         label(for='floatingLastName')= t('users.new.lastNameLabel')
+        if validationErrors.lastName
+          .invalid-feedback.d-block= validationErrors.lastName
       .form-floating.mb-3
-        input.form-control(type='email', name='email', id='floatingEmail', placeholder=t('users.new.emailPlaceholder'), required)
+        input.form-control(type='email', name='email', id='floatingEmail', placeholder=t('users.new.emailPlaceholder'))
         label(for='floatingEmail')= t('users.new.emailLabel')
+        if validationErrors.email
+          .invalid-feedback.d-block= validationErrors.email
       .form-floating.mb-3
-        input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('users.new.passwordPlaceholder'), required)
+        input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('users.new.passwordPlaceholder'))
         label(for='floatingPassword')= t('users.new.passwordLabel')
+        if validationErrors.password
+          .invalid-feedback.d-block= validationErrors.password
       button.w-100.btn.btn-lg.btn-primary(type='submit')= t('users.new.submit')
       // ...existing code...

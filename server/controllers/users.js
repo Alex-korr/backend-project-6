@@ -29,9 +29,10 @@ export const newUser = async (request, reply) => {
   const query = request.query || {};
   const error = request.session?.flash?.error || [];
   const success = request.session?.flash?.success || [];
+  const validationErrors = request.session?.flash?.validationErrors || {};
   request.session.flash = {};
   const currentLang = request.cookies?.lang || 'en';
-  return reply.view('users/new', { error, success, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url, query });
+  return reply.view('users/new', { error, success, validationErrors, currentLang, t: request.i18next.t.bind(request.i18next), isAuthenticated: !!request.user, user: request.user, currentUrl: request.raw.url, query });
 };
 
 export const create = async (request, reply) => {
@@ -40,6 +41,33 @@ export const create = async (request, reply) => {
   const { firstName, lastName, email, password } = userData;
   const role = 'user';
   const currentLang = request.cookies?.lang || 'en';
+  
+  // Validate required fields
+  const errors = {};
+  let hasErrors = false;
+  
+  if (!firstName || firstName.trim() === '') {
+    errors.firstName = request.i18next.t('First name is required');
+    hasErrors = true;
+  }
+  if (!lastName || lastName.trim() === '') {
+    errors.lastName = request.i18next.t('Last name is required');
+    hasErrors = true;
+  }
+  if (!email || email.trim() === '') {
+    errors.email = request.i18next.t('Email is required');
+    hasErrors = true;
+  }
+  if (!password || password.length < 3) {
+    errors.password = request.i18next.t('Password must be at least 3 characters');
+    hasErrors = true;
+  }
+  
+  if (hasErrors) {
+    request.session.flash = { error: [request.i18next.t('flash.users.create.error')], validationErrors: errors };
+    return reply.redirect('/users/new');
+  }
+  
   try {
     const user = await User.query().insert({ firstName, lastName, email, password, role });
     request.session.flash = { success: [request.i18next.t('flash.users.create.success')] };

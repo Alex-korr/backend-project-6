@@ -1,5 +1,9 @@
 export default {
   translation: {
+    'First name is required': 'Имя обязательно',
+    'Last name is required': 'Фамилия обязательна',
+    'Email is required': 'Email обязателен',
+    'Password must be at least 3 characters': 'Пароль должен быть не менее 3 символов',
     flash: {
       session: {
         create: {
@@ -13,6 +17,7 @@ export default {
       users: {
         create: {
           success: 'Пользователь успешно зарегистрирован',
+          error: 'Не удалось зарегистрировать',
         },
         update: {
           success: 'Пользователь успешно изменён',
