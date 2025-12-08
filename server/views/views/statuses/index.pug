@@ -10,17 +10,15 @@ block content
         div.alert.alert-danger.mt-3(style='position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60%; z-index: 10; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);')= msg
     h1= t('statuses.index.title')
     a.btn.btn-primary(href="/statuses/new")= t('statuses.index.createStatus')
-    if statuses.length
-      table.table.table-striped.mt-3
-        thead
+    table.table.table-striped.mt-3
+      thead
+        tr
+          th= t('statuses.index.name')
+          th= t('statuses.index.actions')
+      tbody
+        each status in statuses
           tr
-            th= t('statuses.index.name')
-            th= t('statuses.index.actions')
-        tbody
-          each status in statuses
-            tr
-              td= status.name
-              td
-                form(action=`/statuses/${status.id}/delete`, method='POST', style='display:inline;')
-                  button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('statuses.index.delete')
-    // No message shown when statuses are empty
+            td= status.name
+            td
+              form(action=`/statuses/${status.id}/delete`, method='POST', style='display:inline;')
+                button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('statuses.index.delete')
