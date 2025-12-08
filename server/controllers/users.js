@@ -106,23 +106,44 @@ export const destroy = async (request, reply) => {
   const { id } = request.params;
   const user = await User.query().findById(id);
   const currentLang = request.cookies?.lang || 'en';
-  // Role check
-  if (!request.user || request.user.role !== 'admin') {
-    request.session.flash = { error: [request.i18next.t('Only admin can delete users')] };
+  
+  // Check if user is authenticated
+  if (!request.user) {
+    request.session.flash = { error: [request.i18next.t('You must be logged in')] };
     return reply.redirect('/users');
   }
+  
+  // Allow user to delete themselves OR admin to delete regular users
+  const canDelete = request.user.id === parseInt(id) || 
+                   (request.user.role === 'admin' && user?.role === 'user');
+  
+  if (!canDelete) {
+    request.session.flash = { error: [request.i18next.t('You cannot delete this user')] };
+    return reply.redirect('/users');
+  }
+  
   if (!user) {
     request.session.flash = { error: [request.i18next.t('User not found or already deleted')] };
     return reply.redirect('/users');
   }
-  // Check for related tasks
-  const tasksAsCreator = await User.relatedQuery('tasks').for(id).where('creatorId', id);
-  const tasksAsExecutor = await User.relatedQuery('tasks').for(id).where('executorId', id);
-  if (tasksAsCreator.length > 0 || tasksAsExecutor.length > 0) {
-    request.session.flash = { error: [request.i18next.t('Cannot delete user with related tasks')] };
+  
+  // Check for related tasks (optional - can be removed if not needed)
+  // const tasksAsCreator = await User.relatedQuery('tasks').for(id).where('creatorId', id);
+  // const tasksAsExecutor = await User.relatedQuery('tasks').for(id).where('executorId', id);
+  // if (tasksAsCreator.length > 0 || tasksAsExecutor.length > 0) {
+  //   request.session.flash = { error: [request.i18next.t('Cannot delete user with related tasks')] };
+  //   return reply.redirect('/users');
+  // }
+  
+  await User.query().deleteById(id);
+  
+  // If user deleted themselves, clear the session
+  if (request.user.id === parseInt(id)) {
+    request.session.delete();
+    request.session.flash = { success: [request.i18next.t('flash.users.delete.success')] };
     return reply.redirect('/users');
   }
-  await User.query().deleteById(id);
-  request.session.flash = { success: [request.i18next.t('User successfully deleted')] };
+  
+  request.session.flash = { success: [request.i18next.t('flash.users.delete.success')] };
   return reply.redirect('/users');
 };

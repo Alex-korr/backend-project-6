@@ -92,15 +92,6 @@ export default async function (fastify, opts) {
     done();
   });
 
-  // Method override support for HTML forms (PATCH, DELETE, etc.)
-  // Must be registered BEFORE formbody parser
-  fastify.addHook('onRequest', (req, reply, done) => {
-    if (req.raw.method === 'POST' && req.query._method) {
-      req.raw.method = req.query._method.toUpperCase();
-    }
-    done();
-  });
-
   // Register form body parser
   fastify.register(formbody);
 
@@ -255,6 +246,12 @@ export default async function (fastify, opts) {
   
   // Global error handler
   fastify.setErrorHandler((error, request, reply) => {
+    console.error('=== ERROR HANDLER ===');
+    console.error('Error:', error);
+    console.error('Message:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('====================');
+    
     if (fastify.rollbar) {
       fastify.rollbar.error(error, request);
     }

@@ -99,6 +99,7 @@ export default async (app, options) => {
   app.get('/users/:id/edit', usersController.edit);
   app.post('/users/:id/update', usersController.update);
   app.patch('/users/:id', usersController.update);
+  app.post('/users/:id/delete', usersController.destroy);
   app.delete('/users/:id', usersController.destroy);
   
   // Sessions routes - both URLs show login form directly (no redirects)

@@ -17,6 +17,9 @@ export default {
         update: {
           success: 'Пользователь успешно изменён',
         },
+        delete: {
+          success: 'Пользователь успешно удалён',
+        },
       },
       tasks: {
         create: {
