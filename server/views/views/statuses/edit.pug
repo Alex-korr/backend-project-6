@@ -5,7 +5,7 @@ block content
   form(action=`/statuses/${status.id}`, method='POST')
     .mb-3
       label.form-label(for='name')= t('statuses.index.name')
-      input.form-control(type='text', name='name', id='data_name', required, minlength='1', value=status.name, aria-label=t('statuses.index.name'))
+      input.form-control(type='text', name='name', id='data_name', required, minlength='1', value=status.name, aria-label=t('statuses.index.name'), placeholder=t('statuses.index.name'))
     if error && error.length
       .alert.alert-danger= error
     button.btn.btn-primary(type='submit')= t('statuses.index.save')
