@@ -39,12 +39,17 @@ export const create = async (req, reply) => {
   try {
     const created = await TaskStatus.query().insert({ name });
     console.log('DEBUG statuses/create: Created status:', created);
-    let successMsg = req.i18next.t('flash.statuses.create.success');
-    console.log('DEBUG: Translation for flash.statuses.create.success:', successMsg, 'lang:', req.i18next.language);
-    if (successMsg === 'flash.statuses.create.success') {
-      successMsg = 'Status created successfully.';
+    
+    // Only set flash message if session exists (authenticated user)
+    if (req.session && req.i18next) {
+      let successMsg = req.i18next.t('flash.statuses.create.success');
+      console.log('DEBUG: Translation for flash.statuses.create.success:', successMsg, 'lang:', req.i18next.language);
+      if (successMsg === 'flash.statuses.create.success') {
+        successMsg = 'Status created successfully.';
+      }
+      req.session.flash = { status: { success: [successMsg] } };
     }
-    req.session.flash = { status: { success: [successMsg] } };
+    
     reply.redirect('/statuses');
   } catch (err) {
     console.log('DEBUG statuses/create: ERROR:', err.message);
