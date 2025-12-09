@@ -3,12 +3,12 @@ import TaskStatus from '../models/TaskStatus.cjs';
 
 export const index = async (req, reply) => {
   const statuses = await TaskStatus.query();
-  console.log('DEBUG statuses/index: Found', statuses.length, 'statuses:', statuses.map(s => s.name));
   const error = req.session?.flash?.status?.error || [];
   const success = req.session?.flash?.status?.success || [];
   req.session.flash = {};
-    const query = req.query || {};
-    const currentLang = req.cookies?.lang || query.lang || 'en';
+  const query = req.query || {};
+  const currentLang = req.cookies?.lang || query.lang || 'en';
+  reply.header('Cache-Control', 'no-store');
   return reply.view('statuses/index', {
     statuses,
     error,
@@ -30,33 +30,32 @@ export const newStatus = async (req, reply) => {
     t: req.i18next.t.bind(req.i18next),
     currentLang,
     currentUrl: req.raw.url,
+    error: null,
   });
 };
 
 export const create = async (req, reply) => {
-  const { name } = req.body;
-    req.log && req.log.info(`[DEBUG] Attempt to create status: ${name}`);
-    console.log('[DEBUG] /statuses/create called');
-    console.log('[DEBUG] Request body:', req.body);
+  const name = req.body.name || (req.body.data && req.body.data.name);
+  req.log && req.log.info(`[DEBUG] /statuses/create: name = ${name}`);
+  req.log && req.log.info(`[DEBUG] Request body: ${JSON.stringify(req.body)}`);
+  // DEBUG: Проверка парсинга формы
+  console.log('BODY:', req.body);
   try {
-      const status = await TaskStatus.query().insert({ name });
-      req.log && req.log.info(`[DEBUG] Status created: ${JSON.stringify(status)}`);
-    
-    // Only set flash message if session exists (authenticated user)
+    const status = await TaskStatus.query().insert({ name });
+    req.log && req.log.info(`[DEBUG] Status created: ${JSON.stringify(status)}`);
     if (req.session && req.i18next) {
       let successMsg = req.i18next.t('flash.statuses.create.success');
-      console.log('DEBUG: Translation for flash.statuses.create.success:', successMsg, 'lang:', req.i18next.language);
       if (successMsg === 'flash.statuses.create.success') {
         successMsg = 'Status created successfully.';
       }
       req.session.flash = { status: { success: [successMsg] } };
     }
-    
-      res.redirect('/statuses');
+    reply.redirect('/statuses');
   } catch (err) {
-      req.log && req.log.error(`[DEBUG] Status creation error: ${err.message}`);
+    req.log && req.log.error(`[DEBUG] Status creation error: ${err.message}`);
     reply.view('statuses/new', {
       error: err.message,
+      name,
       isAuthenticated: !!req.user,
       user: req.user,
       t: req.i18next.t.bind(req.i18next),
@@ -106,13 +105,11 @@ export const remove = async (req, reply) => {
   const relatedTasks = await Task.query().whereRaw('statusId = ?', [id]);
   if (relatedTasks.length > 0) {
     const errorMsg = req.i18next.t('flash.statuses.delete.error');
-    console.log('DEBUG: Translation for flash.statuses.delete.error:', errorMsg, 'lang:', req.i18next.language);
     req.session.flash = { status: { error: [errorMsg] } };
     return reply.redirect('/statuses');
   }
   await TaskStatus.query().deleteById(id);
   let successMsg = req.i18next.t('flash.statuses.delete.success');
-  console.log('DEBUG: Translation for flash.statuses.delete.success:', successMsg, 'lang:', req.i18next.language);
   if (successMsg === 'flash.statuses.delete.success') {
     successMsg = 'Status deleted successfully.';
   }

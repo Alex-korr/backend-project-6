@@ -2,8 +2,10 @@ extends ../layout.pug
 
 block content
   h1= t('statuses.index.createStatus')
+  if error && error.length
+    .alert.alert-danger.mt-3= error
   form(action='/statuses', method='POST')
     .mb-3
       label.form-label(for='name')= t('statuses.index.name')
-      input.form-control(type='text', name='name', id='name', required, minlength='1')
+      input.form-control(type='text', name='name', id='name', required, minlength='1', value=(typeof name !== 'undefined' ? name : ''))
     button.btn.btn-primary(type='submit')= t('statuses.index.createStatus')
