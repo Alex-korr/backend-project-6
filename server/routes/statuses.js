@@ -8,6 +8,7 @@ export default async (app) => {
   app.post('/statuses', statusesController.create);
   app.get('/statuses/:id/edit', { preHandler: ensureAuthenticated }, statusesController.edit);
   app.patch('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.update);
+  app.post('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.update);
   app.delete('/statuses/:id', { preHandler: ensureAuthenticated }, statusesController.remove);
   app.post('/statuses/:id/delete', { preHandler: ensureAuthenticated }, statusesController.remove);
 };

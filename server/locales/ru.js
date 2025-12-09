@@ -105,9 +105,11 @@ export default {
       index: {
         title: 'Статусы',
         createStatus: 'Создать статус',
+        editStatus: 'Изменить статус',
         name: 'Наименование',
         actions: 'Действия',
-        delete: 'Удалить'
+        delete: 'Удалить',
+        save: 'Сохранить'
       },
       createSubmit: 'Создать',
     },

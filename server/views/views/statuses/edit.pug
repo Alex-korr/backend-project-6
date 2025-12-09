@@ -1,11 +1,11 @@
 extends ../layout.pug
 
 block content
-  h1 Edit status
-  form(action=`/statuses/${status.id}?_method=PATCH`, method='POST')
+  h1= t('statuses.index.editStatus')
+  form(action=`/statuses/${status.id}`, method='POST')
     .mb-3
-      label.form-label(for='name') Name
+      label.form-label(for='name')= t('statuses.index.name')
       input.form-control(type='text', name='name', id='name', required, minlength='1', value=status.name)
-    if error
+    if error && error.length
       .alert.alert-danger= error
-    button.btn.btn-primary(type='submit') Save
+    button.btn.btn-primary(type='submit')= t('statuses.index.save')

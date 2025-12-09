@@ -76,9 +76,11 @@ export default {
       index: {
         title: 'Statuses',
         createStatus: 'Create status',
+        editStatus: 'Edit status',
         name: 'Name',
         actions: 'Actions',
         delete: 'Delete',
+        save: 'Save',
       },
     },
     tasks: {
