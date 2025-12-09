@@ -35,8 +35,10 @@ export const newStatus = async (req, reply) => {
 
 export const create = async (req, reply) => {
   const { name } = req.body;
+  console.log('DEBUG statuses/create: name =', name);
   try {
-    await TaskStatus.query().insert({ name });
+    const created = await TaskStatus.query().insert({ name });
+    console.log('DEBUG statuses/create: Created status:', created);
     let successMsg = req.i18next.t('flash.statuses.create.success');
     console.log('DEBUG: Translation for flash.statuses.create.success:', successMsg, 'lang:', req.i18next.language);
     if (successMsg === 'flash.statuses.create.success') {
@@ -45,6 +47,7 @@ export const create = async (req, reply) => {
     req.session.flash = { status: { success: [successMsg] } };
     reply.redirect('/statuses');
   } catch (err) {
+    console.log('DEBUG statuses/create: ERROR:', err.message);
     reply.view('statuses/new', {
       error: err.message,
       isAuthenticated: !!req.user,
