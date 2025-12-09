@@ -35,10 +35,12 @@ export const newStatus = async (req, reply) => {
 
 export const create = async (req, reply) => {
   const { name } = req.body;
-  console.log('DEBUG statuses/create: name =', name);
+    req.log && req.log.info(`[DEBUG] Attempt to create status: ${name}`);
+    console.log('[DEBUG] /statuses/create called');
+    console.log('[DEBUG] Request body:', req.body);
   try {
-    const created = await TaskStatus.query().insert({ name });
-    console.log('DEBUG statuses/create: Created status:', created);
+      const status = await TaskStatus.query().insert({ name });
+      req.log && req.log.info(`[DEBUG] Status created: ${JSON.stringify(status)}`);
     
     // Only set flash message if session exists (authenticated user)
     if (req.session && req.i18next) {
@@ -50,9 +52,9 @@ export const create = async (req, reply) => {
       req.session.flash = { status: { success: [successMsg] } };
     }
     
-    reply.redirect('/statuses');
+      res.redirect('/statuses');
   } catch (err) {
-    console.log('DEBUG statuses/create: ERROR:', err.message);
+      req.log && req.log.error(`[DEBUG] Status creation error: ${err.message}`);
     reply.view('statuses/new', {
       error: err.message,
       isAuthenticated: !!req.user,
