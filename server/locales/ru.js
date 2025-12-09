@@ -41,7 +41,7 @@ export default {
       },
       statuses: {
         create: {
-          success: 'Статус успешно создан!',
+          success: 'Статус успешно создан',
         },
         update: {
           success: 'Статус успешно обновлён!',
