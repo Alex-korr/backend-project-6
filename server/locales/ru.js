@@ -104,7 +104,7 @@ export default {
     statuses: {
       index: {
         title: 'Статусы',
-        createStatus: 'Создать статус',
+        createStatus: 'Создать',
         name: 'Наименование',
         actions: 'Действия',
         delete: 'Удалить'
