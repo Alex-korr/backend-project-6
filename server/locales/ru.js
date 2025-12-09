@@ -104,11 +104,12 @@ export default {
     statuses: {
       index: {
         title: 'Статусы',
-        createStatus: 'Создать',
+        createStatus: 'Создать статус',
         name: 'Наименование',
         actions: 'Действия',
         delete: 'Удалить'
-      }
+      },
+      createSubmit: 'Создать',
     },
     sessions: {
       new: {
