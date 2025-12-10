@@ -48,6 +48,14 @@ export const index = async (req, reply) => {
     currentUrl: req.raw.url,
     query,
   });
+  console.log('--- FINAL LABELS ARRAY ---');
+  if (labels.length === 0) {
+    console.log('LABELS ARRAY IS EMPTY');
+  } else {
+    labels.forEach((label, idx) => {
+      console.log(`LABEL[${idx}]:`, JSON.stringify(label));
+    });
+  }
   return reply.view('labels/index', {
     labels,
     error,
