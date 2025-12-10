@@ -44,7 +44,7 @@ export default {
           success: 'Статус успешно создан',
         },
         update: {
-          success: 'Статус успешно обновлён!',
+          success: 'Статус успешно изменён',
         },
         delete: {
           success: 'Статус успешно удалён!',
