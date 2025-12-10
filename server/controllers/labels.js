@@ -8,7 +8,7 @@ export const index = async (req, reply) => {
   }
   let labels = [];
   try {
-    labels = await Label.query().where('user_id', req.user.id);
+    labels = await Label.query();
     console.log('LABELS FOR USER:', req.user.id, labels);
   } catch (err) {
     console.error('ERROR FETCHING LABELS:', err);
