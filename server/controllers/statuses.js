@@ -103,10 +103,10 @@ export const remove = async (req, reply) => {
   // Use Task model to check for related tasks
   const Task = (await import('../models/Task.cjs')).default;
   const relatedTasks = await Task.query().whereRaw('statusId = ?', [id]);
-  if (relatedTasks.length > 0) {
+    if (relatedTasks.length > 0) { 
     const errorMsg = req.i18next.t('flash.statuses.delete.error');
     req.session.flash = { status: { error: [errorMsg] } };
-    return reply.redirect('/statuses');
+      return reply.redirect(303, '/statuses');
   }
   await TaskStatus.query().deleteById(id);
   let successMsg = req.i18next.t('flash.statuses.delete.success');
@@ -114,5 +114,5 @@ export const remove = async (req, reply) => {
     successMsg = 'Status deleted successfully.';
   }
   req.session.flash = { status: { success: [successMsg] } };
-  reply.redirect('/statuses');
+    return reply.redirect(303, '/statuses');
 };
