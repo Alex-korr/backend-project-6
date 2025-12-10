@@ -247,7 +247,7 @@ export default async function (fastify, opts) {
   // Global error handler
   fastify.setErrorHandler((error, request, reply) => {
     console.error('=== ERROR HANDLER ===');
-    console.error('Error:', error);
+    console.log('All routes registered, server ready to handle requests');
     console.error('Message:', error.message);
     console.error('Stack:', error.stack);
     console.error('====================');

@@ -1,7 +1,7 @@
 import Label from '../models/Label.cjs';
 
 export const index = async (req, reply) => {
-    console.log('LABELS INDEX CONTROLLER CALLED', { user: req.user && req.user.id });
+  console.log('LABELS INDEX CONTROLLER CALLED', { user: req.user && req.user.id });
   const query = req.query || {};
   if (!req.user) {
     return reply.redirect('/session/new');
@@ -12,6 +12,11 @@ export const index = async (req, reply) => {
     console.log('LABELS FOR USER:', req.user.id, labels);
   } catch (err) {
     console.error('ERROR FETCHING LABELS:', err);
+  }
+  // Check if the client expects JSON
+  const accept = req.headers.accept || '';
+  if (accept.includes('application/json')) {
+    return reply.send({ data: labels });
   }
   const error = req.session?.flash?.labels?.error || [];
   const success = req.session?.flash?.labels?.success || [];
