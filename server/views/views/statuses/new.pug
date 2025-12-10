@@ -1,12 +1,14 @@
 extends ../layout.pug
 
 block content
-  h1= t('statuses.index.createStatus')
-  form(action='/statuses', method='POST')
-    .mb-3
-      label.form-label(for='name')= t('statuses.index.name')
-      // Dummy comment for commit
-      input.form-control(type='text', name='name', id='name', minlength='1', value=(typeof name !== 'undefined' ? name : ''))
-      if errors && errors.length
-        div.invalid-feedback(style='display:block')= errors[0]
-    button.btn.btn-primary(type='submit')= t('statuses.createSubmit')
+    if alert
+      .alert.alert-danger.mt-3= alert
+    h1= t('statuses.index.createStatus')
+    form(action='/statuses', method='POST')
+      .mb-3
+        label.form-label(for='name')= t('statuses.index.name')
+        // Dummy comment for commit
+        input.form-control(type='text', name='name', id='name', minlength='1', value=(typeof name !== 'undefined' ? name : ''))
+        if errors && errors.length
+          div.invalid-feedback(style='display:block; margin-left:8px;')= errors[0]
+      button.btn.btn-primary(type='submit')= t('statuses.createSubmit')

@@ -42,9 +42,10 @@ export const create = async (req, reply) => {
   console.log('BODY:', req.body);
   // Server-side validation: status name must not be empty
   if (!name || name.trim().length < 1) {
-    const errors = ['Status name cannot be empty'];
+    const errors = ['Имя статуса не может быть пустым'];
     return reply.code(422).view('statuses/new', {
       errors,
+      alert: 'Не удалось создать статус',
       name,
       isAuthenticated: !!req.user,
       user: req.user,
@@ -70,6 +71,7 @@ export const create = async (req, reply) => {
     const errors = [err.message];
     reply.code(422).view('statuses/new', {
       errors,
+      alert: 'Не удалось создать статус',
       name,
       isAuthenticated: !!req.user,
       user: req.user,
