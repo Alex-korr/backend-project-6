@@ -8,8 +8,5 @@ block content
       // Dummy comment for commit
       input.form-control(type='text', name='name', id='name', minlength='1', value=(typeof name !== 'undefined' ? name : ''))
       if errors && errors.length
-        .alert.alert-danger.mt-2
-          ul.validation-errors(style='list-style: none; padding-left: 0; margin-bottom: 0;')
-            each err in errors
-              li= err
+        div.invalid-feedback(style='display:block')= errors[0]
     button.btn.btn-primary(type='submit')= t('statuses.createSubmit')
