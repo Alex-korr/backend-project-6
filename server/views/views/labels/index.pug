@@ -27,14 +27,16 @@ block content
       thead
         tr
           th Name
+          th user_id
           th Actions
           th Debug
       tbody
         each label in labels
           tr
             td= label.name
+            td= label.user_id
             td
               a.btn.btn-sm.me-2(href=`/labels/${label.id}/edit` style="background: #fff; color: #1976d2; border: 1px solid #90caf9;") Edit
               form(action=`/labels/${label.id}/delete` method="post" style="display:inline;")
                 button.btn.btn-sm(type="submit" style="background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;") Delete
-            td= JSON.stringify(label)
+            td= Object.keys(label).map(k => `${k}: ${label[k]}`).join(', ')
