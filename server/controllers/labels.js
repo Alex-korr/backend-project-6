@@ -19,7 +19,7 @@ export const index = async (req, reply) => {
   }
   let labels = [];
   try {
-    labels = await Label.query();
+    labels = await Label.query().where('user_id', req.user.id);
     console.log('=== [LABELS FROM DB] ===');
     if (labels.length > 0) {
       labels.forEach((label, idx) => {
