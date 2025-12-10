@@ -5,7 +5,8 @@ export const index = async (req, reply) => {
   if (!req.user) {
     return reply.redirect('/session/new');
   }
-  const labels = await Label.query().where('userId', req.user.id);
+  const labels = await Label.query().where('user_id', req.user.id);
+  console.log('LABELS FOR USER:', req.user.id, labels);
   const error = req.session?.flash?.labels?.error || [];
   const success = req.session?.flash?.labels?.success || [];
   req.session.flash = {};
@@ -37,7 +38,8 @@ export const newLabel = async (req, reply) => {
 export const create = async (req, reply) => {
   const { name } = req.body;
   const userId = req.user.id;
-  await Label.query().insert({ name, userId });
+  const label = await Label.query().insert({ name, user_id: userId });
+  console.log('LABEL CREATED:', label);
   return reply.redirect('/labels');
 };
 
