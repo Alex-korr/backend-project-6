@@ -47,14 +47,38 @@ export const newLabel = async (req, reply) => {
 };
 
 export const create = async (req, reply) => {
-    console.log('LABELS CREATE CONTROLLER CALLED', { user: req.user && req.user.id, body: req.body });
+  console.log('LABELS CREATE CONTROLLER CALLED', { user: req.user && req.user.id, body: req.body });
   const { name } = req.body;
   const userId = req.user.id;
+  const t = req.i18next.t.bind(req.i18next);
+  const query = req.query || {};
+  if (!name || name.trim().length === 0) {
+    return reply.code(422).view('labels/new', {
+      error: [t('flash.labels.create.error')],
+      t,
+      currentLang: req.cookies?.lang || query.lang || 'en',
+      isAuthenticated: !!req.user,
+      user: req.user,
+      currentUrl: req.raw.url,
+      query,
+      name,
+    });
+  }
   try {
     const label = await Label.query().insert({ name, user_id: userId });
     console.log('LABEL CREATED:', label);
   } catch (err) {
     console.error('ERROR CREATING LABEL:', err);
+    return reply.code(422).view('labels/new', {
+      error: [t('flash.labels.create.error')],
+      t,
+      currentLang: req.cookies?.lang || query.lang || 'en',
+      isAuthenticated: !!req.user,
+      user: req.user,
+      currentUrl: req.raw.url,
+      query,
+      name,
+    });
   }
   return reply.redirect('/labels');
 };

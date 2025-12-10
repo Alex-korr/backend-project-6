@@ -38,6 +38,9 @@ export default {
         },
       },
       labels: {
+        create: {
+          error: 'Failed to create label. Name cannot be empty.'
+        },
         delete: {
           success: 'Label was deleted!',
           error: 'Cannot delete label with related tasks.',
