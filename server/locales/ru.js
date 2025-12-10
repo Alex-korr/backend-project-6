@@ -35,8 +35,8 @@ export default {
       },
       labels: {
         delete: {
-          success: 'Тег успешно удалён',
-          error: 'Не удалось удалить тег.'
+          success: 'Метка успешно удалена',
+          error: 'Не удалось удалить метку.'
         }
       },
       statuses: {
@@ -57,8 +57,8 @@ export default {
         status: 'Статус',
         all: 'Все',
         executor: 'Исполнитель',
-        label: 'Тег',
-        labels: 'Теги',
+        label: 'Метка',
+        labels: 'Метки',
         onlyMy: 'Только мои задачи',
         filter: 'Фильтровать',
         newTask: 'Новая задача',
@@ -95,10 +95,10 @@ export default {
     },
     labels: {
       index: {
-        newLabel: 'Создать тег',
+        newLabel: 'Создать метку',
         name: 'Название',
         actions: 'Действия',
-        noLabels: 'Нет тегов'
+        noLabels: 'Нет меток'
       }
     },
     statuses: {
@@ -130,7 +130,7 @@ export default {
         users: 'Пользователи',
         statuses: 'Статусы',
         tasks: 'Задачи',
-        labels: 'Теги',
+        labels: 'Метки',
         signIn: 'Вход',
         signUp: 'Регистрация',
         edit: 'Редактировать',
