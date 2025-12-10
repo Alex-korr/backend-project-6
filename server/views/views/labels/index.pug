@@ -34,6 +34,7 @@ block content
             tr
               td= label.name
               td
+                a.btn.btn-sm.me-2(href=`/labels/${label.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}` style="background: #fff; color: #1976d2; border: 1px solid #90caf9;")= t('layouts.application.edit')
                 form(action=`/labels/${label.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}` method="post" style="display:inline;")
                   button.btn.btn-sm(type="submit" style="background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;")= t('layouts.application.delete')
     else

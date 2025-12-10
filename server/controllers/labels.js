@@ -104,12 +104,9 @@ export const update = async (req, reply) => {
 };
 
 export const remove = async (req, reply) => {
-  const label = await Label.query().findById(req.params.id).withGraphFetched('tasks');
+  const label = await Label.query().findById(req.params.id);
   const t = req.i18next.t.bind(req.i18next);
-  if (label.tasks && label.tasks.length > 0) {
-    req.session.flash = { labels: { error: [t('flash.labels.delete.error')] } };
-    return reply.redirect('/labels');
-  }
+  // If you need to prevent deletion when label is used, add logic here
   await Label.query().deleteById(req.params.id);
   req.session.flash = { labels: { success: [t('flash.labels.delete.success')] } };
   return reply.redirect('/labels');
