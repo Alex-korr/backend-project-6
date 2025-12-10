@@ -38,8 +38,21 @@ export const create = async (req, reply) => {
   const name = req.body.name || (req.body.data && req.body.data.name);
   req.log && req.log.info(`[DEBUG] /statuses/create: name = ${name}`);
   req.log && req.log.info(`[DEBUG] Request body: ${JSON.stringify(req.body)}`);
-  // DEBUG: Проверка парсинга формы
+  // DEBUG: Check form parsing
   console.log('BODY:', req.body);
+  // Server-side validation: status name must not be empty
+  if (!name || name.trim().length < 1) {
+    const errors = ['Status name cannot be empty'];
+    return reply.code(422).view('statuses/new', {
+      errors,
+      name,
+      isAuthenticated: !!req.user,
+      user: req.user,
+      t: req.i18next.t.bind(req.i18next),
+      currentLang: req.cookies?.lang || 'en',
+      currentUrl: req.raw.url,
+    });
+  }
   try {
     const status = await TaskStatus.query().insert({ name });
     req.log && req.log.info(`[DEBUG] Status created: ${JSON.stringify(status)}`);
@@ -53,12 +66,16 @@ export const create = async (req, reply) => {
     reply.redirect('/statuses');
   } catch (err) {
     req.log && req.log.error(`[DEBUG] Status creation error: ${err.message}`);
-    reply.view('statuses/new', {
-      error: err.message,
+    // Build array of errors for template
+    const errors = [err.message];
+    reply.code(422).view('statuses/new', {
+      errors,
       name,
       isAuthenticated: !!req.user,
       user: req.user,
       t: req.i18next.t.bind(req.i18next),
+      currentLang: req.cookies?.lang || 'en',
+      currentUrl: req.raw.url,
     });
   }
 };
@@ -111,7 +128,8 @@ export const remove = async (req, reply) => {
       return reply.redirect(303, '/statuses');
     }
   } catch (err) {
-    console.error('Ошибка при проверке связанных задач (tasks.statusId):', err);
+    console.error('Error checking related tasks (tasks.statusId):', err);
+    // Continue status deletion even if error occurs
     // Продолжаем удаление статуса даже при ошибке
   }
   await TaskStatus.query().deleteById(id);
