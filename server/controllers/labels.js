@@ -1,6 +1,7 @@
 import Label from '../models/Label.cjs';
 
 export const index = async (req, reply) => {
+    console.log('LABELS INDEX CONTROLLER CALLED', { user: req.user && req.user.id });
   const query = req.query || {};
   if (!req.user) {
     return reply.redirect('/session/new');
@@ -41,6 +42,7 @@ export const newLabel = async (req, reply) => {
 };
 
 export const create = async (req, reply) => {
+    console.log('LABELS CREATE CONTROLLER CALLED', { user: req.user && req.user.id, body: req.body });
   const { name } = req.body;
   const userId = req.user.id;
   try {
