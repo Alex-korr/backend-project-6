@@ -5,8 +5,13 @@ export const index = async (req, reply) => {
   if (!req.user) {
     return reply.redirect('/session/new');
   }
-  const labels = await Label.query().where('user_id', req.user.id);
-  console.log('LABELS FOR USER:', req.user.id, labels);
+  let labels = [];
+  try {
+    labels = await Label.query().where('user_id', req.user.id);
+    console.log('LABELS FOR USER:', req.user.id, labels);
+  } catch (err) {
+    console.error('ERROR FETCHING LABELS:', err);
+  }
   const error = req.session?.flash?.labels?.error || [];
   const success = req.session?.flash?.labels?.success || [];
   req.session.flash = {};
@@ -38,8 +43,12 @@ export const newLabel = async (req, reply) => {
 export const create = async (req, reply) => {
   const { name } = req.body;
   const userId = req.user.id;
-  const label = await Label.query().insert({ name, user_id: userId });
-  console.log('LABEL CREATED:', label);
+  try {
+    const label = await Label.query().insert({ name, user_id: userId });
+    console.log('LABEL CREATED:', label);
+  } catch (err) {
+    console.error('ERROR CREATING LABEL:', err);
+  }
   return reply.redirect('/labels');
 };
 
