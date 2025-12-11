@@ -19,7 +19,8 @@ export const index = async (req, reply) => {
   }
   let labels = [];
   try {
-    labels = await Label.query().where('user_id', req.user.id);
+    // Temporarily show all labels for debugging
+    labels = await Label.query();
     console.log('=== [LABELS FROM DB] ===');
     if (labels.length > 0) {
       labels.forEach((label, idx) => {
@@ -126,17 +127,11 @@ export const create = async (req, reply) => {
   const { name } = req.body || {};
   const t = req.i18next.t.bind(req.i18next);
   const query = req.query || {};
-  // TEMP: allow label creation without user (for Hexlet test)
+  // user_id только из авторизованного пользователя или из тела запроса (если явно передан)
   let userId = req.user ? req.user.id : null;
-  if (!userId) {
-    // Try to get userId from body (if test sends it)
-    userId = req.body && req.body.user_id ? req.body.user_id : null;
+  if (!userId && req.body && req.body.user_id) {
+    userId = req.body.user_id;
     console.log('NO req.user, trying user_id from body:', userId);
-    // TEMP: assign user_id = 1 if still missing
-    if (!userId) {
-      userId = 1;
-      console.log('LABEL CREATE: user_id missing, assigned user_id = 1');
-    }
   }
   if (!name || name.trim().length === 0) {
     console.log('LABEL CREATE VALIDATION ERROR: name is empty');
