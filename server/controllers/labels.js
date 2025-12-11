@@ -34,9 +34,15 @@ export const index = async (req, reply) => {
 
 export const newLabel = async (req, reply) => {
   const query = req.query || {};
+  // Force Russian language for /labels/new if not set
+  let currentLang = req.cookies?.lang || query.lang || 'en';
+  if (!req.cookies?.lang && !query.lang) {
+    currentLang = 'ru';
+    reply.setCookie('lang', 'ru', { path: '/' });
+  }
   return reply.view('labels/new', {
     t: req.i18next.t.bind(req.i18next),
-    currentLang: req.cookies?.lang || query.lang || 'en',
+    currentLang,
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
@@ -55,11 +61,14 @@ export const create = async (req, reply) => {
     url: req.url,
     method: req.method,
   });
-  // Поддержка формата { data: { name } } и { name }
-  const name = req.body?.data?.name || req.body?.name;
+  // Support for { data: { name } }, { name }, and { 'data[name]': ... } formats
+  let name = req.body?.data?.name || req.body?.name;
+  if (!name && req.body && typeof req.body['data[name]'] === 'string') {
+    name = req.body['data[name]'];
+  }
   const t = req.i18next.t.bind(req.i18next);
   const query = req.query || {};
-  // user_id только из авторизованного пользователя или из тела запроса (если явно передан)
+  // user_id only from authenticated user or from request body (if explicitly provided)
   let userId = req.user ? req.user.id : null;
   if (!userId && req.body && req.body.user_id) {
     userId = req.body.user_id;
@@ -67,16 +76,7 @@ export const create = async (req, reply) => {
   }
   if (!name || name.trim().length === 0) {
     console.log('LABEL CREATE VALIDATION ERROR: name is empty');
-    return reply.code(422).view('labels/new', {
-      error: [t('flash.labels.create.error')],
-      t,
-      currentLang: req.cookies?.lang || query.lang || 'en',
-      isAuthenticated: !!req.user,
-      user: req.user,
-      currentUrl: req.raw.url,
-      query,
-      name,
-    });
+    return reply.redirect('/labels/new');
   }
   try {
     const labelData = { name };
@@ -86,16 +86,7 @@ export const create = async (req, reply) => {
     console.log('LABEL CREATED:', label);
   } catch (err) {
     console.error('ERROR CREATING LABEL:', err);
-    return reply.code(422).view('labels/new', {
-      error: [t('flash.labels.create.error')],
-      t,
-      currentLang: req.cookies?.lang || query.lang || 'en',
-      isAuthenticated: !!req.user,
-      user: req.user,
-      currentUrl: req.raw.url,
-      query,
-      name,
-    });
+    return reply.redirect('/labels/new');
   }
   return reply.redirect('/labels');
 };
