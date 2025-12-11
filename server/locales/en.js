@@ -45,6 +45,7 @@ export default {
       },
       labels: {
         create: {
+          success: 'Label was created successfully!',
           error: 'Failed to create label. Name cannot be empty.'
         },
         delete: {
@@ -152,9 +153,5 @@ export default {
       },
     },
     noUsersYet: 'No users yet',
-    flash: {
-      userNotFound: 'User not found or already deleted',
-      userDeleted: 'User successfully deleted',
-    },
   },
 };

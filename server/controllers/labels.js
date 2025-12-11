@@ -84,6 +84,8 @@ export const create = async (req, reply) => {
     console.log('INSERTING LABEL:', labelData);
     const label = await Label.query().insert(labelData);
     console.log('LABEL CREATED:', label);
+    // Set flash message for successful creation
+    req.session.flash = { labels: { success: [t('flash.labels.create.success')] } };
   } catch (err) {
     console.error('ERROR CREATING LABEL:', err);
     return reply.redirect('/labels/new');
