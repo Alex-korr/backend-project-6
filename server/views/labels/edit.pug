@@ -8,6 +8,6 @@ block content
       div.alert.alert-danger.mt-3(style='width: 60%; margin: 0 auto;')= msg
   form(action=`/labels/${label.id}?_method=PATCH`, method='POST')
     .mb-3
-      label.form-label(for='name')= t('labels.index.name')
+      label.form-label(for='data_name')= t('labels.index.name')
       input.form-control(type='text', name='data[name]', id='data_name', minlength='1', value=label.name, aria-label=t('labels.index.name'))
     button.btn.btn-primary(type='submit')= t('statuses.index.save')
