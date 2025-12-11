@@ -10,3 +10,7 @@ block content
         a(href=`/labels/${label.id}/edit`) Редактировать
         form(action=`/labels/${label.id}?_method=DELETE`, method='POST', style='display:inline')
           button(type='submit') Удалить
+
+  // DEBUG: выводим весь массив labels как JSON
+  h2 Debug
+  pre= JSON.stringify(labels, null, 2)

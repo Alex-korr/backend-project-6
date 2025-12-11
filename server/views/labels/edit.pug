@@ -4,5 +4,5 @@ block content
   h1 Редактировать метку
   form(action=`/labels/${label.id}?_method=PATCH`, method='POST')
     label(for='name') Название метки
-    input(type='text', name='name', id='name', required, minlength='1', value=label.name)
+    input(type='text', name='data[name]', id='name', required, minlength='1', value=label.name)
     button(type='submit') Сохранить

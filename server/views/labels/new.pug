@@ -4,5 +4,5 @@ block content
   h1 Новая метка
   form(action='/labels', method='POST')
     label(for='name') Название метки
-    input(type='text', name='name', id='name', required, minlength='1')
+    input(type='text', name='data[name]', id='name', required, minlength='1')
     button(type='submit') Создать
