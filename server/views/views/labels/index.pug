@@ -11,7 +11,7 @@ block content
     h1.mb-4= t('layouts.application.labels')
     if typeof user !== 'undefined' && user
       .d-flex.justify-content-start.mb-3
-        a.btn.btn-primary(href=`/labels/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('labels.index.newLabel')
+        a.btn.btn-primary(href="/labels/new")= t('labels.index.newLabel')
     else
       .card.mt-4.p-4.shadow-sm(style='max-width:400px;')
         h4.mb-3= t('loginRequired')
@@ -24,25 +24,19 @@ block content
             input.form-control(type='password', name='password', id='password', required)
           button.btn.btn-primary(type='submit')= t('Login')
     if user
-      h3(style="color: #1976d2;") Current user: #{user.id} (#{user.email})
     table.table.table-striped.mt-3
 
-    // Debug: show all labels as JSON
-    h2 Debug: All labels JSON
-    pre= JSON.stringify(labels, null, 2)
+    h1 Метки
+    table.table.table-striped
       thead
         tr
-          th Name
-          th user_id
-          th Actions
-          th Debug
+          th Название
+          th Действия
       tbody
         each label in labels
           tr
             td= label.name
-            td= label.userId
             td
-              a.btn.btn-sm.me-2(href=`/labels/${label.id}/edit` style="background: #fff; color: #1976d2; border: 1px solid #90caf9;") Edit
+              a.btn.btn-sm.btn-outline-primary.me-2(href=`/labels/${label.id}/edit`) Edit
               form(action=`/labels/${label.id}/delete` method="post" style="display:inline;")
-                button.btn.btn-sm(type="submit" style="background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;") Delete
-            td= Object.keys(label).map(k => `${k}: ${label[k]}`).join(', ')
+                button.btn.btn-sm(type="submit" style="background: #fff; color: #e57373; border: 1px solid #e57373;") Delete
