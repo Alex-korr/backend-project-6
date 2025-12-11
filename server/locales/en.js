@@ -1,5 +1,11 @@
 export default {
   translation: {
+    create: 'Create',
+    layouts: {
+      application: {
+        labels: 'Labels',
+      },
+    },
     flash: {
       session: {
         create: {

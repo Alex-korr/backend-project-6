@@ -1,5 +1,6 @@
 export default {
   translation: {
+    create: 'Создать',
     'First name is required': 'Имя обязательно',
     'Last name is required': 'Фамилия обязательна',
     'Email is required': 'Email обязателен',
