@@ -5,9 +5,9 @@ block content
   h1= t('labels.index.newLabel')
   if error && error.length
     each msg in error
-      div.alert.alert-danger.mt-3(style='width: 60%; margin: 0 auto;')= msg
+      div.alert.alert-danger.mt-3(style='width: 60%; margin: 0 auto; margin-left: 0px;')= msg
   form(action='/labels', method='POST')
     .mb-3
       label.form-label(for='name')= t('labels.index.name')
-      input.form-control(type='text', name='data[name]', id='name', required, minlength='1', value=(typeof name !== 'undefined' ? name : ''))
+      input.form-control(type='text', name='data[name]', id='name', value=(typeof name !== 'undefined' ? name : ''))
     button.btn.btn-primary(type='submit')= t('create')

@@ -118,8 +118,18 @@ export const edit = async (req, reply) => {
 };
 
 export const update = async (req, reply) => {
-  const { name } = req.body;
+  let name = req.body?.data?.name || req.body?.name;
+  if (!name && typeof req.body['data[name]'] === 'string') {
+    name = req.body['data[name]'];
+  }
   await Label.query().patchAndFetchById(req.params.id, { name });
+  const t = req.i18next.t.bind(req.i18next);
+  // Use translation if exists, fallback to default
+  let msg = t('flash.labels.update.success');
+  if (!msg || msg === 'flash.labels.update.success') {
+    msg = 'Метка успешно изменена';
+  }
+  req.session.flash = { labels: { success: [msg] } };
   return reply.redirect('/labels');
 };
 
