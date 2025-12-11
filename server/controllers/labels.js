@@ -37,12 +37,23 @@ export const index = async (req, reply) => {
       console.error('ERROR STACK:', err.stack);
     }
   }
-  // Check if the client expects JSON
+  // Check if the client expects JSON API format
   const accept = req.headers.accept || '';
   if (accept.includes('application/json')) {
-    console.log('=== [SENDING JSON RESPONSE] ===');
-    console.log({ data: labels });
-    return reply.send({ data: labels });
+    console.log('=== [SENDING JSON:API RESPONSE] ===');
+    const jsonApiLabels = labels.map(label => ({
+      type: 'labels',
+      id: String(label.id),
+      attributes: {
+        name: label.name,
+        user_id: label.user_id,
+        created_at: label.created_at,
+        updated_at: label.updated_at,
+      }
+    }));
+    const response = { data: jsonApiLabels };
+    console.log(response);
+    return reply.send(response);
   }
   const error = req.session?.flash?.labels?.error || [];
   const success = req.session?.flash?.labels?.success || [];
