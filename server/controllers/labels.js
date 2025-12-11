@@ -108,7 +108,10 @@ export const edit = async (req, reply) => {
 };
 
 export const update = async (req, reply) => {
-  const { name } = req.body;
+  let name = req.body?.data?.name || req.body?.name;
+  if (!name && req.body && typeof req.body['data[name]'] === 'string') {
+    name = req.body['data[name]'];
+  }
   const t = req.i18next.t.bind(req.i18next);
   await Label.query().patchAndFetchById(req.params.id, { name });
   req.session.flash = { labels: { success: ['Метка успешно изменена'] } };
