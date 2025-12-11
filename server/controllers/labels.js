@@ -68,25 +68,25 @@ export const create = async (req, reply) => {
   }
   const t = req.i18next.t.bind(req.i18next);
   const query = req.query || {};
-  // user_id only from authenticated user or from request body (if explicitly provided)
   let userId = req.user ? req.user.id : null;
   if (!userId && req.body && req.body.user_id) {
     userId = req.body.user_id;
     console.log('NO req.user, trying user_id from body:', userId);
   }
+  // Общий обработчик ошибок
+  const renderError = (msg) => reply.view('labels/new', {
+    error: [msg],
+    name,
+    t,
+    currentLang: req.cookies?.lang || 'ru',
+    isAuthenticated: !!req.user,
+    user: req.user,
+    currentUrl: req.raw.url,
+    query,
+  });
   if (!name || name.trim().length === 0) {
     console.log('LABEL CREATE VALIDATION ERROR: name is empty');
-    const error = ['Не удалось создать метку'];
-    return reply.view('labels/new', {
-      error,
-      name,
-      t,
-      currentLang: req.cookies?.lang || 'ru',
-      isAuthenticated: !!req.user,
-      user: req.user,
-      currentUrl: req.raw.url,
-      query,
-    });
+    return renderError('Не удалось создать метку');
   }
   try {
     const labelData = { name };
@@ -94,13 +94,12 @@ export const create = async (req, reply) => {
     console.log('INSERTING LABEL:', labelData);
     const label = await Label.query().insert(labelData);
     console.log('LABEL CREATED:', label);
-    // Set flash message for successful creation
     req.session.flash = { labels: { success: [t('flash.labels.create.success')] } };
+    return reply.redirect('/labels');
   } catch (err) {
     console.error('ERROR CREATING LABEL:', err);
-    return reply.redirect('/labels/new');
+    return renderError('Не удалось создать метку');
   }
-  return reply.redirect('/labels');
 };
 
 export const edit = async (req, reply) => {
