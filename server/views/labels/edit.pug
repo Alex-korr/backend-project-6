@@ -9,5 +9,5 @@ block content
   form(action=`/labels/${label.id}?_method=PATCH`, method='POST')
     .mb-3
       label.form-label(for='name')= t('labels.index.name')
-      input.form-control(type='text', name='data[name]', id='name', required, minlength='1', value=label.name)
+      input.form-control(type='text', name='data[name]', id='data_name', required, minlength='1', value=label.name)
     button.btn.btn-primary(type='submit')= t('statuses.index.save')
