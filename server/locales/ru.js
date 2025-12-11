@@ -63,7 +63,7 @@ export default {
         filter: 'Фильтровать',
         newTask: 'Новая задача',
         signInToAdd: 'Войдите, чтобы добавить задачи',
-        name: 'Название',
+        name: 'Наименование',
         statusTh: 'Статус',
         creator: 'Автор',
         actions: 'Действия',
@@ -96,7 +96,7 @@ export default {
     labels: {
       index: {
         newLabel: 'Создать метку',
-        name: 'Название',
+        name: 'Наименование',
         actions: 'Действия',
         noLabels: 'Нет меток'
       }

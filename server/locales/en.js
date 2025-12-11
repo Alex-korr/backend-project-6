@@ -72,6 +72,8 @@ export default {
         newLabel: 'New Label',
         name: 'Name',
         actions: 'Actions',
+        name: 'Name',
+        actions: 'Actions',
         noLabels: 'No tags',
       },
     },
