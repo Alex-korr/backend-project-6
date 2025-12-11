@@ -13,91 +13,22 @@ export const index = async (req, reply) => {
     user: req.user,
     session: req.session,
   });
-  const query = req.query || {};
-  if (!req.user) {
-    return reply.redirect('/session/new');
-  }
-  let labels = [];
-  try {
-    // Temporarily show all labels for debugging
-    labels = await Label.query();
-    console.log('=== [LABELS FROM DB] ===');
-    if (labels.length > 0) {
-      labels.forEach((label, idx) => {
-        console.log(`LABEL[${idx}]:`, JSON.stringify(label));
-        Object.keys(label).forEach(key => {
-          console.log(`  FIELD: ${key} =`, label[key]);
-        });
-      });
-    } else {
-      console.log('LABELS ARRAY IS EMPTY');
-    }
-  } catch (err) {
-    console.error('ERROR FETCHING LABELS:', err);
-    if (err.stack) {
-      console.error('ERROR STACK:', err.stack);
-    }
-  }
-  // Check if the client expects JSON API format
-  const accept = req.headers.accept || '';
-  if (accept.includes('application/json')) {
-    console.log('=== [SENDING JSON:API RESPONSE] ===');
-    const jsonApiLabels = labels.map(label => ({
-      type: 'labels',
-      id: String(label.id),
-      attributes: {
-        name: label.name,
-        user_id: label.user_id,
-        created_at: label.created_at,
-        updated_at: label.updated_at,
-      }
-    }));
-    const response = { data: jsonApiLabels };
-    console.log(response);
-    return reply.send(response);
-  }
+  const labels = await Label.query();
   const error = req.session?.flash?.labels?.error || [];
   const success = req.session?.flash?.labels?.success || [];
   req.session.flash = {};
-  console.log('=== [BEFORE RENDER] ===');
-  console.log('labels:', labels);
-  if (labels.length > 0) {
-    labels.forEach((label, idx) => {
-      console.log(`LABEL[${idx}]:`, JSON.stringify(label));
-      Object.keys(label).forEach(key => {
-        console.log(`  FIELD: ${key} =`, label[key]);
-      });
-    });
-  }
-  console.log('error:', error);
-  console.log('success:', success);
-  console.log('user:', req.user);
-  console.log('currentUrl:', req.raw.url);
-  console.log('query:', query);
-  console.log('session:', req.session);
-  console.log('flash:', req.session?.flash);
-  console.log('=== [RENDERING VIEW labels/index] ===');
-  console.log('View data:', {
-    labels,
-    error,
-    success,
-    currentLang: req.cookies?.lang || query.lang || 'en',
-    isAuthenticated: !!req.user,
-    user: req.user,
-    currentUrl: req.raw.url,
-    query,
-  });
-  console.log('=== [LABELS CONTROLLER END] ===');
+  const query = req.query || {};
+  const currentLang = req.cookies?.lang || query.lang || 'en';
+  reply.header('Cache-Control', 'no-store');
   return reply.view('labels/index', {
     labels,
     error,
     success,
-    t: req.i18next.t.bind(req.i18next),
-    currentLang: req.cookies?.lang || query.lang || 'en',
     isAuthenticated: !!req.user,
     user: req.user,
+    t: req.i18next.t.bind(req.i18next),
+    currentLang,
     currentUrl: req.raw.url,
-    query,
   });
 };
 
