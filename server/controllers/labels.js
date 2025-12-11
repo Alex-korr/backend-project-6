@@ -55,7 +55,8 @@ export const create = async (req, reply) => {
     url: req.url,
     method: req.method,
   });
-  const { name } = req.body || {};
+  // Поддержка формата { data: { name } } и { name }
+  const name = req.body?.data?.name || req.body?.name;
   const t = req.i18next.t.bind(req.i18next);
   const query = req.query || {};
   // user_id только из авторизованного пользователя или из тела запроса (если явно передан)
