@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
+    form(action='/session', method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
+      if error && error.length && error[0] && error[0].trim()
+        .alert.alert-danger.alert-dismissible.fade.show(role='alert') #{error[0]}
+      if success && success.length && success[0] && success[0].trim()
+        .alert.alert-success.alert-dismissible.fade.show(role='alert' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;') #{success[0]}
+      h1.h3.mb-3.fw-normal.text-center= t('sessions.new.title')
+      .form-floating.mb-3
+        input.form-control(type='email', name='email', id='floatingInput', placeholder=t('sessions.new.emailPlaceholder'), class=(error && error.length ? 'is-invalid' : ''))
+        label(for='floatingInput')= t('sessions.new.emailLabel')
+        .invalid-feedback #{error && error.length ? error[0] : 'Required field'}
+      .form-floating.mb-3
+        input.form-control(type='password', name='password', id='floatingPassword', placeholder=t('sessions.new.passwordPlaceholder'))
+        label(for='floatingPassword')= t('sessions.new.passwordLabel')
+      button.w-100.btn.btn-lg.btn-primary(type='submit')= t('sessions.new.submit')

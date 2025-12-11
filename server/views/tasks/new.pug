@@ -1,0 +1,46 @@
+extends ../layout.pug
+
+block content
+  span#labels-placeholder(style='position: absolute; left: 0; right: 0; top: 0; bottom: 0; color: #bbb; text-align: center; pointer-events: none; font-size: 1em; display: flex; align-items: center; justify-content: center; z-index: 0;') drag labels here
+
+block content
+  h1 New Task
+  if error && error.length
+    each msg in error
+      .alert.alert-danger= msg
+  if success && success.length
+    each msg in success
+      .alert.alert-success(style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= msg
+
+  form(method='post', action='/tasks')
+    .form-group
+      label(for='name') Name
+      input#name.form-control(type='text', name='name', required, value=task.name || '')
+    .form-group
+      label(for='description') Description
+      textarea#description.form-control(name='description')= task.description || ''
+    .form-group
+      label(for='statusId') Status
+      select#statusId.form-control(name='statusId', required)
+        option(value='') Select status
+        each status in statuses
+          option(value=status.id selected=(task.statusId==status.id))= status.name
+    .form-group
+      label(for='executorId') Executor
+      select#executorId.form-control(name='executorId')
+        option(value='') Not assigned
+        each user in users
+          option(value=user.id selected=(task.executorId==user.id))= user.firstName + ' ' + user.lastName
+    .form-group
+      label Метки
+      if labels && labels.length
+        .checkbox-group(style='height: 100px; overflow-y: scroll; background: #f8f8f8; border: 1px solid #ccc; border-radius: 8px; padding: 12px;')
+          each label in labels
+            label.form-check(style='display: flex; align-items: center; margin-bottom: 8px;')
+              input.form-check-input(type='checkbox', name='labels[]', value=label.id checked=(task.labels && task.labels.includes(label.id)))
+              span.form-check-label(style='margin-left: 8px;')= label.name
+      else
+        span(style='color: #bbb;') Нет меток
+    .mt-4
+      button.btn.btn-primary(type='submit') Create
+      a.btn.btn-secondary.ms-2(href='/tasks') Cancel

@@ -71,7 +71,7 @@ export default async function (fastify, opts) {
   // Register view engine (Pug)
   fastify.register(view, {
     engine: { pug },
-    root: path.join(__dirname, 'views/views'),
+    root: path.join(__dirname, 'views'),
     defaultContext: {
       appName: 'Task Manager',
       error: [],
