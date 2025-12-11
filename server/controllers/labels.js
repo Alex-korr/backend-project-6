@@ -76,7 +76,17 @@ export const create = async (req, reply) => {
   }
   if (!name || name.trim().length === 0) {
     console.log('LABEL CREATE VALIDATION ERROR: name is empty');
-    return reply.redirect('/labels/new');
+    const error = ['Не удалось создать метку'];
+    return reply.view('labels/new', {
+      error,
+      name,
+      t,
+      currentLang: req.cookies?.lang || 'ru',
+      isAuthenticated: !!req.user,
+      user: req.user,
+      currentUrl: req.raw.url,
+      query,
+    });
   }
   try {
     const labelData = { name };
@@ -108,13 +118,8 @@ export const edit = async (req, reply) => {
 };
 
 export const update = async (req, reply) => {
-  let name = req.body?.data?.name || req.body?.name;
-  if (!name && req.body && typeof req.body['data[name]'] === 'string') {
-    name = req.body['data[name]'];
-  }
-  const t = req.i18next.t.bind(req.i18next);
+  const { name } = req.body;
   await Label.query().patchAndFetchById(req.params.id, { name });
-  req.session.flash = { labels: { success: ['Метка успешно изменена'] } };
   return reply.redirect('/labels');
 };
 
