@@ -23,6 +23,8 @@ block content
             label.form-label(for='password')= t('Password')
             input.form-control(type='password', name='password', id='password', required)
           button.btn.btn-primary(type='submit')= t('Login')
+    if user
+      h3(style="color: #1976d2;") Current user: #{user.id} (#{user.email})
     table.table.table-striped.mt-3
       thead
         tr
@@ -34,7 +36,7 @@ block content
         each label in labels
           tr
             td= label.name
-            td= label.user_id
+            td= label.userId
             td
               a.btn.btn-sm.me-2(href=`/labels/${label.id}/edit` style="background: #fff; color: #1976d2; border: 1px solid #90caf9;") Edit
               form(action=`/labels/${label.id}/delete` method="post" style="display:inline;")
