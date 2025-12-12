@@ -2,11 +2,12 @@ extends ../layout
 
 block content
 block content
+  if error && error.length
+    div.alert.alert-danger.mt-3= 'Не удалось создать метку'
   h1= t('labels.index.newLabel')
   form(action='/labels', method='POST')
     .mb-3
       label.form-label(for='name')= t('labels.index.name')
       input.form-control(type='text', name='data[name]', id='name', value=(typeof name !== 'undefined' ? name : ''))
-      if error && error.length
-        div.invalid-feedback(style='display:block; margin-left:8px;')= error[0]
+      div.invalid-feedback(style='display:block; margin-left:8px;') Поле метки не может быть пустым
     button.btn.btn-primary(type='submit')= t('create')

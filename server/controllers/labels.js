@@ -86,6 +86,8 @@ export const create = async (req, reply) => {
   });
   if (!name || name.trim().length === 0) {
     console.log('LABEL CREATE VALIDATION ERROR: name is empty');
+    // Set flash error for .alert
+    req.session.flash = { labels: { error: ['Не удалось создать метку'] } };
     return renderError('Поле метки не может быть пустым');
   }
   try {
