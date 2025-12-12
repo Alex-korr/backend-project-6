@@ -86,7 +86,7 @@ export const create = async (req, reply) => {
   });
   if (!name || name.trim().length === 0) {
     console.log('LABEL CREATE VALIDATION ERROR: name is empty');
-    return renderError('Не удалось создать метку');
+    return renderError('Поле метки не может быть пустым');
   }
   try {
     const labelData = { name };
