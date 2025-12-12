@@ -20,8 +20,8 @@ block content
       label(for='description')= t('tasks.index.description')
       textarea#description.form-control(name='description')= task.description || ''
     .form-group
-      label(for='data_status_id')= t('tasks.index.status')
-      select#data_status_id.form-control(name='status_id', required)
+      label(for='data_statusId')= t('tasks.index.status')
+      select#data_statusId.form-control(name='status_id', required)
         option(value='')= t('tasks.index.statusPlaceholder')
         each status in statuses
           option(value=status.id selected=(task.status_id==status.id))= status.name
