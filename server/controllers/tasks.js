@@ -8,10 +8,10 @@ export const index = async (req, reply) => {
     let queryBuilder = Task.query().withGraphFetched('[status, labels, executor]');
     const { status, executor, label, my } = query;
     if (status) {
-      queryBuilder = queryBuilder.where('statusId', status);
+      queryBuilder = queryBuilder.where('status_id', status);
     }
     if (executor) {
-      queryBuilder = queryBuilder.where('executorId', executor);
+      queryBuilder = queryBuilder.where('executor_id', executor);
     }
     if (label) {
       queryBuilder = queryBuilder.whereExists(
@@ -22,7 +22,7 @@ export const index = async (req, reply) => {
     if (my && !req.user) {
       tasks = [];
     } else if (my && req.user) {
-      tasks = await queryBuilder.where('creatorId', req.user.id);
+      tasks = await queryBuilder.where('creator_id', req.user.id);
     } else {
       tasks = await queryBuilder;
     }
@@ -109,17 +109,17 @@ export const create = async (req, reply) => {
     const { name, description, statusId, executorId, newLabels } = req.body;
     const raw = req.body['labels[]'];
     let labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
-    const creatorId = req.user?.id;
+    const creator_id = req.user?.id;
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     try {
-      if (!creatorId) {
-        console.error('No creatorId, user not authenticated');
+      if (!creator_id) {
+        console.error('No creator_id, user not authenticated');
         req.flash('error', t('User not authenticated'));
         return reply.redirect('/session/new');
       }
       // Convert statusId and executorId to integers (or null)
-      const statusIdInt = statusId ? Number(statusId) : null;
-      const executorIdInt = executorId ? Number(executorId) : null;
+      const status_id = statusId ? Number(statusId) : null;
+      const executor_id = executorId ? Number(executorId) : null;
       // Create new labels if provided
       if (newLabels && newLabels.trim()) {
         const Label = (await import('../models/Label.js')).default;
@@ -133,7 +133,7 @@ export const create = async (req, reply) => {
           labelIds.push(label.id.toString());
         }
       }
-      const task = await Task.query().insert({ name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt });
+      const task = await Task.query().insert({ name, description, status_id, creator_id, executor_id });
       if (labelIds.length > 0) {
         for (const labelId of labelIds) {
           await task.$relatedQuery('labels').relate(Number(labelId));
@@ -142,8 +142,22 @@ export const create = async (req, reply) => {
       reply.redirect('/tasks');
     } catch (e) {
       console.error('Error in create task controller:', e);
-      req.flash('error', t('flash.tasks.create.error'));
-      reply.redirect('/tasks/new');
+      // Показываем текст ошибки на странице для диагностики
+      return reply.view('tasks/new', {
+        statuses: await TaskStatus.query(),
+        users: await User.query(),
+        labels: await import('../models/Label.cjs').then(m => m.default.query()),
+        task: { name, description, statusId, executorId, labels: labelIds },
+        currentUser: req.user,
+        error: [t('flash.tasks.create.error'), e.message],
+        success: [],
+        currentLang: req.cookies?.lang || req.query.lang || 'en',
+        t,
+        isAuthenticated: !!req.user,
+        user: req.user,
+        currentUrl: req.raw.url,
+        query: req.query || {},
+      });
     }
 };
 
@@ -204,7 +218,7 @@ export const remove = async (req, reply) => {
     const task = await Task.query().findById(id);
     if (!task) return reply.code(404).send('Task not found');
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
-    if (task.creatorId !== req.user.id) {
+    if (task.creator_id !== req.user.id) {
       req.flash('error', t('Task not found'));
       return reply.redirect('/tasks');
     }

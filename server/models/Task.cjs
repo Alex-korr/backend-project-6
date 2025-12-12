@@ -12,14 +12,14 @@ module.exports = class Task extends BaseModel {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['name', 'statusId'],
+      required: ['name', 'status_id'],
       properties: {
         id: { type: 'integer' },
         name: { type: 'string', minLength: 1 },
         description: { type: ['string', 'null'] },
-        statusId: { type: 'integer' },
-        executorId: { type: ['integer', 'null'] },
-        creatorId: { type: 'integer' },
+        status_id: { type: 'integer' },
+        executor_id: { type: ['integer', 'null'] },
+        creator_id: { type: 'integer' },
         createdAt: { type: 'string' },
         updatedAt: { type: 'string' },
       },
@@ -31,7 +31,7 @@ module.exports = class Task extends BaseModel {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: __dirname + '/TaskStatus.cjs',
         join: {
-          from: 'tasks.statusId',
+          from: 'tasks.status_id',
           to: 'task_statuses.id',
         },
       },
@@ -51,7 +51,7 @@ module.exports = class Task extends BaseModel {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: __dirname + '/User.cjs',
         join: {
-          from: 'tasks.executorId',
+          from: 'tasks.executor_id',
           to: 'users.id',
         },
       },
@@ -59,7 +59,7 @@ module.exports = class Task extends BaseModel {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: __dirname + '/User.cjs',
         join: {
-          from: 'tasks.creatorId',
+          from: 'tasks.creator_id',
           to: 'users.id',
         },
       },

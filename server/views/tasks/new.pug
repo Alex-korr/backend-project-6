@@ -22,7 +22,7 @@ block content
     .form-group
       label(for='statusId')= t('tasks.index.status')
       select#statusId.form-control(name='statusId', required)
-        option(value='')= t('tasks.index.statusTh')
+        option(value='')= t('tasks.index.statusPlaceholder')
         each status in statuses
           option(value=status.id selected=(task.statusId==status.id))= status.name
     .form-group

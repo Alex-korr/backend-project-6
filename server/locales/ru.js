@@ -70,6 +70,7 @@ export default {
         signInToAdd: 'Войдите, чтобы добавить задачи',
         name: 'Наименование',
         statusTh: 'Статус',
+        statusPlaceholder: 'Выберите статус',
         creator: 'Автор',
         actions: 'Действия',
         noTasksFound: 'Задачи не найдены',
