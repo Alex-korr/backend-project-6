@@ -33,12 +33,12 @@ block content
             td
               | #{user.firstName} #{user.lastName}
             td= user.email
-            td
+            td.text-end.align-middle
               if currentUser && (currentUser.id === user.id || currentUser.role === 'admin')
-                a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('users.index.Edit')
-            td
-              if currentUser && (currentUser.id === user.id || (currentUser.role === 'admin' && user.role === 'user'))
-                form(action=`/users/${user.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline;')
-                  button.btn.btn-sm(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.Delete')
+                div.d-inline-flex.align-items-center.gap-2
+                  a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('users.index.Edit')
+                  if currentUser && (currentUser.id === user.id || (currentUser.role === 'admin' && user.role === 'user'))
+                    form(action=`/users/${user.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline; margin: 0;')
+                      button.btn.btn-sm.btn-user-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.Delete')
   else
     div.alert.alert-info.mt-4= t('noUsersYet')

@@ -47,6 +47,9 @@ export const newLabel = async (req, reply) => {
     user: req.user,
     currentUrl: req.raw.url,
     query,
+    msg: null,
+    error: [],
+    name: '',
   });
 };
 
@@ -75,7 +78,8 @@ export const create = async (req, reply) => {
   }
   // Общий обработчик ошибок
   const renderError = (msg) => reply.view('labels/new', {
-    error: [msg],
+    error: ['Не удалось создать метку'],
+    msg,
     name,
     t,
     currentLang: req.cookies?.lang || 'ru',

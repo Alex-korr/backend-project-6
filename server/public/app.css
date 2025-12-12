@@ -1,3 +1,24 @@
+/* Custom hover for status delete button (red) */
+.btn-status-delete:hover {
+  background: #e57373 !important;
+  color: #fff !important;
+  border: 1px solid #e57373 !important;
+  transition: background 0.2s, color 0.2s;
+}
+/* Custom hover for label delete button */
+.btn-label-delete:hover {
+  background: #e57373 !important;
+  color: #fff !important;
+  border: 1px solid #e57373 !important;
+  transition: background 0.2s, color 0.2s;
+}
+/* Custom hover for user delete button */
+.btn-user-delete:hover {
+  background: #e57373 !important;
+  color: #fff !important;
+  border: 1px solid #e57373 !important;
+  transition: background 0.2s, color 0.2s;
+}
 @charset "UTF-8";/*!
  * Bootstrap  v5.3.8 (https://getbootstrap.com/)
  * Copyright 2011-2025 The Bootstrap Authors
