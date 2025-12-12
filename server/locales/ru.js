@@ -75,6 +75,7 @@ export default {
         noTasksFound: 'Задачи не найдены',
         delete: 'Удалить',
         description: 'Описание'
+        ,notAssigned: 'Не назначен'
       }
     },
     users: {

@@ -110,8 +110,8 @@ export const create = async (req, reply) => {
     const raw = req.body['labels[]'];
     let labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
     const creatorId = req.user?.id;
+    const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     try {
-      const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
       if (!creatorId) {
         console.error('No creatorId, user not authenticated');
         req.flash('error', t('User not authenticated'));

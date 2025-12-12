@@ -33,7 +33,7 @@ block content
         label.form-check-label(for="my" style='margin-left: 8px;')= t('tasks.index.onlyMy')
         button.btn.btn-primary.ms-3(type="submit")= t('tasks.index.filter')
   if currentUser
-    a.btn.btn-primary(href=`/tasks/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('tasks.index.newTask')
+    a.btn.btn-primary(href="/tasks/new")= t('tasks.index.newTask')
   if !currentUser && !tasks.length
     div.alert.alert-info.mt-4= t('tasks.index.signInToAdd')
   else

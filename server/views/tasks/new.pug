@@ -4,7 +4,7 @@ block content
   span#labels-placeholder(style='position: absolute; left: 0; right: 0; top: 0; bottom: 0; color: #bbb; text-align: center; pointer-events: none; font-size: 1em; display: flex; align-items: center; justify-content: center; z-index: 0;') drag labels here
 
 block content
-  h1 New Task
+  h1= t('tasks.index.newTask')
   if error && error.length
     each msg in error
       .alert.alert-danger= msg
@@ -14,25 +14,25 @@ block content
 
   form(method='post', action='/tasks')
     .form-group
-      label(for='name') Name
+      label(for='name')= t('tasks.index.name')
       input#name.form-control(type='text', name='name', required, value=task.name || '')
     .form-group
-      label(for='description') Description
+      label(for='description')= t('tasks.index.description')
       textarea#description.form-control(name='description')= task.description || ''
     .form-group
-      label(for='statusId') Status
+      label(for='statusId')= t('tasks.index.status')
       select#statusId.form-control(name='statusId', required)
-        option(value='') Select status
+        option(value='')= t('tasks.index.statusTh')
         each status in statuses
           option(value=status.id selected=(task.statusId==status.id))= status.name
     .form-group
-      label(for='executorId') Executor
+      label(for='executorId')= t('tasks.index.executor')
       select#executorId.form-control(name='executorId')
-        option(value='') Not assigned
+        option(value='')= t('tasks.index.notAssigned' || 'Not assigned')
         each user in users
           option(value=user.id selected=(task.executorId==user.id))= user.firstName + ' ' + user.lastName
     .form-group
-      label Метки
+      label= t('tasks.index.labels')
       if labels && labels.length
         .checkbox-group(style='height: 100px; overflow-y: scroll; background: #f8f8f8; border: 1px solid #ccc; border-radius: 8px; padding: 12px;')
           each label in labels
