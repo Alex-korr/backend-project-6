@@ -13,10 +13,21 @@ export const index = async (req, reply) => {
     if (executor) {
       queryBuilder = queryBuilder.where('executor_id', executor);
     }
+    // Filter by multiple labels
+    let labelIds = [];
     if (label) {
-      queryBuilder = queryBuilder.whereExists(
-        Task.relatedQuery('labels').where('labels.id', label)
-      );
+      if (Array.isArray(label)) {
+        labelIds = label.filter(Boolean);
+      } else {
+        labelIds = [label];
+      }
+    }
+    if (labelIds.length > 0) {
+      for (const labelId of labelIds) {
+        queryBuilder = queryBuilder.whereExists(
+          Task.relatedQuery('labels').where('labels.id', labelId)
+        );
+      }
     }
     let tasks;
     if (my && !req.user) {
