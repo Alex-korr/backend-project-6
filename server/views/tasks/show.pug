@@ -1,1 +1,33 @@
-// ...existing code from server/views/views/tasks/show.pug
+extends ../layout.pug
+
+block content
+	h1 Task details
+	if error && error.length
+		.alert.alert-danger= error[0]
+	if success && success.length
+		.alert.alert-success= success[0]
+	if task
+		h2= task.name
+		p
+			strong Status:
+			| #{task.status ? task.status.name : '-'}
+		p
+			strong Description:
+			| #{task.description || '-'}
+		p
+			strong Executor:
+			| #{task.executor ? (task.executor.first_name || task.executor.firstName || '') + ' ' + (task.executor.last_name || task.executor.lastName || '') : '-'}
+		p
+			strong Creator:
+			| #{task.creator ? task.creator.firstName : '-'}
+		if task.labels && task.labels.length
+			p
+				strong Labels:
+				each label in task.labels
+					span.badge.bg-info.text-dark.me-1= label.name
+		else
+			p
+				strong Labels:
+				span.text-muted No labels
+	else
+		p.text-muted Task not found.

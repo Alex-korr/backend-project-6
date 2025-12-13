@@ -65,13 +65,13 @@ export const index = async (req, reply) => {
 export const show = async (req, reply) => {
   const query = req.query || {};
   const { id } = req.params;
-  const task = await Task.query().findById(id).withGraphFetched('[status, labels]');
+  const task = await Task.query().findById(id).withGraphFetched('[status, labels, executor, creator]');
   if (!task) return reply.code(404).send('Task not found');
   const error = req.session?.flash?.error || [];
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
   const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
-  reply.view('tasks/show', {
+  return reply.view('tasks/show', {
     task,
     currentUser: req.user,
     error,

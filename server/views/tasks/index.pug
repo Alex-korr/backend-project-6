@@ -54,7 +54,7 @@ block content
           each task in tasks
             tr
               td
-                a(href=`/tasks/${task.id}?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}` class='fw-bold fs-5 text-decoration-none' style='color: #4a6fa5;')
+                a(href=`/tasks/${task.id}` class='fw-bold fs-5 text-decoration-none' style='color: #4a6fa5;')
                   span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; color: #4a6fa5;')= task.name
               td
                 if task.status
