@@ -4,10 +4,10 @@ block content
   h1= t('layouts.application.tasks')
   if success && success.length
     .alert.alert-success= success[0]
-  form(method="get" action="/tasks" class="row g-3 mb-4")
+    form(method="get" action="/tasks" class="row g-3 mb-4" id="tasks-filter-form")
     .col-md-3
-      label.form-label(for="status")= t('tasks.index.status')
-      select.form-select(name="status" id="status")
+        label.form-label(for="data_status")= t('tasks.index.status')
+      select.form-select(name="status" id="data_status")
         option(value="")= t('tasks.index.all')
         if statuses && statuses.length
           each status in statuses
