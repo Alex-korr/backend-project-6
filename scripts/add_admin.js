@@ -16,7 +16,7 @@ async function addAdmin() {
     await db('users').where({ email }).update({
       first_name: 'Admin',
       last_name: 'User',
-      password_digest: hashedPassword,
+      password: hashedPassword,
       updated_at: new Date().toISOString(),
     });
     console.log('Admin user updated');
@@ -25,7 +25,7 @@ async function addAdmin() {
       first_name: 'Admin',
       last_name: 'User',
       email,
-      password_digest: hashedPassword,
+      password: hashedPassword,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });

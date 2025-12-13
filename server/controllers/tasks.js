@@ -5,7 +5,7 @@ import User from '../models/User.cjs';
 export const index = async (req, reply) => {
   try {
     const query = req.query || {};
-    let queryBuilder = Task.query().withGraphFetched('[status, labels, executor]');
+    let queryBuilder = Task.query().withGraphFetched('[status, labels, executor, creator]');
     const { status, executor, label, my } = query;
     if (status) {
       queryBuilder = queryBuilder.where('status_id', status);
@@ -25,6 +25,12 @@ export const index = async (req, reply) => {
       tasks = await queryBuilder.where('creator_id', req.user.id);
     } else {
       tasks = await queryBuilder;
+    }
+    if (tasks && tasks.length) {
+      // Debug: show all tasks with relations
+      // eslint-disable-next-line no-console
+      console.log('DEBUG all tasks:', JSON.stringify(tasks, null, 2));
+      // Do not convert to plain objects, pass as is to preserve relations
     }
     const statuses = await TaskStatus.query();
     const users = await User.query();
@@ -139,6 +145,8 @@ export const create = async (req, reply) => {
           await task.$relatedQuery('labels').relate(Number(labelId));
         }
       }
+      // Fetch the task with creator relation to ensure it's available in the next render
+      await Task.query().findById(task.id).withGraphFetched('[creator]');
       req.session.flash = { success: ['Задача успешно создана'] };
       reply.redirect('/tasks');
     } catch (e) {

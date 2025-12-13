@@ -1,10 +1,15 @@
 // @ts-check
+
 const BaseModel = require('./BaseModel.cjs');
 const TaskStatus = require('./TaskStatus.cjs');
 const Label = require('./Label.cjs');
 const User = require('./User.cjs');
+const { snakeCaseMappers } = require('objection');
 
 module.exports = class Task extends BaseModel {
+  static get columnNameMappers() {
+    return snakeCaseMappers();
+  }
   static get tableName() {
     return 'tasks';
   }

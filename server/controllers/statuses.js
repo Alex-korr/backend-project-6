@@ -132,7 +132,7 @@ export const remove = async (req, reply) => {
   } catch (err) {
     console.error('Error checking related tasks (tasks.statusId):', err);
     // Continue status deletion even if error occurs
-    // Продолжаем удаление статуса даже при ошибке
+    
   }
   await TaskStatus.query().deleteById(id);
   let successMsg = req.i18next.t('flash.statuses.delete.success');

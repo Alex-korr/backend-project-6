@@ -46,6 +46,7 @@ block content
           th= t('tasks.index.statusTh')
           th= t('tasks.index.description')
           th= t('tasks.index.executor')
+          th Creator
           th= t('tasks.index.labels')
           th(style='width: 25px; text-align: left;')= t('tasks.index.actions')
       tbody
@@ -61,7 +62,8 @@ block content
                 else
                   span.text-muted Нет статуса
               td= task.description || '-'
-              td= task.executor ? task.executor.firstName + ' ' + task.executor.lastName : '-'
+              td= task.executor ? (task.executor.first_name || task.executor.firstName || '') + ' ' + (task.executor.last_name || task.executor.lastName || '') : '-'
+              td= task.creator ? task.creator.firstName : '-'
               td
                 if task.labels && task.labels.length
                   each label in task.labels
@@ -69,9 +71,9 @@ block content
                 else
                   span.text-muted= t('labels.index.noLabels')
               td(style='text-align: left; vertical-align: middle;')
-                if currentUser && currentUser.id === task.creatorId
-                    form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
-                      button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('tasks.index.delete')
+                if currentUser && (currentUser.id === task.creatorId || currentUser.id === task.creator_id)
+                  form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
+                    button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('tasks.index.delete')
         else
           tr
             td(colspan='6')= t('tasks.index.noTasksFound')

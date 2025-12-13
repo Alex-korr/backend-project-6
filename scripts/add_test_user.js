@@ -18,7 +18,7 @@ async function addTestUser() {
     first_name: 'Lawrence',
     last_name: 'Kulas',
     email,
-    password_digest: hashedPassword,
+    password: hashedPassword,
     role: 'user',
     created_at: new Date(),
     updated_at: new Date(),
