@@ -44,10 +44,7 @@ block content
         tr
           th= t('tasks.index.name')
           th= t('tasks.index.statusTh')
-          th= t('tasks.index.description')
           th= t('tasks.index.executor')
-          th Creator
-          th= t('tasks.index.labels')
           th(style='width: 25px; text-align: left;')= t('tasks.index.actions')
       tbody
         if tasks.length
@@ -61,15 +58,7 @@ block content
                   span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; font-weight: 500; color: #4a6fa5;')= task.status.name
                 else
                   span.text-muted Нет статуса
-              td= task.description || '-'
               td= task.executor ? (task.executor.first_name || task.executor.firstName || '') + ' ' + (task.executor.last_name || task.executor.lastName || '') : '-'
-              td= task.creator ? task.creator.firstName : '-'
-              td
-                if task.labels && task.labels.length
-                  each label in task.labels
-                    span.badge.bg-info.text-dark.me-1= label.name
-                else
-                  span.text-muted= t('labels.index.noLabels')
               td(style='text-align: left; vertical-align: middle;')
                 if currentUser && (currentUser.id === task.creatorId || currentUser.id === task.creator_id)
                   form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
