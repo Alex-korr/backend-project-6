@@ -34,11 +34,9 @@ block content
     .form-group
       label(for='data_labels')= t('tasks.index.labels')
       if labels && labels.length
-        .checkbox-group#data_labels(style='height: 100px; overflow-y: scroll; background: #f8f8f8; border: 1px solid #ccc; border-radius: 8px; padding: 12px;')
+        select#data_labels.form-control(name='labels[]', multiple, style='height: 100px;')
           each label in labels
-            label.form-check(style='display: flex; align-items: center; margin-bottom: 8px;')
-              input.form-check-input(type='checkbox', name='labels[]', value=label.id checked=(task.labels && task.labels.includes(label.id)))
-              span.form-check-label(style='margin-left: 8px;')= label.name
+            option(value=label.id selected=(task.labels && task.labels.includes(label.id)))= label.name
       else
         span(style='color: #bbb;') Нет меток
     .mt-4
