@@ -10,4 +10,7 @@ block content
     .mb-3
       label.form-label(for='data_name')= t('labels.index.name')
       input.form-control(type='text', name='data[name]', id='data_name', minlength='1', value=label.name, aria-label=t('labels.index.name'))
+    .mb-3
+      label.form-label(for='description') Описание
+      textarea.form-control(id='description', name='description')= label.description || ''
     button.btn.btn-primary(type='submit') Изменить

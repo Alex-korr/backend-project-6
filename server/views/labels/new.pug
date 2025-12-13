@@ -11,4 +11,7 @@ block content
       input.form-control(type='text', name='data[name]', id='name', value=(typeof name !== 'undefined' ? name : ''))
       if msg
         div.invalid-feedback(style='display:block; margin-left:8px;')= msg
+    .mb-3
+      label.form-label(for='description') Описание
+      textarea.form-control(id='description', name='description')= typeof description !== 'undefined' ? description : ''
     button.btn.btn-primary(type='submit')= t('create')

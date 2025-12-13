@@ -106,7 +106,7 @@ export const newTask = async (req, reply) => {
 };
 
 export const create = async (req, reply) => {
-    const { name, description, statusId, executorId, newLabels } = req.body;
+    const { name, description, status_id, executorId, newLabels } = req.body;
     const raw = req.body['labels[]'];
     let labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
     const creator_id = req.user?.id;
@@ -118,7 +118,7 @@ export const create = async (req, reply) => {
         return reply.redirect('/session/new');
       }
       // Convert statusId and executorId to integers (or null)
-      const status_id = statusId ? Number(statusId) : null;
+      const status_id_int = status_id ? Number(status_id) : null;
       const executor_id = executorId ? Number(executorId) : null;
       // Create new labels if provided
       if (newLabels && newLabels.trim()) {
@@ -133,7 +133,7 @@ export const create = async (req, reply) => {
           labelIds.push(label.id.toString());
         }
       }
-      const task = await Task.query().insert({ name, description, status_id, creator_id, executor_id });
+      const task = await Task.query().insert({ name, description, status_id: status_id_int, creator_id, executor_id });
       if (labelIds.length > 0) {
         for (const labelId of labelIds) {
           await task.$relatedQuery('labels').relate(Number(labelId));
@@ -147,7 +147,7 @@ export const create = async (req, reply) => {
         statuses: await TaskStatus.query(),
         users: await User.query(),
         labels: await import('../models/Label.cjs').then(m => m.default.query()),
-        task: { name, description, statusId, executorId, labels: labelIds },
+        task: { name, description, status_id, executor_id, labels: labelIds },
         currentUser: req.user,
         error: [t('flash.tasks.create.error'), e.message],
         success: [],
