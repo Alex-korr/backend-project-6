@@ -26,8 +26,8 @@ block content
         each status in statuses
           option(value=status.id selected=(task.status_id==status.id))= status.name
     .form-group
-      label(for='executorId')= t('tasks.index.executor')
-      select#executorId.form-control(name='executorId')
+      label(for='data_executorId')= t('tasks.index.executor')
+      select#data_executorId.form-control(name='executorId')
         option(value='')= t('tasks.index.notAssigned' || 'Not assigned')
         each user in users
           option(value=user.id selected=(task.executorId==user.id))= user.firstName + ' ' + user.lastName
