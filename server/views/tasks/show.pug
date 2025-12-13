@@ -19,7 +19,7 @@ block content
 			| #{task.executor ? (task.executor.first_name || task.executor.firstName || '') + ' ' + (task.executor.last_name || task.executor.lastName || '') : '-'}
 		p
 			strong Creator:
-			| #{task.creator ? task.creator.firstName : '-'}
+			| #{task.creator ? (task.creator.first_name || task.creator.firstName || '') + ' ' + (task.creator.last_name || task.creator.lastName || '') : '-'}
 		if task.labels && task.labels.length
 			p
 				strong Labels:
