@@ -68,6 +68,7 @@ export default {
         submit: 'Create User',
       },
       index: {
+          show: 'Show',
         Name: 'Name',
         Edit: 'Edit',
         Delete: 'Delete',

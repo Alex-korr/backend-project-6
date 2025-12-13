@@ -59,6 +59,7 @@ export default {
     },
     tasks: {
       index: {
+          show: 'Показать',
         status: 'Статус',
         all: 'Все',
         executor: 'Исполнитель',

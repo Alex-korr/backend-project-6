@@ -33,7 +33,7 @@ block content
       div.d-flex.align-items-center.mt-4.mb-3.w-100
         input.form-check-input(type="checkbox" name="my" id="my" checked=(query.my ? true : false))
         label.form-check-label(for="my" style='margin-left: 8px;')= t('tasks.index.onlyMy')
-        button.btn.btn-primary.ms-3(type="submit")= t('tasks.index.filter')
+        button.btn.btn-primary.ms-3(type="submit")= t('tasks.index.show')
   if currentUser
     a.btn.btn-primary(href="/tasks/new")= t('tasks.index.newTask')
   if !currentUser && !tasks.length
