@@ -76,7 +76,7 @@ export const create = async (req, reply) => {
     userId = req.body.user_id;
     console.log('NO req.user, trying user_id from body:', userId);
   }
-  // Общий обработчик ошибок
+  // Common error handler
   const renderError = (msg) => reply.view('labels/new', {
     error: ['Не удалось создать метку'],
     msg,

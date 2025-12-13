@@ -139,10 +139,11 @@ export const create = async (req, reply) => {
           await task.$relatedQuery('labels').relate(Number(labelId));
         }
       }
+      req.session.flash = { success: ['Задача успешно создана'] };
       reply.redirect('/tasks');
     } catch (e) {
       console.error('Error in create task controller:', e);
-      // Показываем текст ошибки на странице для диагностики
+      // Show error message on the page for diagnostics
       return reply.view('tasks/new', {
         statuses: await TaskStatus.query(),
         users: await User.query(),
