@@ -69,6 +69,8 @@ export const index = async (req, reply) => {
     }
 
     const tasks = await queryBuilder;
+      // Debug: log all tasks and their labels
+      console.log('DEBUG tasks:', tasks.map(t => ({ id: t.id, name: t.name, labels: t.labels && t.labels.map(l => ({ id: l.id, name: l.name })) })));
     const statuses = await TaskStatus.query();
     const users = await User.query();
     const labels = await import('../models/Label.cjs').then(m => m.default.query());
