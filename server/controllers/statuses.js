@@ -39,7 +39,7 @@ export const create = async (req, reply) => {
   req.log && req.log.info(`[DEBUG] /statuses/create: name = ${name}`);
   req.log && req.log.info(`[DEBUG] Request body: ${JSON.stringify(req.body)}`);
   // DEBUG: Check form parsing
-  console.log('BODY:', req.body);
+
   // Server-side validation: status name must not be empty
   if (!name || name.trim().length < 1) {
     const errors = ['Имя статуса не может быть пустым'];
@@ -66,7 +66,7 @@ export const create = async (req, reply) => {
     }
     reply.redirect('/statuses');
   } catch (err) {
-    req.log && req.log.error(`[DEBUG] Status creation error: ${err.message}`);
+
     // Build array of errors for template
     const errors = [err.message];
     reply.code(422).view('statuses/new', {
@@ -130,7 +130,7 @@ export const remove = async (req, reply) => {
       return reply.redirect(303, '/statuses');
     }
   } catch (err) {
-    console.error('Error checking related tasks (tasks.statusId):', err);
+
     // Continue status deletion even if error occurs
     
   }

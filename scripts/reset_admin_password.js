@@ -13,9 +13,9 @@ async function updateAdminPassword() {
     .where({ email })
     .update({ passwordDigest: hash, role });
   if (updated) {
-    console.log(`Password for ${email} updated successfully.`);
+
   } else {
-    console.log(`User ${email} not found.`);
+
   }
   process.exit(0);
 }

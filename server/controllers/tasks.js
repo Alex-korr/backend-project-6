@@ -8,7 +8,7 @@ export const index = async (req, reply) => {
     const isMy = my === 'on' || my === 'true' || my === true || my === 1 || my === '1';
     // Debug: log my filter and user
     // eslint-disable-next-line no-console
-    console.log('DEBUG my:', my, 'isMy:', isMy, 'req.user:', req.user?.id);
+
   try {
     const query = req.query || {};
 
@@ -61,7 +61,7 @@ export const index = async (req, reply) => {
     }
     // Debug: log labelIds
     // eslint-disable-next-line no-console
-    console.log('DEBUG labelIds:', labelIds);
+
     if (labelIds.length > 0) {
       queryBuilder = queryBuilder
         .joinRelated('labels')
@@ -70,7 +70,7 @@ export const index = async (req, reply) => {
 
     const tasks = await queryBuilder;
       // Debug: log all tasks and their labels
-      console.log('DEBUG tasks:', tasks.map(t => ({ id: t.id, name: t.name, labels: t.labels && t.labels.map(l => ({ id: l.id, name: l.name })) })));
+
     const statuses = await TaskStatus.query();
     const users = await User.query();
     const labels = await import('../models/Label.cjs').then(m => m.default.query());
@@ -95,7 +95,7 @@ export const index = async (req, reply) => {
       currentUrl: req.raw.url,
     });
   } catch (err) {
-    console.error('Error in tasks controller:', err);
+
     return reply.type('text/html').code(500).send('<h1>Tasks Controller Error</h1><pre>' + err.stack + '</pre>');
   }
 };
@@ -157,7 +157,7 @@ export const create = async (req, reply) => {
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     try {
       if (!creator_id) {
-        console.error('No creator_id, user not authenticated');
+
         req.flash('error', t('User not authenticated'));
         return reply.redirect('/session/new');
       }
@@ -188,7 +188,7 @@ export const create = async (req, reply) => {
       req.session.flash = { success: ['Задача успешно создана'] };
       reply.redirect('/tasks');
     } catch (e) {
-      console.error('Error in create task controller:', e);
+
       // Show error message on the page for diagnostics
       return reply.view('tasks/new', {
         statuses: await TaskStatus.query(),

@@ -56,7 +56,7 @@ export const newSession = async (request, reply) => {
       currentUser: request.user || null,
     });
   } catch (error) {
-    console.error('Error in newSession controller:', error);
+    // ...existing code...
     // Render page with generic error
     return reply.view('sessions/new', {
       error: ['An error occurred. Please try again.'],
@@ -75,7 +75,7 @@ export const newSession = async (request, reply) => {
 // This function is no longer used - login is handled directly in the route
 // But we keep it for compatibility
 export const create = async (request, reply) => {
-  console.warn('DEPRECATED: sessionsController.create called - login is now handled in route handler');
+  // ...existing code...
   
   // If somehow this is called, redirect to home
   if (request.user) {
@@ -87,7 +87,7 @@ export const create = async (request, reply) => {
 
 export const destroy = async (request, reply) => {
   try {
-    console.log('Logout attempt for user:', request.user?.id);
+    // ...existing code...
     
     // Set flash message BEFORE clearing session
     if (request.session) {
@@ -98,18 +98,18 @@ export const destroy = async (request, reply) => {
     if (request.logout && typeof request.logout === 'function') {
       try {
         request.logout();
-        console.log('request.logout called (sync)');
+        // ...existing code...
       } catch (err) {
-        console.error('Logout error (sync):', err);
+        // ...existing code...
       }
     } else {
-      console.log('No request.logout function available');
+      // ...existing code...
     }
     
-    console.log('User logged out successfully');
+    // ...existing code...
     return reply.redirect('/');
   } catch (error) {
-    console.error('Error in destroy session controller:', error);
+    // ...existing code...
     if (request.session) {
       request.session.flash = { 
         error: ['Error during logout. Please try again.'] 
@@ -126,7 +126,7 @@ export const loginUser = async (request, reply, user) => {
     request.session.flash = { success: ['Successfully logged in!'] };
     return true;
   } catch (error) {
-    console.error('Login helper error:', error);
+    // ...existing code...
     request.session.flash = { error: ['Login failed'] };
     return false;
   }

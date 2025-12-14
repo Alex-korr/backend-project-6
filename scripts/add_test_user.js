@@ -23,11 +23,11 @@ async function addTestUser() {
     created_at: new Date(),
     updated_at: new Date(),
   });
-  console.log(`Test user ${email} added with password '${password}'`);
+
   process.exit(0);
 }
 
 addTestUser().catch((err) => {
-  console.error(err);
+
   process.exit(1);
 });

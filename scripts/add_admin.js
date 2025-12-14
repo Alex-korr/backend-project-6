@@ -19,7 +19,7 @@ async function addAdmin() {
       password: hashedPassword,
       updated_at: new Date().toISOString(),
     });
-    console.log('Admin user updated');
+
   } else {
     await db('users').insert({
       first_name: 'Admin',
@@ -29,7 +29,7 @@ async function addAdmin() {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });
-    console.log('Admin user added');
+
   }
   process.exit(0);
 }

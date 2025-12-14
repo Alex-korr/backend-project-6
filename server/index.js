@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 import Rollbar from 'rollbar';
 
-console.log('Step 1: Loading .env');
+// ...existing code...
 dotenv.config();
-console.log('Step 2: .env loaded, ROLLBAR_ACCESS_TOKEN:', process.env.ROLLBAR_ACCESS_TOKEN);
+// ...existing code...
 
 import Fastify from 'fastify';
 import view from '@fastify/view';
@@ -49,7 +49,7 @@ export default async function (fastify, opts) {
     captureUnhandledRejections: true,
   });
   
-  rollbar.log('Hello world from server startup!');
+  // ...existing code...
   fastify.decorate('rollbar', rollbar);
 
   // Serve static assets from server/public/
@@ -108,12 +108,12 @@ export default async function (fastify, opts) {
     try {
       sessionKeyBuffer = Buffer.from(sessionKey, 'hex');
     } catch (error) {
-      console.error('Invalid SECURE_SESSION_KEY format. Expected hex string.');
+      // ...existing code...
       throw new Error('Invalid SECURE_SESSION_KEY format');
     }
   } else {
     // Generate a temporary key for development
-    console.warn('No SECURE_SESSION_KEY provided. Using temporary key for development only.');
+    // ...existing code...
     sessionKeyBuffer = Buffer.alloc(32);
   }
 
@@ -128,38 +128,38 @@ export default async function (fastify, opts) {
   });
 
   // Register fastify-objectionjs for database models
-  console.log('=== REGISTERING DATABASE MODELS ===');
+  // ...existing code...
   await fastify.register(fastifyObjectionjs, {
     knexConfig: knexConfig[mode],
     models,
   });
 
   // Configure Passport
-  console.log('=== CONFIGURING PASSPORT ===');
+  // ...existing code...
 
   // Configure user serialization/deserialization for sessions
   fastifyPassport.registerUserSerializer(async (user, req) => {
-    console.log('=== [SERIALIZER] ===');
-    console.log('Serializer called!');
+    // ...existing code...
+    // ...existing code...
     if (!user) {
-      console.log('Serializer: user is null or undefined!');
+      // ...existing code...
       return null;
     }
-    console.log('Serializer: user object:', user);
-    console.log('Serializer: user.id =', user.id);
+    // ...existing code...
+    // ...existing code...
     return user.id;
   });
 
   fastifyPassport.registerUserDeserializer(async (id, req) => {
-    console.log('=== [DESERIALIZER] ===');
-    console.log('Deserializer called!');
-    console.log('Deserializer: id =', id);
+    // ...existing code...
+    // ...existing code...
+    // ...existing code...
     try {
       const user = await User.query().findById(id);
-      console.log('Deserializer: loaded user:', user);
+      // ...existing code...
       return user;
     } catch (error) {
-      console.error('Deserialization error:', error);
+      // ...existing code...
       return null;
     }
   });
@@ -173,87 +173,87 @@ export default async function (fastify, opts) {
     usernameField: 'email' 
   }, async (email, password, done) => {
     try {
-      console.log('\n' + '='.repeat(50));
-      console.log('=== PASSPORT LOCAL STRATEGY START ===');
-      console.log(`Email: ${email}`);
-      console.log(`Password length: ${password?.length}`);
-      console.log('='.repeat(50) + '\n');
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
       
       // Use the directly imported User model
-      console.log('=== USING DIRECT USER MODEL IMPORT ===');
-      console.log('User model available:', !!User);
-      console.log('User.query available:', !!User.query);
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
       
       // Find user by email (case-insensitive)
       const user = await User.query().findOne({ 
         email: email.toLowerCase().trim() 
       });
       
-      console.log('=== USER QUERY RESULT ===');
-      console.log('User found:', !!user);
+      // ...existing code...
+      // ...existing code...
       
       if (!user) {
-        console.log('❌ User not found in database');
-        console.log('Searched for email:', email);
+        // ...existing code...
+        // ...existing code...
         return done(null, false, { message: 'Invalid email or password' });
       }
       
-      console.log('✅ User found in database');
-      console.log('User ID:', user.id);
-      console.log('User email from DB:', user.email);
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
       
       // Debug user information
-      console.log('=== USER DEBUG INFO ===');
-      console.log('Has password:', !!user.password);
-      console.log('password length:', user.password?.length);
-      console.log('password preview:', user.password?.substring(0, 20) + '...');
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
 
       if (!user.password) {
-        console.error('❌ CRITICAL: User has no password field!');
+        // ...existing code...
         return done(null, false, { message: 'Account error - no password set' });
       }
       
       // Verify password using user model method
-      console.log('\n=== CALLING verifyPassword ===');
+      // ...existing code...
       const isValid = await user.verifyPassword(password);
-      console.log('verifyPassword returned:', isValid);
+      // ...existing code...
       
       if (!isValid) {
-        console.log('❌ Password verification failed');
+        // ...existing code...
         return done(null, false, { message: 'Invalid email or password' });
       }
       
-      console.log('\n' + '='.repeat(50));
-      console.log('✅ ✅ ✅ AUTHENTICATION SUCCESSFUL ✅ ✅ ✅');
-      console.log(`User ${user.email} (ID: ${user.id}) logged in`);
-      console.log('='.repeat(50) + '\n');
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
       
       return done(null, user);
     } catch (err) {
-      console.error('\n' + '='.repeat(50));
-      console.error('❌ ❌ ❌ LOCAL STRATEGY ERROR ❌ ❌ ❌');
-      console.error('Error message:', err.message);
-      console.error('Error stack:', err.stack);
-      console.error('='.repeat(50) + '\n');
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
+      // ...existing code...
       return done(err);
     }
   }));
-  console.log('✅ LocalStrategy configured successfully');
+  // ...existing code...
 
   // Register application routes
-  console.log('=== REGISTERING ROUTES ===');
+  // ...existing code...
   await fastify.register(indexRoutes);
   
   // Global error handler
   fastify.setErrorHandler((error, request, reply) => {
-    console.error('=== ERROR HANDLER ===');
-    console.log('All routes registered, server ready to handle requests');
-    console.error('Message:', error.message);
-    console.error('Stack:', error.stack);
-    console.error('====================');
+    // ...existing code...
+    // ...existing code...
+    // ...existing code...
+    // ...existing code...
+    // ...existing code...
     
     if (fastify.rollbar) {
-      fastify.rollbar.error(error, request);
+      // ...existing code...
     }
     
     if (reply.sent) return;
@@ -281,10 +281,10 @@ export default async function (fastify, opts) {
     }
   });
   
-  console.log('=== SERVER INITIALIZATION COMPLETE ===');
-  console.log('Environment:', mode);
-  console.log('Session security:', sessionKey ? 'Using env key' : 'Using temporary key');
-  console.log('Models registered:', models.map(m => m.name).join(', '));
+  // ...existing code...
+  // ...existing code...
+  // ...existing code...
+  // ...existing code...
   
   return fastify;
 }

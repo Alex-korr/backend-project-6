@@ -12,9 +12,9 @@ const fastify = Fastify({
       port: process.env.PORT || 3000,
       host: process.env.HOST || 'localhost'
     });
-    console.log(`Server listening at ${fastify.server.address().port}`);
+    // ...existing code...
   } catch (err) {
-    console.error('Failed to start server:', err);
+    // ...existing code...
     process.exit(1);
   }
 })();

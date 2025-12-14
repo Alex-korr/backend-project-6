@@ -7,6 +7,6 @@ Task.knex(knex);
 
 (async () => {
   const task = await Task.query().findById(1).withGraphFetched('creator');
-  console.log(JSON.stringify(task, null, 2));
+  // ...existing code...
   await knex.destroy();
 })();

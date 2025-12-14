@@ -1,18 +1,6 @@
 import Label from '../models/Label.cjs';
 
 export const index = async (req, reply) => {
-  console.log('=== [LABELS CONTROLLER START] ===');
-  console.log('INCOMING REQUEST:', {
-    method: req.method,
-    url: req.url,
-    originalUrl: req.raw && req.raw.url,
-    headers: req.headers,
-    cookies: req.cookies,
-    query: req.query,
-    body: req.body,
-    user: req.user,
-    session: req.session,
-  });
   const labels = await Label.query();
   const error = req.session?.flash?.labels?.error || [];
   const success = req.session?.flash?.labels?.success || [];
@@ -54,27 +42,15 @@ export const newLabel = async (req, reply) => {
 };
 
 export const create = async (req, reply) => {
-  console.log('LABELS CREATE CONTROLLER CALLED', {
-    user: req.user && req.user.id,
-    userObj: req.user,
-    body: req.body,
-    session: req.session,
-    cookies: req.cookies,
-    headers: req.headers,
-    url: req.url,
-    method: req.method,
-  });
   // Support for { data: { name } }, { name }, and { 'data[name]': ... } formats
   let name = req.body?.data?.name || req.body?.name;
   if (!name && req.body && typeof req.body['data[name]'] === 'string') {
     name = req.body['data[name]'];
   }
   const t = req.i18next.t.bind(req.i18next);
-  const query = req.query || {};
   let userId = req.user ? req.user.id : null;
   if (!userId && req.body && req.body.user_id) {
     userId = req.body.user_id;
-    console.log('NO req.user, trying user_id from body:', userId);
   }
   // Common error handler
   const renderError = (msg) => reply.view('labels/new', {
@@ -86,24 +62,19 @@ export const create = async (req, reply) => {
     isAuthenticated: !!req.user,
     user: req.user,
     currentUrl: req.raw.url,
-    query,
+    query: req.query || {},
   });
   if (!name || name.trim().length === 0) {
-    console.log('LABEL CREATE VALIDATION ERROR: name is empty');
-    // Set flash error for .alert
     req.session.flash = { labels: { error: ['Не удалось создать метку'] } };
     return renderError('Поле метки не может быть пустым');
   }
   try {
     const labelData = { name };
     if (userId) labelData.user_id = userId;
-    console.log('INSERTING LABEL:', labelData);
-    const label = await Label.query().insert(labelData);
-    console.log('LABEL CREATED:', label);
+    await Label.query().insert(labelData);
     req.session.flash = { labels: { success: [t('flash.labels.create.success')] } };
     return reply.redirect('/labels');
   } catch (err) {
-    console.error('ERROR CREATING LABEL:', err);
     return renderError('Не удалось создать метку');
   }
 };

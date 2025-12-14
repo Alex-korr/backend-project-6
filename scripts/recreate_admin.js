@@ -18,7 +18,7 @@ async function recreateAdmin() {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
-  console.log(`Admin user recreated with email: ${email} and password: ${password}`);
+
   process.exit(0);
 }
 
