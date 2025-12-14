@@ -64,14 +64,15 @@ export const index = async (req, reply) => {
 
     if (labelIds.length > 0) {
       if (labelIds.includes('__no_label__')) {
+        // Только задачи без меток
         queryBuilder = queryBuilder.whereNotExists(
           Task.relatedQuery('labels').select(1)
         );
       } else {
+        // Только задачи с выбранным лейблом (INNER JOIN)
         queryBuilder = queryBuilder
-          .leftJoinRelated('labels')
-          .whereIn('labels.id', labelIds)
-          .orWhereNull('labels.id');
+          .joinRelated('labels')
+          .whereIn('labels.id', labelIds);
       }
     }
 
