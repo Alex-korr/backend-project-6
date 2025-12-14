@@ -105,13 +105,8 @@ export const edit = async (request, reply) => {
 };
 
 export const update = async (request, reply) => {
-  console.log('=== UPDATE USER CALLED ===');
-  console.log('Request method:', request.method);
-  console.log('Request URL:', request.url);
   const { id } = request.params;
-  console.log('User ID:', id);
   const { firstName, lastName, email, password } = request.body;
-  console.log('Body data:', { firstName, lastName, email, passwordLength: password?.length });
   const currentLang = request.cookies?.lang || 'en';
   try {
     const updateData = { firstName, lastName, email };
@@ -123,10 +118,6 @@ export const update = async (request, reply) => {
     request.session.flash = { success: [request.i18next.t('flash.users.update.success')] };
     return reply.redirect('/users');
   } catch (error) {
-    console.error('=== UPDATE ERROR ===');
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
-    console.error('Error data:', error.data);
     request.session.flash = { error: [error.message] };
     return reply.redirect(`/users/${id}/edit`);
   }

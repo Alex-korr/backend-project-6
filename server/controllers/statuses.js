@@ -36,8 +36,6 @@ export const newStatus = async (req, reply) => {
 
 export const create = async (req, reply) => {
   const name = req.body.name || (req.body.data && req.body.data.name);
-  req.log && req.log.info(`[DEBUG] /statuses/create: name = ${name}`);
-  req.log && req.log.info(`[DEBUG] Request body: ${JSON.stringify(req.body)}`);
   // DEBUG: Check form parsing
 
   // Server-side validation: status name must not be empty
@@ -56,7 +54,6 @@ export const create = async (req, reply) => {
   }
   try {
     const status = await TaskStatus.query().insert({ name });
-    req.log && req.log.info(`[DEBUG] Status created: ${JSON.stringify(status)}`);
     if (req.session && req.i18next) {
       let successMsg = req.i18next.t('flash.statuses.create.success');
       if (successMsg === 'flash.statuses.create.success') {

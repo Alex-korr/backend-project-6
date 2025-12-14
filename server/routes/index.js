@@ -15,7 +15,6 @@ export default async (app, options) => {
     reply.redirect(back);
   });
   
-  console.log('ROUTES INDEX.JS LOADED');
   
   // Home page
   app.get('/', (request, reply) => {

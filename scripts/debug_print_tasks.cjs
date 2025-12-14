@@ -1,4 +1,3 @@
-// debug_print_tasks.cjs
 // Скрипт для вывода всех задач с реляциями в консоль в виде объекта
 
 const { Model } = require('objection');
@@ -17,6 +16,5 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error(err);
   process.exit(1);
 });
