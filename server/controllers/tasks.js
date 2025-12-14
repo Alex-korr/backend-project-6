@@ -69,6 +69,15 @@ export const index = async (req, reply) => {
     }
 
     const tasks = await queryBuilder;
+    // DEBUG: log all tasks for analysis
+    console.log('=== ALL TASKS ===', tasks.map(t => ({
+      id: t.id,
+      name: t.name,
+      status: t.status && t.status.name,
+      labels: t.labels && t.labels.map(l => l.name),
+      executor: t.executor && (t.executor.first_name || t.executor.firstName || '') + ' ' + (t.executor.last_name || t.executor.lastName || ''),
+      creator_id: t.creator_id || t.creatorId
+    })));
       // Debug: log all tasks and their labels
 
     const statuses = await TaskStatus.query();
