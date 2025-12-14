@@ -3,17 +3,54 @@ import TaskStatus from '../models/TaskStatus.cjs';
 import User from '../models/User.cjs';
 
 export const index = async (req, reply) => {
+    const query = req.query || {};
+    const { status, executor, label, my } = query;
+    const isMy = my === 'on' || my === 'true' || my === true || my === 1 || my === '1';
+    // Debug: log my filter and user
+    // eslint-disable-next-line no-console
+    console.log('DEBUG my:', my, 'isMy:', isMy, 'req.user:', req.user?.id);
   try {
     const query = req.query || {};
-    let queryBuilder = Task.query().withGraphFetched('[status, labels, executor, creator]');
+
     const { status, executor, label, my } = query;
+    const isMy = my === 'on' || my === 'true' || my === true || my === 1 || my === '1';
+    if (isMy && !req.user) {
+      const statuses = await TaskStatus.query();
+      const users = await User.query();
+      const labels = await import('../models/Label.cjs').then(m => m.default.query());
+      const error = req.session?.flash?.error || [];
+      const success = req.session?.flash?.success || [];
+      req.session.flash = {};
+      const currentLang = req.cookies?.lang || query.lang || 'en';
+      const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
+      return reply.view('tasks/index', {
+        tasks: [],
+        statuses,
+        users,
+        labels,
+        query,
+        currentUser: req.user || null,
+        error,
+        success,
+        currentLang,
+        t,
+        isAuthenticated: !!req.user,
+        user: req.user,
+        currentUrl: req.raw.url,
+      });
+    }
+
+    let queryBuilder = Task.query().withGraphFetched('[status, labels, executor, creator]');
     if (status) {
       queryBuilder = queryBuilder.where('status_id', status);
     }
     if (executor) {
       queryBuilder = queryBuilder.where('executor_id', executor);
     }
-    // Filter by multiple labels
+    if (isMy && req.user) {
+      queryBuilder = queryBuilder.where('creator_id', req.user.id);
+    }
+
     let labelIds = [];
     if (label) {
       if (Array.isArray(label)) {
@@ -22,27 +59,18 @@ export const index = async (req, reply) => {
         labelIds = [label];
       }
     }
+    // Debug: log labelIds
+    // eslint-disable-next-line no-console
+    console.log('DEBUG labelIds:', labelIds);
     if (labelIds.length > 0) {
-      for (const labelId of labelIds) {
-        queryBuilder = queryBuilder.whereExists(
-          Task.relatedQuery('labels').where('labels.id', labelId)
-        );
-      }
+      queryBuilder = queryBuilder
+        .joinRelated('labels')
+        .whereIn('labels.id', labelIds)
+        .groupBy('tasks.id')
+        .havingRaw('count(distinct labels.id) = ?', [labelIds.length]);
     }
-    let tasks;
-    if (my && !req.user) {
-      tasks = [];
-    } else if (my && req.user) {
-      tasks = await queryBuilder.where('creator_id', req.user.id);
-    } else {
-      tasks = await queryBuilder;
-    }
-    if (tasks && tasks.length) {
-      // Debug: show all tasks with relations
-      // eslint-disable-next-line no-console
-      console.log('DEBUG all tasks:', JSON.stringify(tasks, null, 2));
-      // Do not convert to plain objects, pass as is to preserve relations
-    }
+
+    const tasks = await queryBuilder;
     const statuses = await TaskStatus.query();
     const users = await User.query();
     const labels = await import('../models/Label.cjs').then(m => m.default.query());
@@ -50,7 +78,6 @@ export const index = async (req, reply) => {
     const success = req.session?.flash?.success || [];
     req.session.flash = {};
     const currentLang = req.cookies?.lang || query.lang || 'en';
-    // Fallback for i18next in tests
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     return reply.view('tasks/index', {
       tasks,
@@ -68,8 +95,8 @@ export const index = async (req, reply) => {
       currentUrl: req.raw.url,
     });
   } catch (err) {
-    console.error('TASKS INDEX ERROR:', err);
-    reply.type('text/html').code(500).send('<h1>Tasks Controller Error</h1><pre>' + err.stack + '</pre>');
+    console.error('Error in tasks controller:', err);
+    return reply.type('text/html').code(500).send('<h1>Tasks Controller Error</h1><pre>' + err.stack + '</pre>');
   }
 };
 
@@ -238,7 +265,7 @@ export const remove = async (req, reply) => {
     const task = await Task.query().findById(id);
     if (!task) return reply.code(404).send('Task not found');
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
-    if (task.creator_id !== req.user.id) {
+    if (Number(task.creator_id) !== Number(req.user.id)) {
       req.flash('error', t('Task not found'));
       return reply.redirect('/tasks');
     }

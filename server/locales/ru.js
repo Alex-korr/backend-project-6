@@ -66,6 +66,7 @@ export default {
         label: 'Метка',
         labels: 'Метки',
         onlyMy: 'Только мои задачи',
+        onlyMyActive: 'Показаны только ваши задачи',
         filter: 'Фильтровать',
         newTask: 'Создать задачу',
         signInToAdd: 'Войдите, чтобы добавить задачи',

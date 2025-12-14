@@ -21,12 +21,12 @@ block content
             option(value=user.id selected=(user.id == query.executor))= user.firstName + ' ' + user.lastName
     .col-md-3
       label.form-label(for="data_label")= t('tasks.index.label')
-      select.form-select(name="label[]" id="data_label" multiple)
+      select.form-select(name="label" id="data_label")
         if labels && labels.length
           each label in labels
             option(
               value=label.id
-              selected=(Array.isArray(query.label) ? query.label.includes(label.id.toString()) : query.label == label.id)
+              selected=(query.label == label.id)
             )= label.name
     .col-md-3.d-flex.align-items-start
       div.d-flex.align-items-center.mt-4.mb-3.w-100
@@ -44,6 +44,7 @@ block content
           th= t('tasks.index.name')
           th= t('tasks.index.statusTh')
           th= t('tasks.index.executor')
+          th(style='width: 80px;')= t('tasks.index.creatorId')
           th(style='width: 25px; text-align: left;')= t('tasks.index.actions')
       tbody
         if tasks.length
@@ -58,10 +59,16 @@ block content
                 else
                   span.text-muted Нет статуса
               td= task.executor ? (task.executor.first_name || task.executor.firstName || '') + ' ' + (task.executor.last_name || task.executor.lastName || '') : '-'
+              td= task.creatorId || task.creator_id
               td(style='text-align: left; vertical-align: middle;')
                 if currentUser && (currentUser.id === task.creatorId || currentUser.id === task.creator_id)
                   form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
                     button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('tasks.index.delete')
+              td= JSON.stringify(task)
         else
           tr
             td(colspan='6')= t('tasks.index.noTasksFound')
+  if query.my && (query.my === 'on' || query.my === 'true' || query.my === true || query.my === 1 || query.my === '1')
+    div.alert.alert-info.mt-3(style='font-weight: 500; color: #1976d2;')
+      | #{t('tasks.index.onlyMyActive')}
+  p.mt-2.text-muted Tasks count: #{tasks.length}
