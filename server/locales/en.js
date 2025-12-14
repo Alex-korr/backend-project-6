@@ -104,6 +104,7 @@ export default {
         label: 'Label',
         labels: 'Labels',
         onlyMy: 'Only my tasks',
+        noLabel: 'No label',
         onlyMyActive: 'Showing only your tasks',
         filter: 'Filter',
         newTask: 'New Task',

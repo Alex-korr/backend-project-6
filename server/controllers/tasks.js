@@ -63,9 +63,16 @@ export const index = async (req, reply) => {
     // eslint-disable-next-line no-console
 
     if (labelIds.length > 0) {
-      queryBuilder = queryBuilder
-        .joinRelated('labels')
-        .whereIn('labels.id', labelIds);
+      if (labelIds.includes('__no_label__')) {
+        queryBuilder = queryBuilder.whereNotExists(
+          Task.relatedQuery('labels').select(1)
+        );
+      } else {
+        queryBuilder = queryBuilder
+          .leftJoinRelated('labels')
+          .whereIn('labels.id', labelIds)
+          .orWhereNull('labels.id');
+      }
     }
 
     const tasks = await queryBuilder;

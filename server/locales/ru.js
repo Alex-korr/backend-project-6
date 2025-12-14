@@ -66,6 +66,7 @@ export default {
         label: 'Метка',
         labels: 'Метки',
         onlyMy: 'Только мои задачи',
+        noLabel: 'Без метки',
         onlyMyActive: 'Показаны только ваши задачи',
         filter: 'Фильтровать',
         newTask: 'Создать задачу',
