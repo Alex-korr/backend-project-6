@@ -6,7 +6,6 @@
 // import fastifyPassport from '@fastify/passport';
 
 // export default async (app, options) => {
-//   console.log('ROUTES INDEX.JS LOADED');
 //   // Home page
 //   app.get('/', (request, reply) => {
 //     let currentLang = request.cookies?.lang || 'en';
@@ -28,9 +27,7 @@
 //     if (req.server && req.server.rollbar) {
 //       req.server.rollbar.error('Manual error test from /rollbar-error', (err) => {
 //         if (err) {
-//           console.error('Rollbar error send failed:', err);
 //         } else {
-//           console.log('Rollbar error sent successfully');
 //         }
 //       });
 //     }
@@ -75,6 +72,5 @@
 //   await statusesRoutes(app);
 //   await labelsRoutes(app);
 //   
-//   console.log('Routes have been registered', app);
 //   return app;
 // };

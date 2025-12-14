@@ -73,9 +73,9 @@ export default async (app, options) => {
     if (req.server && req.server.rollbar) {
       req.server.rollbar.error('Manual error test from /rollbar-error', (err) => {
         if (err) {
-          console.error('Rollbar error send failed:', err);
+            // console.error('Rollbar error send failed:', err);
         } else {
-          console.log('Rollbar error sent successfully');
+            // console.log('Rollbar error sent successfully');
         }
       });
     }
@@ -107,11 +107,6 @@ export default async (app, options) => {
 
   // Debug session route for authentication troubleshooting
   app.get('/debug-session', async (request, reply) => {
-    console.log('=== DEBUG SESSION ===');
-    console.log('Request user:', request.user);
-    console.log('Is authenticated:', request.isAuthenticated ? request.isAuthenticated() : 'no method');
-    console.log('Session ID:', request.session?.sessionId);
-    console.log('Session data:', request.session);
     return reply.send({
       user: request.user,
       isAuthenticated: request.isAuthenticated ? request.isAuthenticated() : false,
@@ -124,14 +119,12 @@ export default async (app, options) => {
   // POST /session - Login route
   app.post('/session', async (request, reply) => {
     const { email, password } = request.body;
-    console.log('[LOGIN] Attempt - email:', email, 'password length:', password?.length);
     
     const currentLang = request.cookies?.lang || 'ru';
     const translateError = () => currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
     
     // Server-side validation - render form directly (NO redirect)
     if (!email || !email.trim() || !password || !password.trim()) {
-      console.log('[LOGIN] Failure - empty fields, rendering /session with error');
       return reply.view('sessions/new', {
         error: [translateError()],
         success: [],
@@ -152,7 +145,6 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      console.log('[LOGIN] Failure - user not found, rendering /session with error');
       return reply.view('sessions/new', {
         error: [translateError()],
         success: [],
@@ -166,14 +158,11 @@ export default async (app, options) => {
       });
     }
     
-    console.log('[LOGIN] User found, password hash:', user.password?.substring(0, 10) + '...');
     
     // Verify password
     const isValid = await user.verifyPassword(password);
-    console.log('[LOGIN] Password verification result:', isValid);
     
     if (!isValid) {
-      console.log('[LOGIN] Failure - wrong password, rendering /session with error');
       return reply.view('sessions/new', {
         error: [translateError()],
         success: [],
@@ -190,21 +179,18 @@ export default async (app, options) => {
     // Authentication successful
     await request.logIn(user);
     request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
-    console.log('[LOGIN] Success, user:', user?.email, 'redirecting to /');
     return reply.redirect('/');
   });
   
   // POST /session/new - Login from /session/new page (no redirect, render directly)
   app.post('/session/new', async (request, reply) => {
     const { email, password } = request.body;
-    console.log('[LOGIN /session/new] Attempt - email:', email, 'password length:', password?.length);
     
     const currentLang = request.cookies?.lang || 'ru';
     const translateError = () => currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
     
     // Server-side validation - render form with error (NO redirect)
     if (!email || !email.trim() || !password || !password.trim()) {
-      console.log('[LOGIN /session/new] Failure - empty fields, rendering form with error');
       return reply.view('sessions/new', {
         error: [translateError()],
         success: [],
@@ -223,7 +209,6 @@ export default async (app, options) => {
     const user = await User.query().findOne({ email });
     
     if (!user) {
-      console.log('[LOGIN /session/new] Failure - user not found, rendering form with error');
       return reply.view('sessions/new', {
         error: [translateError()],
         success: [],
@@ -240,7 +225,6 @@ export default async (app, options) => {
     const isValid = await user.verifyPassword(password);
     
     if (!isValid) {
-      console.log('[LOGIN /session/new] Failure - wrong password, rendering form with error');
       return reply.view('sessions/new', {
         error: [translateError()],
         success: [],
@@ -257,7 +241,6 @@ export default async (app, options) => {
     // Success - redirect to home
     await request.logIn(user);
     request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
-    console.log('[LOGIN /session/new] Success, user:', user?.email, 'redirecting to /');
     return reply.redirect('/');
   });
 
@@ -267,18 +250,11 @@ export default async (app, options) => {
   // Diagnostic route to check database
   app.get('/check-db', async (request, reply) => {
     try {
-      console.log('=== CHECKING DATABASE ===');
       
       // 1. Check via User model
       const modelUsers = await User.query();
-      console.log(`📊 Users via User model: ${modelUsers.length}`);
       
       modelUsers.forEach((user, index) => {
-        console.log(`\nUser #${index + 1} (from model):`);
-        console.log(`  ID: ${user.id}`);
-        console.log(`  Email: ${user.email}`);
-        console.log(`  Has password_digest: ${!!user.password_digest}`);
-        console.log(`  password_digest length: ${user.password_digest?.length}`);
       });
       
       // 2. Check via direct database query
@@ -293,15 +269,10 @@ export default async (app, options) => {
         const db = Knex(knexConfig);
         
         await db.raw('SELECT 1');
-        console.log('✅ Database connection successful');
         
         const directUsers = await db('users').select('*');
-        console.log(`📊 Direct DB query - users: ${directUsers.length}`);
         
         directUsers.forEach((user, index) => {
-          console.log(`\nUser #${index + 1} (direct DB):`);
-          console.log(`  ID: ${user.id}`);
-          console.log(`  Email: ${user.email}`);
           
           // Find password fields
           const passwordFields = Object.keys(user).filter(key => 
@@ -311,12 +282,9 @@ export default async (app, options) => {
           );
           
           if (passwordFields.length > 0) {
-            console.log('  Password fields found:');
             passwordFields.forEach(field => {
-              console.log(`    - ${field}: ${user[field] ? `LENGTH=${user[field].length}` : 'NULL'}`);
             });
           } else {
-            console.log('  No password fields found');
           }
         });
         
@@ -334,7 +302,6 @@ export default async (app, options) => {
         });
         
       } catch (dbError) {
-        console.error('Direct DB check failed:', dbError.message);
         return reply.send({
           success: true,
           modelUsers: modelUsers.length,
@@ -349,7 +316,6 @@ export default async (app, options) => {
       }
       
     } catch (error) {
-      console.error('Database check error:', error);
       return reply.send({ 
         success: false, 
         error: error.message
@@ -360,21 +326,12 @@ export default async (app, options) => {
   // Route to create test user
   app.post('/create-test-user-now', async (request, reply) => {
     try {
-      console.log('=== DEBUG /create-test-user-now ===');
-      console.log('request.body:', request.body);
-      console.log('typeof User:', typeof User);
-      console.log('User:', User);
-      console.log('User.query:', typeof User?.query);
       const { email = 'alex@mail.ru', password = 'admin123' } = request.body || {};
       
-      console.log('=== CREATING TEST USER ===');
-      console.log('Email:', email);
-      console.log('Password:', password);
       
       // 1. Check if user exists
       const existingUser = await User?.query?.().findOne({ email });
       if (existingUser) {
-        console.log('User already exists, updating password...');
         // Update password
         await existingUser.setPassword(password);
         await User.query().findById(existingUser.id).patch({
@@ -394,7 +351,6 @@ export default async (app, options) => {
         });
       } else {
         // 2. Create new user
-        console.log('Creating new user...');
         // Dynamic import for ES modules
         const bcryptModule = await import('bcrypt');
         const bcrypt = bcryptModule.default;
@@ -407,7 +363,6 @@ export default async (app, options) => {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         });
-        console.log('New user created:', newUser.id);
         return reply.send({
           success: true,
           action: 'created',
@@ -421,7 +376,6 @@ export default async (app, options) => {
       }
       
     } catch (error) {
-      console.error('Create user error:', error);
       return reply.send({ 
         error: error.message
       });
@@ -455,6 +409,5 @@ export default async (app, options) => {
   await statusesRoutes(app);
   await labelsRoutes(app);
   
-  console.log('Routes have been registered');
   return app;
 };
