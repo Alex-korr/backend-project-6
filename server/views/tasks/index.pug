@@ -14,7 +14,7 @@ block content
             option(value=status.id selected=(status.id == query.status))= status.name
     .col-md-3
       label.form-label(for="executor")= t('tasks.index.executor')
-      select.form-select(name="executor" id="executor")
+      select.form-select(name="executor" id="data_executor")
         option(value="")= t('tasks.index.all')
         if users && users.length
           each user in users
