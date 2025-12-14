@@ -65,9 +65,7 @@ export const index = async (req, reply) => {
     if (labelIds.length > 0) {
       queryBuilder = queryBuilder
         .joinRelated('labels')
-        .whereIn('labels.id', labelIds)
-        .groupBy('tasks.id')
-        .havingRaw('count(distinct labels.id) = ?', [labelIds.length]);
+        .whereIn('labels.id', labelIds);
     }
 
     const tasks = await queryBuilder;

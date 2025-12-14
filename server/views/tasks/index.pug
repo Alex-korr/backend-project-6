@@ -64,7 +64,6 @@ block content
                 if currentUser && (currentUser.id === task.creatorId || currentUser.id === task.creator_id)
                   form(method='post', action=`/tasks/${task.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, style='display:inline')
                     button.btn.btn-sm(type='submit' style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= t('tasks.index.delete')
-              td= JSON.stringify(task)
         else
           tr
             td(colspan='6')= t('tasks.index.noTasksFound')
