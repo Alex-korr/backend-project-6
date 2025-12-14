@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import app from './index.js';
 
 const fastify = Fastify({
-  logger: process.env.NODE_ENV !== 'production'
+  logger: false
 });
 
 (async () => {
