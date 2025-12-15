@@ -6,7 +6,7 @@ block content
     ul.text-danger
       each err in error
         li= err
-  form(method='post', action=`/tasks/${task.id}?_method=patch`)
+  form(method='post', action=`/tasks/${task.id}`)
     .mb-3
       label(for='data_name')= t('tasks.name')
       input#data_name.form-control(type='text', name='name', required, value=task.name)
@@ -30,4 +30,4 @@ block content
         option(value='')= t('tasks.index.noLabel' || 'No label')
         each label in labels
           option(value=label.id, selected=(task.labels && task.labels.some(l => l.id == label.id)))= label.name
-    button.btn.btn-primary(type='submit')= t('tasks.save')
+    button.btn.btn-primary(type='submit')= t('tasks.index.edit')
