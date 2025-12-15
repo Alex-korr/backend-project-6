@@ -23,12 +23,12 @@ block content
       textarea#description.form-control(name='description')= task.description || ''
     .form-group
       label(for='data_statusId')= t('tasks.index.status')
-      select#data_statusId.form-control(class=errors && errors.status_id ? 'is-invalid' : '', name='status_id')
+      select#data_statusId.form-control(class=errors && errors.statusId ? 'is-invalid' : '', name='status_id')
         option(value='')= t('tasks.index.statusPlaceholder')
         each status in statuses
-          option(value=status.id selected=(task.status_id==status.id))= status.name
-      if errors && errors.status_id
-        .invalid-feedback.d-block= errors.status_id
+          option(value=status.id selected=(task.statusId==status.id))= status.name
+      if errors && errors.statusId
+        .invalid-feedback.d-block= errors.statusId
     .form-group
       label(for='data_executorId')= t('tasks.index.executor')
       select#data_executorId.form-control(name='executorId')

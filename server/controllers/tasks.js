@@ -1,10 +1,14 @@
+import camelcaseKeys from 'camelcase-keys';
+import decamelizeKeys from 'decamelize-keys';
 import Task from '../models/Task.cjs';
 import TaskStatus from '../models/TaskStatus.cjs';
 import User from '../models/User.cjs';
 
 export const index = async (req, reply) => {
   const query = req.query || {};
-  const { status, executor, label, my } = query;
+  const {
+    status, executor, label, my,
+  } = query;
   const isMy = my === 'on' || my === 'true' || my === true || my === 1 || my === '1';
   try {
     if (isMy && !req.user) {
@@ -145,12 +149,13 @@ export const newTask = async (req, reply) => {
 };
 
 export const create = async (req, reply) => {
+  // Convert all keys in req.body to camelCase
+  const body = camelcaseKeys(req.body, { deep: true });
+  console.log('DEBUG BODY:', body);
   const {
-    name, description, status_id, executorId, newLabels,
-  } = req.body;
-  // camelcase: status_id -> statusId
-  const statusId = status_id;
-  const raw = req.body['labels[]'];
+    name, description, statusId, executorId, newLabels,
+  } = body;
+  const raw = body.labels || body['labels[]'] || req.body['labels[]'];
   const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
   const creatorId = req.user?.id;
   const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
@@ -207,9 +212,14 @@ export const create = async (req, reply) => {
       const newLabelIds = await Promise.all(labelPromises);
       labelIds.push(...newLabelIds);
     }
-    const task = await Task.query().insert({
-      name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt,
+    const taskData = decamelizeKeys({
+      name,
+      description,
+      statusId: statusIdInt,
+      creatorId,
+      executorId: executorIdInt,
     });
+    const task = await Task.query().insert(taskData);
     if (labelIds.length > 0) {
       await Promise.all(labelIds.map((labelId) => task.$relatedQuery('labels').relate(Number(labelId))));
     }
@@ -218,7 +228,7 @@ export const create = async (req, reply) => {
     req.session.flash = { success: ['Задача успешно создана'] };
     return reply.redirect('/tasks');
   } catch (e) {
-    // Show error message on the page for diagnostics
+    console.error('CREATE TASK ERROR:', e);
     return reply.view('tasks/new', {
       statuses: await TaskStatus.query(),
       users: await User.query(),
