@@ -131,6 +131,7 @@ export const newTask = async (req, reply) => {
     users,
     labels,
     task: {},
+    errors: {},
     currentUser: req.user,
     error,
     success,

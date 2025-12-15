@@ -16,7 +16,8 @@ block content
     .form-group
       label(for='name')= t('tasks.index.name')
       input#name.form-control(class=errors && errors.name ? 'is-invalid' : '', type='text', name='name', value=task.name || '')
-      .invalid-feedback.d-block(style=errors && errors.name ? '' : 'display:none')= errors && errors.name ? errors.name : t('validation.required')
+      if errors && errors.name
+        .invalid-feedback.d-block= errors.name
     .form-group
       label(for='description')= t('tasks.index.description')
       textarea#description.form-control(name='description')= task.description || ''
@@ -26,7 +27,8 @@ block content
         option(value='')= t('tasks.index.statusPlaceholder')
         each status in statuses
           option(value=status.id selected=(task.status_id==status.id))= status.name
-      .invalid-feedback.d-block(style=errors && errors.status_id ? '' : 'display:none')= errors && errors.status_id ? errors.status_id : t('validation.required')
+      if errors && errors.status_id
+        .invalid-feedback.d-block= errors.status_id
     .form-group
       label(for='data_executorId')= t('tasks.index.executor')
       select#data_executorId.form-control(name='executorId')
