@@ -125,6 +125,7 @@ export default {
         title: 'Статусы',
         createStatus: 'Создать статус',
         editStatus: 'Изменить статус',
+        edit: 'Изменить',
         name: 'Наименование',
         actions: 'Действия',
         delete: 'Удалить',

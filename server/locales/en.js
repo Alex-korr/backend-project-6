@@ -91,6 +91,7 @@ export default {
         title: 'Statuses',
         createStatus: 'Create status',
         editStatus: 'Edit status',
+        edit: 'Edit',
         name: 'Name',
         actions: 'Actions',
         delete: 'Delete',
