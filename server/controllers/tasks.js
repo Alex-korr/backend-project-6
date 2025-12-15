@@ -174,9 +174,33 @@ export const create = async (req, reply) => {
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
     try {
       if (!creator_id) {
-
         req.flash('error', t('User not authenticated'));
         return reply.redirect('/session/new');
+      }
+      // Validation for required fields
+      const validationErrors = [];
+      if (!name || name.trim() === '') {
+        validationErrors.push(t('First name is required'));
+      }
+      if (!status_id || status_id === '') {
+        validationErrors.push(t('flash.tasks.validation.statusRequired') || 'Status is required');
+      }
+      if (validationErrors.length > 0) {
+        return reply.view('tasks/new', {
+          statuses: await TaskStatus.query(),
+          users: await User.query(),
+          labels: await import('../models/Label.cjs').then(m => m.default.query()),
+          task: { name, description, status_id, executor_id: executorId, labels: labelIds },
+          currentUser: req.user,
+          error: validationErrors,
+          success: [],
+          currentLang: req.cookies?.lang || req.query.lang || 'en',
+          t,
+          isAuthenticated: !!req.user,
+          user: req.user,
+          currentUrl: req.raw.url,
+          query: req.query || {},
+        });
       }
       // Convert statusId and executorId to integers (or null)
       const status_id_int = status_id ? Number(status_id) : null;
@@ -205,13 +229,12 @@ export const create = async (req, reply) => {
       req.session.flash = { success: ['Задача успешно создана'] };
       reply.redirect('/tasks');
     } catch (e) {
-
       // Show error message on the page for diagnostics
       return reply.view('tasks/new', {
         statuses: await TaskStatus.query(),
         users: await User.query(),
         labels: await import('../models/Label.cjs').then(m => m.default.query()),
-        task: { name, description, status_id, executor_id, labels: labelIds },
+        task: { name, description, status_id, executor_id: executorId, labels: labelIds },
         currentUser: req.user,
         error: [t('flash.tasks.create.error'), e.message],
         success: [],

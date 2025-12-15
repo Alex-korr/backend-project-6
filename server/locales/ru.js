@@ -39,7 +39,10 @@ export default {
         delete: {
           success: 'Задача успешно удалена',
           error: 'Не удалось удалить задачу.'
-        }
+        },
+        validation: {
+          statusRequired: 'Статус обязателен',
+        },
       },
       labels: {
         create: {

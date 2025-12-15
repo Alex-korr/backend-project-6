@@ -30,6 +30,9 @@ export default {
           forbidden: 'You are not allowed to delete this task.',
           error: 'Failed to delete task.',
         },
+        validation: {
+          statusRequired: 'Status is required',
+        },
       },
       statuses: {
         create: {
