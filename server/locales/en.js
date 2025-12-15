@@ -26,7 +26,7 @@ export default {
           error: 'Failed to update task.',
         },
         delete: {
-          success: 'Task was deleted!',
+          success: 'Task was deleted',
           forbidden: 'You are not allowed to delete this task.',
           error: 'Failed to delete task.',
         },

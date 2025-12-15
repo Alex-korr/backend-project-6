@@ -282,14 +282,26 @@ export const update = async (req, reply) => {
 
 export const remove = async (req, reply) => {
     const { id } = req.params;
-    const task = await Task.query().findById(id);
-    if (!task) return reply.code(404).send('Task not found');
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
-    if (Number(task.creator_id) !== Number(req.user.id)) {
+    console.log('[REMOVE] Delete request for task:', id, 'User:', req.user && req.user.id);
+    const task = await Task.query().findById(id);
+    console.log('[REMOVE] Task found:', task);
+    if (!task) {
+      console.log('[REMOVE] Task not found');
+      return reply.code(404).send('Task not found');
+    }
+    if (!req.user) {
+      console.log('[REMOVE] No user in req.user');
+      req.flash('error', t('Task not found'));
+      return reply.redirect('/tasks');
+    }
+    if (Number(task.creatorId) !== Number(req.user.id)) {
+      console.log('[REMOVE] No permission to delete. creatorId:', task.creatorId, 'user.id:', req.user.id);
       req.flash('error', t('Task not found'));
       return reply.redirect('/tasks');
     }
     await Task.query().deleteById(id);
-    req.flash('success', t('Task was removed'));
+    console.log('[REMOVE] Task deleted:', id);
+    req.flash('success', t('flash.tasks.delete.success'));
     reply.redirect('/tasks');
 };
