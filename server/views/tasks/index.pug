@@ -60,7 +60,7 @@ block content
                   span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; font-weight: 500; color: #4a6fa5;')= task.status.name
                 else
                   span.text-muted Нет статуса
-              td= task.executor ? (task.executor.first_name || task.executor.firstName || '') + ' ' + (task.executor.last_name || task.executor.lastName || '') : '-'
+              td= task.executor ? `${task.executor.firstName} ${task.executor.lastName}` : '-'
               td= task.creatorId || task.creator_id
               td(style='text-align: left; vertical-align: middle;')
                 if currentUser && (currentUser.id === task.creatorId || currentUser.id === task.creator_id)

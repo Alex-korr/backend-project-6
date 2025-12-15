@@ -98,6 +98,13 @@ export default {
       },
     },
     tasks: {
+      editTitle: 'Edit Task',
+      name: 'Name',
+      description: 'Description',
+      status: 'Status',
+      executor: 'Executor',
+      labels: 'Labels',
+      save: 'Save',
       index: {
         status: 'Status',
         all: 'All',

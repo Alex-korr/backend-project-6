@@ -82,6 +82,14 @@ export default {
         description: 'Описание'
         ,notAssigned: 'Не назначен'
       }
+      ,
+      editTitle: 'Изменить задачу',
+      name: 'Наименование',
+      description: 'Описание',
+      status: 'Статус',
+      executor: 'Исполнитель',
+      labels: 'Метки',
+      save: 'Сохранить'
     },
     users: {
       new: {

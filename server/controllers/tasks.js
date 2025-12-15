@@ -64,12 +64,12 @@ export const index = async (req, reply) => {
 
     if (labelIds.length > 0) {
       if (labelIds.includes('__no_label__')) {
-        // Только задачи без меток
+        // Only tasks without labels
         queryBuilder = queryBuilder.whereNotExists(
           Task.relatedQuery('labels').select(1)
         );
       } else {
-        // Только задачи с выбранным лейблом (INNER JOIN)
+        // Only tasks with selected label (INNER JOIN)
         queryBuilder = queryBuilder
           .joinRelated('labels')
           .whereIn('labels.id', labelIds);
@@ -226,9 +226,11 @@ export const create = async (req, reply) => {
 };
 
 export const edit = async (req, reply) => {
+  console.log('EDIT CONTROLLER CALLED', req.params.id);
   const query = req.query || {};
   const { id } = req.params;
   const task = await Task.query().findById(id).withGraphFetched('labels');
+  console.log('EDIT CONTROLLER', id, 'TASK:', task);
   if (!task) return reply.code(404).send('Task not found');
   const statuses = await TaskStatus.query();
   const users = await User.query();
@@ -237,21 +239,22 @@ export const edit = async (req, reply) => {
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
   const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
-  reply.view('tasks/edit', {
-    task,
-    statuses,
-    users,
-    labels,
-    currentUser: req.user,
-    error,
-    success,
-    currentLang: req.cookies?.lang || query.lang || 'en',
-    t,
-    isAuthenticated: !!req.user,
-    user: req.user,
-    currentUrl: req.raw.url,
-    query,
-  });
+  console.log('RENDERING EDIT VIEW');
+    return reply.view('tasks/edit', {
+      task,
+      statuses,
+      users,
+      labels,
+      currentUser: req.user,
+      error,
+      success,
+      currentLang: req.cookies?.lang || query.lang || 'en',
+      t,
+      isAuthenticated: !!req.user,
+      user: req.user,
+      currentUrl: req.raw.url,
+      query,
+    });
 };
 
 export const update = async (req, reply) => {
