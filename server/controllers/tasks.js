@@ -148,6 +148,8 @@ export const create = async (req, reply) => {
   const {
     name, description, status_id, executorId, newLabels,
   } = req.body;
+  // camelcase: status_id -> statusId
+  const statusId = status_id;
   const raw = req.body['labels[]'];
   const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
   const creatorId = req.user?.id;
@@ -164,9 +166,9 @@ export const create = async (req, reply) => {
       errors.name = t('First name is required');
       validationErrors.push(errors.name);
     }
-    if (!status_id || status_id === '') {
-      errors.status_id = t('flash.tasks.validation.statusRequired') || 'Status is required';
-      validationErrors.push(errors.status_id);
+    if (!statusId || statusId === '') {
+      errors.statusId = t('flash.tasks.validation.statusRequired') || 'Status is required';
+      validationErrors.push(errors.statusId);
     }
     if (validationErrors.length > 0) {
       return reply.view('tasks/new', {
@@ -174,7 +176,7 @@ export const create = async (req, reply) => {
         users: await User.query(),
         labels: await import('../models/Label.cjs').then((m) => m.default.query()),
         task: {
-          name, description, status_id, executorId, labels: labelIds,
+          name, description, statusId, executorId, labels: labelIds,
         },
         errors,
         currentUser: req.user,
@@ -189,31 +191,27 @@ export const create = async (req, reply) => {
       });
     }
     // Convert statusId and executorId to integers (or null)
-    const statusIdInt = status_id ? Number(status_id) : null;
+    const statusIdInt = statusId ? Number(statusId) : null;
     const executorIdInt = executorId ? Number(executorId) : null;
     // Create new labels if provided
     if (newLabels && newLabels.trim()) {
       const Label = (await import('../models/Label.cjs')).default;
       const names = newLabels.split(',').map((s) => s.trim()).filter(Boolean);
-      for (const labelName of names) {
-        // Check if label already exists
-        // eslint-disable-next-line no-await-in-loop
+      const labelPromises = names.map(async (labelName) => {
         let label = await Label.query().findOne({ name: labelName });
         if (!label) {
-          // eslint-disable-next-line no-await-in-loop
           label = await Label.query().insert({ name: labelName });
         }
-        labelIds.push(label.id.toString());
-      }
+        return label.id.toString();
+      });
+      const newLabelIds = await Promise.all(labelPromises);
+      labelIds.push(...newLabelIds);
     }
     const task = await Task.query().insert({
-      name, description, status_id: statusIdInt, creatorId, executorId: executorIdInt,
+      name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt,
     });
     if (labelIds.length > 0) {
-      for (const labelId of labelIds) {
-        // eslint-disable-next-line no-await-in-loop
-        await task.$relatedQuery('labels').relate(Number(labelId));
-      }
+      await Promise.all(labelIds.map((labelId) => task.$relatedQuery('labels').relate(Number(labelId))));
     }
     // Fetch the task with creator relation to ensure it's available in the next render
     await Task.query().findById(task.id).withGraphFetched('[creator]');
@@ -228,6 +226,7 @@ export const create = async (req, reply) => {
       task: {
         name, description, statusId, executorId, labels: labelIds,
       },
+      errors: {},
       currentUser: req.user,
       error: [t('flash.tasks.create.error'), e.message],
       success: [],

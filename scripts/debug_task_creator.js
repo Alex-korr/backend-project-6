@@ -1,15 +1,15 @@
-import Knex from 'knex';
+import knex from 'knex';
 import Task from '../server/models/Task.cjs';
 import { development } from '../knexfile.js';
 
-const knex = Knex(development);
-Task.knex(knex);
 
+const db = knex(development);
+Task.knex(db);
 
 async function runDebugTaskCreator() {
-  const task = await Task.query().findById(1).withGraphFetched('creator');
-  // Можно добавить вывод или обработку task, если нужно
-  await knex.destroy();
+  await Task.query().findById(1).withGraphFetched('creator');
+  // You can add output or processing here if needed
+  await db.destroy();
 }
 
 runDebugTaskCreator();

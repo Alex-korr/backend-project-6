@@ -81,9 +81,8 @@ export const create = async (req, reply) => {
 
 export const edit = async (req, reply) => {
   const query = req.query || {};
-  const label = await Label.query().findById(req.params.id);
   return reply.view('labels/edit', {
-    label,
+    label: await Label.query().findById(req.params.id),
     t: req.i18next.t.bind(req.i18next),
     currentLang: req.cookies?.lang || query.lang || 'en',
     isAuthenticated: !!req.user,
