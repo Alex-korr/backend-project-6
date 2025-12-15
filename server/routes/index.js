@@ -1,8 +1,7 @@
-import fastifyPassport from '@fastify/passport';
 import * as usersController from '../controllers/users.js';
 import * as sessionsController from '../controllers/sessions.js';
-import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
-import User from '../models/User.cjs';
+// import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
+let User;
 
 export default async (app, options) => {
   // Language switch route
@@ -246,42 +245,23 @@ export default async (app, options) => {
   // Diagnostic route to check database
   app.get('/check-db', async (request, reply) => {
     try {
+      if (!User) {
+        User = (await import('../models/User.cjs')).default;
+      }
       // 1. Check via User model
       const modelUsers = await User.query();
-
-      modelUsers.forEach((user, index) => {
-      });
-
       // 2. Check via direct database query
       try {
         // Dynamic import for ES modules
         const knexModule = await import('knex');
         const knexConfigModule = await import('../../knexfile.js');
         const Knex = knexModule.default;
-
         const mode = process.env.NODE_ENV || 'development';
         const knexConfig = knexConfigModule[mode] || knexConfigModule.default?.[mode] || knexConfigModule.default;
         const db = Knex(knexConfig);
-
         await db.raw('SELECT 1');
-
         const directUsers = await db('users').select('*');
-
-        directUsers.forEach((user, index) => {
-          // Find password fields
-          const passwordFields = Object.keys(user).filter((key) => key.toLowerCase().includes('pass')
-            || key.toLowerCase().includes('digest')
-            || key.toLowerCase().includes('hash'));
-
-          if (passwordFields.length > 0) {
-            passwordFields.forEach((field) => {
-            });
-          } else {
-          }
-        });
-
         await db.destroy();
-
         return reply.send({
           success: true,
           modelUsers: modelUsers.length,
