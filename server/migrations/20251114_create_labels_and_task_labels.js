@@ -5,8 +5,12 @@ export async function up(knex) {
   });
 
   await knex.schema.createTable('task_labels', (table) => {
-    table.integer('taskId').unsigned().notNullable().references('id').inTable('tasks').onDelete('CASCADE');
-    table.integer('labelId').unsigned().notNullable().references('id').inTable('labels').onDelete('CASCADE');
+    table.integer('taskId').unsigned().notNullable().references('id')
+      .inTable('tasks')
+      .onDelete('CASCADE');
+    table.integer('labelId').unsigned().notNullable().references('id')
+      .inTable('labels')
+      .onDelete('CASCADE');
     table.primary(['taskId', 'labelId']);
   });
 }

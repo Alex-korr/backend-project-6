@@ -12,11 +12,7 @@ async function updateAdminPassword() {
   const updated = await knex('users')
     .where({ email })
     .update({ passwordDigest: hash, role });
-  if (updated) {
-
-  } else {
-
-  }
+  // updated: true if password was updated, false otherwise
   process.exit(0);
 }
 

@@ -1,7 +1,8 @@
-import { development } from '../knexfile.js';
+import dotenv from 'dotenv';
 import knex from 'knex';
 import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
+import { development } from '../knexfile.js';
+
 dotenv.config();
 
 const db = knex(development);
@@ -19,7 +20,6 @@ async function addAdmin() {
       password: hashedPassword,
       updated_at: new Date().toISOString(),
     });
-
   } else {
     await db('users').insert({
       first_name: 'Admin',
@@ -29,7 +29,6 @@ async function addAdmin() {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     });
-
   }
   process.exit(0);
 }

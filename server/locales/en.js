@@ -52,7 +52,7 @@ export default {
       labels: {
         create: {
           success: 'Label was created successfully!',
-          error: 'Failed to create label. Name cannot be empty.'
+          error: 'Failed to create label. Name cannot be empty.',
         },
         delete: {
           success: 'Label was deleted!',
@@ -74,7 +74,7 @@ export default {
         submit: 'Create User',
       },
       index: {
-          show: 'Show',
+        show: 'Show',
         Name: 'Name',
         Edit: 'Edit',
         Delete: 'Delete',
@@ -133,17 +133,17 @@ export default {
         delete: 'Delete',
         description: 'Description',
       },
-            },
-        sessions: {
-          new: {
-            title: 'Please sign in',
-            emailLabel: 'Email address',
-            emailPlaceholder: 'name@example.com',
-            passwordLabel: 'Password',
-            passwordPlaceholder: 'Password',
-            submit: 'Sign in',
-          },
-        },
+    },
+    sessions: {
+      new: {
+        title: 'Please sign in',
+        emailLabel: 'Email address',
+        emailPlaceholder: 'name@example.com',
+        passwordLabel: 'Password',
+        passwordPlaceholder: 'Password',
+        submit: 'Sign in',
+      },
+    },
     appName: 'Task Manager',
     layouts: {
       application: {

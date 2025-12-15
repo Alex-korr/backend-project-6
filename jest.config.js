@@ -1,4 +1,4 @@
-
+export default {
 export default {
   testEnvironment: 'node',
   moduleNameMapper: {},

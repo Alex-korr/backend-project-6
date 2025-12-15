@@ -1,8 +1,5 @@
 import dotenv from 'dotenv';
 import Rollbar from 'rollbar';
-
-// ...existing code...
-dotenv.config();
 // ...existing code...
 
 import Fastify from 'fastify';
@@ -15,13 +12,11 @@ import Backend from 'i18next-fs-backend';
 import pug from 'pug';
 import path from 'path';
 import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 import fastifyObjectionjs from 'fastify-objectionjs';
-import * as knexConfig from '../knexfile.js';
 import fastifyPassport from '@fastify/passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import fastifySecureSession from '@fastify/secure-session';
+import * as knexConfig from '../knexfile.js';
 
 // Import models directly
 import User from './models/User.cjs';
@@ -36,11 +31,16 @@ import indexRoutes from './routes/index.js';
 import en from './locales/en.js';
 import ru from './locales/ru.js';
 
+// ...existing code...
+dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Fastify CLI plugin export
 export default async function (fastify, opts) {
   const mode = process.env.NODE_ENV || 'development';
   const models = [User, Label, Task, TaskStatus];
-  
+
   // Initialize Rollbar for error tracking
   const rollbar = new Rollbar({
     accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
@@ -48,7 +48,7 @@ export default async function (fastify, opts) {
     captureUncaught: true,
     captureUnhandledRejections: true,
   });
-  
+
   // ...existing code...
   fastify.decorate('rollbar', rollbar);
 
@@ -57,7 +57,7 @@ export default async function (fastify, opts) {
     root: path.join(__dirname, 'public'),
     prefix: '/',
   });
-  
+
   // Configure i18next for internationalization
   i18next
     .use(Backend)
@@ -97,7 +97,7 @@ export default async function (fastify, opts) {
 
   // Configure session security
   const sessionKey = process.env.SECURE_SESSION_KEY;
-  
+
   if (!sessionKey && process.env.NODE_ENV === 'production') {
     throw new Error('SECURE_SESSION_KEY environment variable is required in production');
   }
@@ -169,8 +169,8 @@ export default async function (fastify, opts) {
   fastify.register(fastifyPassport.secureSession());
 
   // Register LocalStrategy directly (not in onReady)
-  fastifyPassport.use('local', new LocalStrategy({ 
-    usernameField: 'email' 
+  fastifyPassport.use('local', new LocalStrategy({
+    usernameField: 'email',
   }, async (email, password, done) => {
     try {
       // ...existing code...
@@ -178,30 +178,30 @@ export default async function (fastify, opts) {
       // ...existing code...
       // ...existing code...
       // ...existing code...
-      
+
       // Use the directly imported User model
       // ...existing code...
       // ...existing code...
       // ...existing code...
-      
+
       // Find user by email (case-insensitive)
-      const user = await User.query().findOne({ 
-        email: email.toLowerCase().trim() 
+      const user = await User.query().findOne({
+        email: email.toLowerCase().trim(),
       });
-      
+
       // ...existing code...
       // ...existing code...
-      
+
       if (!user) {
         // ...existing code...
         // ...existing code...
         return done(null, false, { message: 'Invalid email or password' });
       }
-      
+
       // ...existing code...
       // ...existing code...
       // ...existing code...
-      
+
       // Debug user information
       // ...existing code...
       // ...existing code...
@@ -212,22 +212,22 @@ export default async function (fastify, opts) {
         // ...existing code...
         return done(null, false, { message: 'Account error - no password set' });
       }
-      
+
       // Verify password using user model method
       // ...existing code...
       const isValid = await user.verifyPassword(password);
       // ...existing code...
-      
+
       if (!isValid) {
         // ...existing code...
         return done(null, false, { message: 'Invalid email or password' });
       }
-      
+
       // ...existing code...
       // ...existing code...
       // ...existing code...
       // ...existing code...
-      
+
       return done(null, user);
     } catch (err) {
       // ...existing code...
@@ -243,7 +243,7 @@ export default async function (fastify, opts) {
   // Register application routes
   // ...existing code...
   await fastify.register(indexRoutes);
-  
+
   // Global error handler
   fastify.setErrorHandler((error, request, reply) => {
     // ...existing code...
@@ -251,21 +251,21 @@ export default async function (fastify, opts) {
     // ...existing code...
     // ...existing code...
     // ...existing code...
-    
+
     if (fastify.rollbar) {
       // ...existing code...
     }
-    
+
     if (reply.sent) return;
-    
+
     try {
       reply.status(error.statusCode || 500);
-      
+
       return reply.view('error', {
         error: [error.message || 'Internal Server Error'],
         success: [],
         query: {},
-        t: request.i18next ? request.i18next.t.bind(request.i18next) : (x => x),
+        t: request.i18next ? request.i18next.t.bind(request.i18next) : ((x) => x),
         currentLang: request.cookies?.lang || 'en',
         isAuthenticated: !!request.user,
         user: request.user,
@@ -273,18 +273,18 @@ export default async function (fastify, opts) {
         appName: 'Task Manager',
       });
     } catch (e) {
-      reply.status(500).send({ 
-        statusCode: 500, 
-        error: 'Internal Server Error', 
-        message: error.message 
+      reply.status(500).send({
+        statusCode: 500,
+        error: 'Internal Server Error',
+        message: error.message,
       });
     }
   });
-  
+
   // ...existing code...
   // ...existing code...
   // ...existing code...
   // ...existing code...
-  
+
   return fastify;
 }

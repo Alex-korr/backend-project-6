@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 export async function up(knex) {

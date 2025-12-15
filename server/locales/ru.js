@@ -33,15 +33,15 @@ export default {
       tasks: {
         create: {
           success: 'Задача успешно создана!',
-          error: 'Не удалось создать задачу'
+          error: 'Не удалось создать задачу',
         },
         update: {
           success: 'Задача успешно изменена',
-          error: 'Не удалось обновить задачу.'
+          error: 'Не удалось обновить задачу.',
         },
         delete: {
           success: 'Задача успешно удалена',
-          error: 'Не удалось удалить задачу.'
+          error: 'Не удалось удалить задачу.',
         },
         validation: {
           statusRequired: 'Статус обязателен',
@@ -50,12 +50,12 @@ export default {
       labels: {
         create: {
           success: 'Метка успешно создана',
-          error: 'Не удалось создать метку. Имя не может быть пустым.'
+          error: 'Не удалось создать метку. Имя не может быть пустым.',
         },
         delete: {
           success: 'Метка успешно удалена',
-          error: 'Не удалось удалить метку.'
-        }
+          error: 'Не удалось удалить метку.',
+        },
       },
       statuses: {
         create: {
@@ -66,13 +66,13 @@ export default {
         },
         delete: {
           success: 'Статус успешно удалён',
-          error: 'Нельзя удалить статус, к которому привязаны задачи.'
-        }
-      }
+          error: 'Нельзя удалить статус, к которому привязаны задачи.',
+        },
+      },
     },
     tasks: {
       index: {
-          show: 'Показать',
+        show: 'Показать',
         status: 'Статус',
         all: 'Все',
         executor: 'Исполнитель',
@@ -92,17 +92,16 @@ export default {
         edit: 'Изменить',
         noTasksFound: 'Задачи не найдены',
         delete: 'Удалить',
-        description: 'Описание'
-        ,notAssigned: 'Не назначен'
-      }
-      ,
+        description: 'Описание',
+        notAssigned: 'Не назначен',
+      },
       editTitle: 'Изменить задачу',
       name: 'Наименование',
       description: 'Описание',
       status: 'Статус',
       executor: 'Исполнитель',
       labels: 'Метки',
-      save: 'Сохранить'
+      save: 'Сохранить',
     },
     users: {
       new: {
@@ -115,23 +114,23 @@ export default {
         emailPlaceholder: 'name@example.com',
         passwordLabel: 'Пароль',
         passwordPlaceholder: 'Пароль',
-        submit: 'Сохранить'
+        submit: 'Сохранить',
       },
       index: {
         Name: 'Имя',
         Edit: 'Изменить',
         Delete: 'Удалить',
         noUsersYet: 'Пользователей пока нет',
-        newUser: 'Создать пользователя'
-      }
+        newUser: 'Создать пользователя',
+      },
     },
     labels: {
       index: {
         newLabel: 'Создать метку',
         name: 'Наименование',
         actions: 'Действия',
-        noLabels: 'Нет меток'
-      }
+        noLabels: 'Нет меток',
+      },
     },
     statuses: {
       index: {
@@ -142,7 +141,7 @@ export default {
         name: 'Наименование',
         actions: 'Действия',
         delete: 'Удалить',
-        save: 'Сохранить'
+        save: 'Сохранить',
       },
       createSubmit: 'Создать',
     },
@@ -153,8 +152,8 @@ export default {
         emailPlaceholder: 'name@example.com',
         passwordLabel: 'Пароль',
         passwordPlaceholder: 'Пароль',
-        submit: 'Войти'
-      }
+        submit: 'Войти',
+      },
     },
     appName: 'Менеджер задач',
     layouts: {
@@ -168,8 +167,8 @@ export default {
         signUp: 'Регистрация',
         edit: 'Редактировать',
         delete: 'Удалить',
-        signOut: 'Выход'
-      }
+        signOut: 'Выход',
+      },
     },
     views: {
       welcome: {
@@ -177,10 +176,9 @@ export default {
           hello: 'Добро пожаловать в Менеджер задач!',
           description: 'Организуйте свои задачи эффективно с помощью нашей простой и мощной системы управления задачами.',
           getStarted: 'Начать',
-          viewUsers: 'Показать пользователей'
-        }
-      }
-    }
-  }
+          viewUsers: 'Показать пользователей',
+        },
+      },
+    },
+  },
 };
-

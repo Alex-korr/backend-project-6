@@ -71,6 +71,5 @@
 //   await tasksRoutes(app);
 //   await statusesRoutes(app);
 //   await labelsRoutes(app);
-//   
 //   return app;
 // };

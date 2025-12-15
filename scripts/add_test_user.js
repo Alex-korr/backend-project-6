@@ -1,9 +1,8 @@
-
 import knexModule from 'knex';
-import { development } from '../knexfile.js';
-const knex = knexModule(development);
 import bcrypt from 'bcrypt';
+import { development } from '../knexfile.js';
 
+const knex = knexModule(development);
 
 async function addTestUser() {
   const email = 'lawrence.kulas87@outlook.com';
@@ -27,7 +26,6 @@ async function addTestUser() {
   process.exit(0);
 }
 
-addTestUser().catch((err) => {
-
+addTestUser().catch(() => {
   process.exit(1);
 });

@@ -1,6 +1,6 @@
-import * as knexConfig from '../knexfile.js';
 import knexModule from 'knex';
 import bcrypt from 'bcrypt';
+import * as knexConfig from '../knexfile.js';
 
 const knex = knexModule(knexConfig.development);
 const email = 'admin@example.com';

@@ -63,7 +63,6 @@ export const create = async (req, reply) => {
     }
     reply.redirect('/statuses');
   } catch (err) {
-
     // Build array of errors for template
     const errors = [err.message];
     reply.code(422).view('statuses/new', {
@@ -83,16 +82,16 @@ export const edit = async (req, reply) => {
   const { id } = req.params;
   const status = await TaskStatus.query().findById(id);
   if (!status) return reply.code(404).send('Status not found');
-    const query = req.query || {};
-    return reply.view('statuses/edit', {
-      status,
-      isAuthenticated: !!req.user,
-      user: req.user,
-      t: req.i18next.t.bind(req.i18next),
-      currentLang: req.cookies?.lang || query.lang || 'en',
-      currentUrl: req.raw.url,
-      query,
-    });
+  const query = req.query || {};
+  return reply.view('statuses/edit', {
+    status,
+    isAuthenticated: !!req.user,
+    user: req.user,
+    t: req.i18next.t.bind(req.i18next),
+    currentLang: req.cookies?.lang || query.lang || 'en',
+    currentUrl: req.raw.url,
+    query,
+  });
 };
 
 export const update = async (req, reply) => {
@@ -129,7 +128,7 @@ export const remove = async (req, reply) => {
   } catch (err) {
 
     // Continue status deletion even if error occurs
-    
+
   }
   await TaskStatus.query().deleteById(id);
   let successMsg = req.i18next.t('flash.statuses.delete.success');
@@ -137,5 +136,5 @@ export const remove = async (req, reply) => {
     successMsg = 'Status deleted successfully.';
   }
   req.session.flash = { status: { success: [successMsg] } };
-    return reply.redirect(303, '/statuses');
+  return reply.redirect(303, '/statuses');
 };

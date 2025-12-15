@@ -1,7 +1,7 @@
+import fastifyPassport from '@fastify/passport';
 import * as usersController from '../controllers/users.js';
 import * as sessionsController from '../controllers/sessions.js';
 import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
-import fastifyPassport from '@fastify/passport';
 import User from '../models/User.cjs';
 
 export default async (app, options) => {
@@ -14,15 +14,14 @@ export default async (app, options) => {
     }
     reply.redirect(back);
   });
-  
-  
+
   // Home page
   app.get('/', (request, reply) => {
-    let currentLang = request.cookies?.lang || 'ru';
+    const currentLang = request.cookies?.lang || 'ru';
     // Collect all flash messages from different sections
     const allErrors = [];
     const allSuccess = [];
-    
+
     if (request.session?.flash) {
       // Helper function to translate flash keys
       const translateMsg = (msg) => {
@@ -37,7 +36,7 @@ export default async (app, options) => {
         }
         return msg;
       };
-      
+
       // Global messages
       if (request.session.flash.error) {
         allErrors.push(...request.session.flash.error.map(translateMsg));
@@ -45,7 +44,7 @@ export default async (app, options) => {
       if (request.session.flash.success) {
         allSuccess.push(...request.session.flash.success.map(translateMsg));
       }
-      
+
       // Session messages
       if (request.session.flash.session?.error) {
         allErrors.push(...request.session.flash.session.error.map(translateMsg));
@@ -53,10 +52,10 @@ export default async (app, options) => {
       if (request.session.flash.session?.success) {
         allSuccess.push(...request.session.flash.session.success.map(translateMsg));
       }
-      
+
       request.session.flash = {};
     }
-    
+
     reply.view('index', {
       t: request.i18next.t.bind(request.i18next),
       currentLang,
@@ -73,9 +72,9 @@ export default async (app, options) => {
     if (req.server && req.server.rollbar) {
       req.server.rollbar.error('Manual error test from /rollbar-error', (err) => {
         if (err) {
-            // console.error('Rollbar error send failed:', err);
+          // console.error('Rollbar error send failed:', err);
         } else {
-            // console.log('Rollbar error sent successfully');
+          // console.log('Rollbar error sent successfully');
         }
       });
     }
@@ -100,29 +99,27 @@ export default async (app, options) => {
   app.patch('/users/:id', usersController.update);
   app.post('/users/:id/delete', usersController.destroy);
   app.delete('/users/:id', usersController.destroy);
-  
+
   // Sessions routes - both URLs show login form directly (no redirects)
   app.get('/session', sessionsController.newSession);
   app.get('/session/new', sessionsController.newSession);
 
   // Debug session route for authentication troubleshooting
-  app.get('/debug-session', async (request, reply) => {
-    return reply.send({
-      user: request.user,
-      isAuthenticated: request.isAuthenticated ? request.isAuthenticated() : false,
-      sessionId: request.session?.sessionId,
-      hasLogIn: typeof request.logIn === 'function',
-      hasLogout: typeof request.logout === 'function'
-    });
-  });
+  app.get('/debug-session', async (request, reply) => reply.send({
+    user: request.user,
+    isAuthenticated: request.isAuthenticated ? request.isAuthenticated() : false,
+    sessionId: request.session?.sessionId,
+    hasLogIn: typeof request.logIn === 'function',
+    hasLogout: typeof request.logout === 'function',
+  }));
 
   // POST /session - Login route
   app.post('/session', async (request, reply) => {
     const { email, password } = request.body;
-    
+
     const currentLang = request.cookies?.lang || 'ru';
-    const translateError = () => currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
-    
+    const translateError = () => (currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password');
+
     // Server-side validation - render form directly (NO redirect)
     if (!email || !email.trim() || !password || !password.trim()) {
       return reply.view('sessions/new', {
@@ -134,16 +131,16 @@ export default async (app, options) => {
         currentLang,
         isAuthenticated: false,
         currentUser: null,
-        currentUrl: '/session'
+        currentUrl: '/session',
       });
     }
-    
+
     // Import User model directly
     const User = (await import('../models/User.cjs')).default;
-    
+
     // Find user
     const user = await User.query().findOne({ email });
-    
+
     if (!user) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -154,14 +151,13 @@ export default async (app, options) => {
         currentLang,
         isAuthenticated: false,
         currentUser: null,
-        currentUrl: '/session'
+        currentUrl: '/session',
       });
     }
-    
-    
+
     // Verify password
     const isValid = await user.verifyPassword(password);
-    
+
     if (!isValid) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -172,23 +168,23 @@ export default async (app, options) => {
         currentLang,
         isAuthenticated: false,
         currentUser: null,
-        currentUrl: '/session'
+        currentUrl: '/session',
       });
     }
-    
+
     // Authentication successful
     await request.logIn(user);
     request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
     return reply.redirect('/');
   });
-  
+
   // POST /session/new - Login from /session/new page (no redirect, render directly)
   app.post('/session/new', async (request, reply) => {
     const { email, password } = request.body;
-    
+
     const currentLang = request.cookies?.lang || 'ru';
-    const translateError = () => currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
-    
+    const translateError = () => (currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password');
+
     // Server-side validation - render form with error (NO redirect)
     if (!email || !email.trim() || !password || !password.trim()) {
       return reply.view('sessions/new', {
@@ -200,14 +196,14 @@ export default async (app, options) => {
         currentLang,
         isAuthenticated: false,
         currentUser: null,
-        currentUrl: '/session/new'
+        currentUrl: '/session/new',
       });
     }
-    
+
     // Import User model
     const User = (await import('../models/User.cjs')).default;
     const user = await User.query().findOne({ email });
-    
+
     if (!user) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -218,12 +214,12 @@ export default async (app, options) => {
         currentLang,
         isAuthenticated: false,
         currentUser: null,
-        currentUrl: '/session/new'
+        currentUrl: '/session/new',
       });
     }
-    
+
     const isValid = await user.verifyPassword(password);
-    
+
     if (!isValid) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -234,10 +230,10 @@ export default async (app, options) => {
         currentLang,
         isAuthenticated: false,
         currentUser: null,
-        currentUrl: '/session/new'
+        currentUrl: '/session/new',
       });
     }
-    
+
     // Success - redirect to home
     await request.logIn(user);
     request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
@@ -250,75 +246,69 @@ export default async (app, options) => {
   // Diagnostic route to check database
   app.get('/check-db', async (request, reply) => {
     try {
-      
       // 1. Check via User model
       const modelUsers = await User.query();
-      
+
       modelUsers.forEach((user, index) => {
       });
-      
+
       // 2. Check via direct database query
       try {
         // Dynamic import for ES modules
         const knexModule = await import('knex');
         const knexConfigModule = await import('../../knexfile.js');
         const Knex = knexModule.default;
-        
+
         const mode = process.env.NODE_ENV || 'development';
         const knexConfig = knexConfigModule[mode] || knexConfigModule.default?.[mode] || knexConfigModule.default;
         const db = Knex(knexConfig);
-        
+
         await db.raw('SELECT 1');
-        
+
         const directUsers = await db('users').select('*');
-        
+
         directUsers.forEach((user, index) => {
-          
           // Find password fields
-          const passwordFields = Object.keys(user).filter(key => 
-            key.toLowerCase().includes('pass') || 
-            key.toLowerCase().includes('digest') ||
-            key.toLowerCase().includes('hash')
-          );
-          
+          const passwordFields = Object.keys(user).filter((key) => key.toLowerCase().includes('pass')
+            || key.toLowerCase().includes('digest')
+            || key.toLowerCase().includes('hash'));
+
           if (passwordFields.length > 0) {
-            passwordFields.forEach(field => {
+            passwordFields.forEach((field) => {
             });
           } else {
           }
         });
-        
+
         await db.destroy();
-        
+
         return reply.send({
           success: true,
           modelUsers: modelUsers.length,
           directUsers: directUsers.length,
-          users: modelUsers.map(u => ({
+          users: modelUsers.map((u) => ({
             id: u.id,
             email: u.email,
-            hasPasswordDigest: !!u.password_digest
-          }))
+            hasPasswordDigest: !!u.password_digest,
+          })),
         });
-        
       } catch (dbError) {
         return reply.send({
           success: true,
           modelUsers: modelUsers.length,
           directUsers: 'DB connection failed',
-          users: modelUsers.map(u => ({
+          users: modelUsers.map((u) => ({
             id: u.id,
             email: u.email,
-            hasPasswordDigest: !!u.password_digest
+            hasPasswordDigest: !!u.password_digest,
           })),
-          dbError: dbError.message
+          dbError: dbError.message,
         });
       }
-      
     } catch (error) {
-      return reply.send({ 
-        success: false, 
-        error: error.message
+      return reply.send({
+        success: false,
+        error: error.message,
       });
     }
   });
@@ -327,8 +317,7 @@ export default async (app, options) => {
   app.post('/create-test-user-now', async (request, reply) => {
     try {
       const { email = 'alex@mail.ru', password = 'admin123' } = request.body || {};
-      
-      
+
       // 1. Check if user exists
       const existingUser = await User?.query?.().findOne({ email });
       if (existingUser) {
@@ -336,7 +325,7 @@ export default async (app, options) => {
         await existingUser.setPassword(password);
         await User.query().findById(existingUser.id).patch({
           password_digest: existingUser.password_digest,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         });
         const updatedUser = await User.query().findById(existingUser.id);
         return reply.send({
@@ -346,60 +335,54 @@ export default async (app, options) => {
             id: updatedUser.id,
             email: updatedUser.email,
             passwordDigestLength: updatedUser.password_digest?.length,
-            testPassword: password
-          }
-        });
-      } else {
-        // 2. Create new user
-        // Dynamic import for ES modules
-        const bcryptModule = await import('bcrypt');
-        const bcrypt = bcryptModule.default;
-        const passwordDigest = await bcrypt.hash(password, 10);
-        const newUser = await User.query().insert({
-          email: email,
-          first_name: 'Alex',
-          last_name: 'Test',
-          password_digest: passwordDigest,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        });
-        return reply.send({
-          success: true,
-          action: 'created',
-          user: {
-            id: newUser.id,
-            email: newUser.email,
-            passwordDigestLength: newUser.password_digest?.length,
-            testPassword: password
-          }
+            testPassword: password,
+          },
         });
       }
-      
+      // 2. Create new user
+      // Dynamic import for ES modules
+      const bcryptModule = await import('bcrypt');
+      const bcrypt = bcryptModule.default;
+      const passwordDigest = await bcrypt.hash(password, 10);
+      const newUser = await User.query().insert({
+        email,
+        first_name: 'Alex',
+        last_name: 'Test',
+        password_digest: passwordDigest,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      return reply.send({
+        success: true,
+        action: 'created',
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          passwordDigestLength: newUser.password_digest?.length,
+          testPassword: password,
+        },
+      });
     } catch (error) {
-      return reply.send({ 
-        error: error.message
+      return reply.send({
+        error: error.message,
       });
     }
   });
 
   // Simple test endpoint
-  app.get('/test-auth', async (request, reply) => {
-    return reply.send({
-      authenticated: !!request.user,
-      userId: request.user?.id,
-      userEmail: request.user?.email,
-      sessionId: request.session?.sessionId
-    });
-  });
+  app.get('/test-auth', async (request, reply) => reply.send({
+    authenticated: !!request.user,
+    userId: request.user?.id,
+    userEmail: request.user?.email,
+    sessionId: request.session?.sessionId,
+  }));
 
   // Quick health check
-  app.get('/health', async (request, reply) => {
-    return reply.send({
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      authenticated: !!request.user
-    });
-  });
+  app.get('/health', async (request, reply) => reply.send({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    authenticated: !!request.user,
+  }));
 
   // Register additional routes for tasks, statuses, labels
   const tasksRoutes = (await import('./tasks.js')).default;
@@ -408,6 +391,6 @@ export default async (app, options) => {
   await tasksRoutes(app);
   await statusesRoutes(app);
   await labelsRoutes(app);
-  
+
   return app;
 };

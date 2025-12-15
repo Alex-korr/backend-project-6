@@ -1,9 +1,8 @@
-/*
-import Label from '../server/models/Label.cjs';
-import User from '../server/models/User.cjs';
+import knex from 'knex';
 import { Model } from 'objection';
 import * as knexConfig from '../knexfile.js';
-import knex from 'knex';
+import Label from '../server/models/Label.cjs';
+import User from '../server/models/User.cjs';
 
 const db = knex(knexConfig.test);
 Model.knex(db);
@@ -37,7 +36,6 @@ describe('Label model', () => {
     expect(labels[0].name).toBe('bug');
   });
 });
-*/
 import Label from '../server/models/Label.cjs';
 import User from '../server/models/User.cjs';
 import { Model } from 'objection';

@@ -1,6 +1,6 @@
+import Knex from 'knex';
 import Task from '../server/models/Task.cjs';
 import { development } from '../knexfile.js';
-import Knex from 'knex';
 
 const knex = Knex(development);
 Task.knex(knex);

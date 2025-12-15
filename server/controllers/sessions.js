@@ -4,18 +4,18 @@ export const newSession = async (request, reply) => {
   try {
     // Safely get query params
     const query = request.query ? { ...request.query } : {};
-    
+
     // Determine current language
     const currentLang = request.cookies?.lang || query.lang || 'ru';
-    
+
     // Safely get flash messages and translate if needed
     let error = [];
     let success = [];
-    
-    if (request.session && 
-        request.session.flash && 
-        Array.isArray(request.session.flash.error)) {
-      error = request.session.flash.error.map(msg => {
+
+    if (request.session
+        && request.session.flash
+        && Array.isArray(request.session.flash.error)) {
+      error = request.session.flash.error.map((msg) => {
         // If it's a translation key, translate it
         if (msg === 'flash.session.create.error') {
           return currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password';
@@ -23,11 +23,11 @@ export const newSession = async (request, reply) => {
         return msg;
       });
     }
-    
-    if (request.session && 
-        request.session.flash && 
-        Array.isArray(request.session.flash.success)) {
-      success = request.session.flash.success.map(msg => {
+
+    if (request.session
+        && request.session.flash
+        && Array.isArray(request.session.flash.success)) {
+      success = request.session.flash.success.map((msg) => {
         // If it's a translation key, translate it
         if (msg === 'flash.session.create.success') {
           return currentLang === 'ru' ? 'Вы залогинены' : 'You are logged in';
@@ -38,12 +38,12 @@ export const newSession = async (request, reply) => {
         return msg;
       });
     }
-    
+
     // Clear flash messages after reading
     if (request.session && request.session.flash) {
       request.session.flash = {};
     }
-    
+
     return reply.view('sessions/new', {
       error,
       success,
@@ -76,24 +76,23 @@ export const newSession = async (request, reply) => {
 // But we keep it for compatibility
 export const create = async (request, reply) => {
   // ...existing code...
-  
+
   // If somehow this is called, redirect to home
   if (request.user) {
     return reply.redirect('/');
-  } else {
-    return reply.redirect('/session/new');
   }
+  return reply.redirect('/session/new');
 };
 
 export const destroy = async (request, reply) => {
   try {
     // ...existing code...
-    
+
     // Set flash message BEFORE clearing session
     if (request.session) {
       request.session.flash = { session: { success: [request.i18next.t('flash.session.delete.success')] } };
     }
-    
+
     // Log out the user (this clears user from session but keeps session alive)
     if (request.logout && typeof request.logout === 'function') {
       try {
@@ -105,14 +104,14 @@ export const destroy = async (request, reply) => {
     } else {
       // ...existing code...
     }
-    
+
     // ...existing code...
     return reply.redirect('/');
   } catch (error) {
     // ...existing code...
     if (request.session) {
-      request.session.flash = { 
-        error: ['Error during logout. Please try again.'] 
+      request.session.flash = {
+        error: ['Error during logout. Please try again.'],
       };
     }
     return reply.redirect('/');

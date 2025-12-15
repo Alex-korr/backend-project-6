@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import app from './index.js';
 
 const fastify = Fastify({
-  logger: false
+  logger: false,
 });
 
 (async () => {
@@ -10,7 +10,7 @@ const fastify = Fastify({
     await app(fastify, {});
     await fastify.listen({
       port: process.env.PORT || 3000,
-      host: process.env.HOST || 'localhost'
+      host: process.env.HOST || 'localhost',
     });
     // ...existing code...
   } catch (err) {
