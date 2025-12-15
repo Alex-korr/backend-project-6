@@ -76,6 +76,7 @@ export default {
         statusPlaceholder: 'Выберите статус',
         creator: 'Автор',
         actions: 'Действия',
+        edit: 'Изменить',
         noTasksFound: 'Задачи не найдены',
         delete: 'Удалить',
         description: 'Описание'

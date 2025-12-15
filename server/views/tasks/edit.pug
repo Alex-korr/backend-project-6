@@ -20,13 +20,13 @@ block content
       select#statusId.form-control(name='statusId', required)
         option(value='') Select status
         each status in statuses
-          option(value=status.id selected=(task.statusId==status.id))= status.name
+          option(value=status.id selected=(task.status_id==status.id))= status.name
     .form-group
       label(for='executorId') Executor
       select#executorId.form-control(name='executorId')
         option(value='') Not assigned
         each user in users
-          option(value=user.id selected=(task.executorId==user.id))= user.name
+          option(value=user.id selected=(task.executor_id==user.id))= user.name
     .form-group
       label(for='labels') Метки
       select#labels.form-control(name='labels' multiple)

@@ -80,6 +80,7 @@ export default {
         newLabel: 'New Label',
         name: 'Name',
         actions: 'Actions',
+        edit: 'Edit',
         name: 'Name',
         actions: 'Actions',
         noLabels: 'No tags',
