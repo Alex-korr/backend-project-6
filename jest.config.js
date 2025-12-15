@@ -1,5 +1,4 @@
-export default {
-export default {
+module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {},
   transform: {},

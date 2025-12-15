@@ -1,7 +1,7 @@
 import knex from 'knex';
 import User from '../server/models/User.cjs';
 import * as knexConfig from '../knexfile.js';
-import { createTestUser } from '../__fixtures__/users.js';
+import createTestUser from '../__fixtures__/users.js';
 
 const db = knex(knexConfig.test);
 User.knex(db);

@@ -9,10 +9,10 @@ const role = 'admin';
 
 async function updateAdminPassword() {
   const hash = await bcrypt.hash(password, 10);
-  const updated = await knex('users')
+  await knex('users')
     .where({ email })
     .update({ passwordDigest: hash, role });
-  // updated: true if password was updated, false otherwise
+  // Можно добавить вывод результата, если нужно
   process.exit(0);
 }
 
