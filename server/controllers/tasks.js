@@ -273,7 +273,7 @@ export const update = async (req, reply) => {
       }
       const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s => s);
       req.flash('success', t('flash.tasks.update.success'));
-      reply.redirect(`/tasks/${id}`);
+      reply.redirect('/tasks');
     } catch (e) {
       req.flash('error', t('flash.tasks.update.error'));
       reply.redirect(`/tasks/${id}/edit`);
