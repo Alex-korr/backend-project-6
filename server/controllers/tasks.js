@@ -146,7 +146,7 @@ export const newTask = async (req, reply) => {
 
 export const create = async (req, reply) => {
   const {
-    name, description, statusId, executorId, newLabels,
+    name, description, status_id, executorId, newLabels,
   } = req.body;
   const raw = req.body['labels[]'];
   const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
@@ -162,7 +162,7 @@ export const create = async (req, reply) => {
     if (!name || name.trim() === '') {
       validationErrors.push(t('First name is required'));
     }
-    if (!statusId || statusId === '') {
+    if (!status_id || status_id === '') {
       validationErrors.push(t('flash.tasks.validation.statusRequired') || 'Status is required');
     }
     if (validationErrors.length > 0) {
@@ -171,7 +171,7 @@ export const create = async (req, reply) => {
         users: await User.query(),
         labels: await import('../models/Label.cjs').then((m) => m.default.query()),
         task: {
-          name, description, statusId, executorId, labels: labelIds,
+          name, description, status_id, executorId, labels: labelIds,
         },
         currentUser: req.user,
         error: validationErrors,
@@ -185,7 +185,7 @@ export const create = async (req, reply) => {
       });
     }
     // Convert statusId and executorId to integers (or null)
-    const statusIdInt = statusId ? Number(statusId) : null;
+    const statusIdInt = status_id ? Number(status_id) : null;
     const executorIdInt = executorId ? Number(executorId) : null;
     // Create new labels if provided
     if (newLabels && newLabels.trim()) {
@@ -203,7 +203,7 @@ export const create = async (req, reply) => {
       }
     }
     const task = await Task.query().insert({
-      name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt,
+      name, description, status_id: statusIdInt, creatorId, executorId: executorIdInt,
     });
     if (labelIds.length > 0) {
       for (const labelId of labelIds) {
