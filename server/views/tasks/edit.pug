@@ -1,36 +1,32 @@
 extends ../layout.pug
 
 block content
-  h1 Edit Task
-  if error.length
-    each msg in error
-      .alert.alert-danger= msg
-  if success.length
-    each msg in success
-      .alert.alert-success(style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= msg
+  h1= t('tasks.editTitle')
+  if error && error.length
+    ul.text-danger
+      each err in error
+        li= err
   form(method='post', action=`/tasks/${task.id}?_method=patch`)
-    .form-group
-      label(for='name') Name
-      input#name.form-control(type='text', name='name', required, value=task.name)
-    .form-group
-      label(for='description') Description
-      textarea#description.form-control(name='description')= task.description
-    .form-group
-      label(for='statusId') Status
-      select#statusId.form-control(name='statusId', required)
-        option(value='') Select status
+    .mb-3
+      label(for='data_name')= t('tasks.name')
+      input#data_name.form-control(type='text', name='name', required, value=task.name)
+    .mb-3
+      label(for='data_description')= t('tasks.description')
+      textarea#data_description.form-control(name='description')= task.description
+    .mb-3
+      label(for='data_statusId')= t('tasks.status')
+      select#data_statusId.form-select(name='statusId', required)
         each status in statuses
-          option(value=status.id selected=(task.status_id==status.id))= status.name
-    .form-group
-      label(for='executorId') Executor
-      select#executorId.form-control(name='executorId')
-        option(value='') Not assigned
+          option(value=status.id, selected=(task.status_id == status.id || task.statusId == status.id))= status.name
+    .mb-3
+      label(for='data_executorId')= t('tasks.index.executor')
+      select#data_executorId.form-control(name='executorId')
+        option(value='')= t('tasks.index.notAssigned' || 'Not assigned')
         each user in users
-          option(value=user.id selected=(task.executor_id==user.id))= user.name
-    .form-group
-      label(for='labels') Метки
-      select#labels.form-control(name='labels' multiple)
+          option(value=user.id selected=(task.executorId==user.id || task.executor_id==user.id))= user.firstName + ' ' + user.lastName
+    .mb-3
+      label(for='labels')= t('tasks.labels')
+      select#labels.form-select(name='labels[]', multiple)
         each label in labels
-          option(value=label.id selected=(task.labels && task.labels.some(l => l.id === label.id)))= label.name
-    button.btn.btn-primary(type='submit') Save
-    a.btn.btn-secondary(href='/tasks') Cancel
+          option(value=label.id, selected=(task.labels && task.labels.some(l => l.id == label.id)))= label.name
+    button.btn.btn-primary(type='submit')= t('tasks.save')
