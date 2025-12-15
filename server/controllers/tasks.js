@@ -159,11 +159,14 @@ export const create = async (req, reply) => {
     }
     // Validation for required fields
     const validationErrors = [];
+    const errors = {};
     if (!name || name.trim() === '') {
-      validationErrors.push(t('First name is required'));
+      errors.name = t('First name is required');
+      validationErrors.push(errors.name);
     }
     if (!status_id || status_id === '') {
-      validationErrors.push(t('flash.tasks.validation.statusRequired') || 'Status is required');
+      errors.status_id = t('flash.tasks.validation.statusRequired') || 'Status is required';
+      validationErrors.push(errors.status_id);
     }
     if (validationErrors.length > 0) {
       return reply.view('tasks/new', {
@@ -173,6 +176,7 @@ export const create = async (req, reply) => {
         task: {
           name, description, status_id, executorId, labels: labelIds,
         },
+        errors,
         currentUser: req.user,
         error: validationErrors,
         success: [],
