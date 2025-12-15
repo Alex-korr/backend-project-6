@@ -1,5 +1,8 @@
 export default {
   translation: {
+    validation: {
+      required: 'Обязательное поле',
+    },
     create: 'Создать',
     'First name is required': 'Имя обязательно',
     'Last name is required': 'Фамилия обязательна',
@@ -30,7 +33,7 @@ export default {
       tasks: {
         create: {
           success: 'Задача успешно создана!',
-          error: 'Не удалось создать задачу. Попробуйте еще раз.'
+          error: 'Не удалось создать задачу'
         },
         update: {
           success: 'Задача успешно изменена',

@@ -1,5 +1,8 @@
 export default {
   translation: {
+    validation: {
+      required: 'This field is required',
+    },
     create: 'Create',
     layouts: {
       application: {
@@ -19,7 +22,7 @@ export default {
       tasks: {
         create: {
           success: 'Success',
-          error: 'Failed to create task. Please try again.',
+          error: 'Failed to create task',
         },
         update: {
           success: 'Task updated successfully!',
