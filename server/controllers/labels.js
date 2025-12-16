@@ -109,7 +109,6 @@ export const update = async (req, reply) => {
 };
 
 export const remove = async (req, reply) => {
-  const label = await Label.query().findById(req.params.id);
   const t = req.i18next.t.bind(req.i18next);
   // If you need to prevent deletion when label is used, add logic here
   await Label.query().deleteById(req.params.id);
