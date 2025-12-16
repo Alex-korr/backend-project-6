@@ -1,16 +1,12 @@
 import dotenv from 'dotenv';
 import Rollbar from 'rollbar';
-// ...existing code...
-
-import Fastify from 'fastify';
+import path from 'path';
 import view from '@fastify/view';
 import fastifyStatic from '@fastify/static';
 import formbody from '@fastify/formbody';
 import i18next from 'i18next';
-import i18nextMiddleware from 'i18next-http-middleware';
 import Backend from 'i18next-fs-backend';
 import pug from 'pug';
-import path from 'path';
 import { fileURLToPath } from 'url';
 import fastifyObjectionjs from 'fastify-objectionjs';
 import fastifyPassport from '@fastify/passport';
@@ -31,13 +27,12 @@ import indexRoutes from './routes/index.js';
 import en from './locales/en.js';
 import ru from './locales/ru.js';
 
-// ...existing code...
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Fastify CLI plugin export
-export default async function (fastify, opts) {
+export default async function main(fastify) {
   const mode = process.env.NODE_ENV || 'development';
   const models = [User, Label, Task, TaskStatus];
 
@@ -49,7 +44,6 @@ export default async function (fastify, opts) {
     captureUnhandledRejections: true,
   });
 
-  // ...existing code...
   fastify.decorate('rollbar', rollbar);
 
   // Serve static assets from server/public/
@@ -108,12 +102,10 @@ export default async function (fastify, opts) {
     try {
       sessionKeyBuffer = Buffer.from(sessionKey, 'hex');
     } catch (error) {
-      // ...existing code...
       throw new Error('Invalid SECURE_SESSION_KEY format');
     }
   } else {
     // Generate a temporary key for development
-    // ...existing code...
     sessionKeyBuffer = Buffer.alloc(32);
   }
 
@@ -128,38 +120,26 @@ export default async function (fastify, opts) {
   });
 
   // Register fastify-objectionjs for database models
-  // ...existing code...
   await fastify.register(fastifyObjectionjs, {
     knexConfig: knexConfig[mode],
     models,
   });
 
   // Configure Passport
-  // ...existing code...
 
   // Configure user serialization/deserialization for sessions
-  fastifyPassport.registerUserSerializer(async (user, req) => {
-    // ...existing code...
-    // ...existing code...
+  fastifyPassport.registerUserSerializer(async (user) => {
     if (!user) {
-      // ...existing code...
       return null;
     }
-    // ...existing code...
-    // ...existing code...
     return user.id;
   });
 
-  fastifyPassport.registerUserDeserializer(async (id, req) => {
-    // ...existing code...
-    // ...existing code...
-    // ...existing code...
+  fastifyPassport.registerUserDeserializer(async (id) => {
     try {
       const user = await User.query().findById(id);
-      // ...existing code...
       return user;
     } catch (error) {
-      // ...existing code...
       return null;
     }
   });
@@ -173,94 +153,40 @@ export default async function (fastify, opts) {
     usernameField: 'email',
   }, async (email, password, done) => {
     try {
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-
-      // Use the directly imported User model
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-
-      // Find user by email (case-insensitive)
       const user = await User.query().findOne({
         email: email.toLowerCase().trim(),
       });
 
-      // ...existing code...
-      // ...existing code...
-
       if (!user) {
-        // ...existing code...
-        // ...existing code...
         return done(null, false, { message: 'Invalid email or password' });
       }
 
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-
-      // Debug user information
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-
       if (!user.password) {
-        // ...existing code...
         return done(null, false, { message: 'Account error - no password set' });
       }
 
-      // Verify password using user model method
-      // ...existing code...
       const isValid = await user.verifyPassword(password);
-      // ...existing code...
 
       if (!isValid) {
-        // ...existing code...
         return done(null, false, { message: 'Invalid email or password' });
       }
 
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-
       return done(null, user);
     } catch (err) {
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
-      // ...existing code...
       return done(err);
     }
   }));
-  // ...existing code...
 
   // Register application routes
-  // ...existing code...
   await fastify.register(indexRoutes);
 
   // Global error handler
   fastify.setErrorHandler((error, request, reply) => {
-    // ...existing code...
-    // ...existing code...
-    // ...existing code...
-    // ...existing code...
-    // ...existing code...
-
-    if (fastify.rollbar) {
-      // ...existing code...
-    }
-
-    if (reply.sent) return;
-
+    // Optionally, send error to Rollbar here
+    // if (fastify.rollbar) fastify.rollbar.error(error);
+    if (reply.sent) return undefined;
     try {
       reply.status(error.statusCode || 500);
-
       return reply.view('error', {
         error: [error.message || 'Internal Server Error'],
         success: [],
@@ -279,12 +205,7 @@ export default async function (fastify, opts) {
         message: error.message,
       });
     }
+    return undefined;
   });
-
-  // ...existing code...
-  // ...existing code...
-  // ...existing code...
-  // ...existing code...
-
   return fastify;
 }
