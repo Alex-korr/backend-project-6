@@ -12,7 +12,7 @@ export const index = async (request, reply) => {
   const validationErrors = request.session?.flash?.validationErrors || {};
   // eslint-disable-next-line no-param-reassign
   request.session.flash = {};
-  // currentLang is not used, so removed
+  const currentLang = request.cookies?.lang || 'ru';
   return reply.view('users/index', {
     users,
     error,
@@ -23,6 +23,7 @@ export const index = async (request, reply) => {
     currentUser: request.user,
     currentUrl: request.raw.url,
     query,
+    currentLang,
   });
 };
 
@@ -33,7 +34,7 @@ export const newUser = async (request, reply) => {
   const validationErrors = request.session?.flash?.validationErrors || {};
   // eslint-disable-next-line no-param-reassign
   request.session.flash = {};
-  // currentLang is not used, so removed
+  const currentLang = request.cookies?.lang || 'ru';
   return reply.view('users/new', {
     error,
     success,
@@ -43,6 +44,7 @@ export const newUser = async (request, reply) => {
     currentUser: request.user,
     currentUrl: request.raw.url,
     query,
+    currentLang,
   });
 };
 
@@ -100,7 +102,7 @@ export const show = async (request, reply) => {
   const query = request.query || {};
   const { id } = request.params;
   const user = await User.query().findById(id);
-  // currentLang is not used, so removed
+  const currentLang = request.cookies?.lang || 'ru';
   if (!user) {
     // eslint-disable-next-line no-param-reassign
     request.session.flash = { error: [request.i18next.t('User not found')] };
@@ -113,6 +115,7 @@ export const show = async (request, reply) => {
     currentUser: request.user,
     currentUrl: request.raw.url,
     query,
+    currentLang,
   });
 };
 
@@ -120,7 +123,7 @@ export const edit = async (request, reply) => {
   const query = request.query || {};
   const { id } = request.params;
   const user = await User.query().findById(id);
-  // currentLang is not used, so removed
+  const currentLang = request.cookies?.lang || 'ru';
   if (!user) {
     // eslint-disable-next-line no-param-reassign
     request.session.flash = { error: [request.i18next.t('User not found')] };
@@ -133,6 +136,7 @@ export const edit = async (request, reply) => {
     currentUser: request.user,
     currentUrl: request.raw.url,
     query,
+    currentLang,
   });
 };
 
