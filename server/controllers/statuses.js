@@ -53,7 +53,6 @@ export const create = async (req, reply) => {
     });
   }
   try {
-    const status = await TaskStatus.query().insert({ name });
     if (req.session && req.i18next) {
       let successMsg = req.i18next.t('flash.statuses.create.success');
       if (successMsg === 'flash.statuses.create.success') {

@@ -1,20 +1,18 @@
-import Fastify from 'fastify';
-import app from './index.js';
+import fastify from 'fastify';
+import appInit from './index.js';
 
-const fastify = Fastify({
+const app = fastify({
   logger: false,
 });
 
 (async () => {
   try {
-    await app(fastify, {});
-    await fastify.listen({
+    await appInit(app, {});
+    await app.listen({
       port: process.env.PORT || 3000,
       host: process.env.HOST || 'localhost',
     });
-    // ...existing code...
   } catch (err) {
-    // ...existing code...
     process.exit(1);
   }
 })();
