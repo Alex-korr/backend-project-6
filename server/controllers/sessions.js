@@ -1,4 +1,4 @@
-import fastifyPassport from '@fastify/passport';
+
 
 export const newSession = async (request, reply) => {
   try {
@@ -41,6 +41,7 @@ export const newSession = async (request, reply) => {
 
     // Clear flash messages after reading
     if (request.session && request.session.flash) {
+      // eslint-disable-next-line no-param-reassign
       request.session.flash = {};
     }
 
@@ -90,6 +91,7 @@ export const destroy = async (request, reply) => {
 
     // Set flash message BEFORE clearing session
     if (request.session) {
+      // eslint-disable-next-line no-param-reassign
       request.session.flash = { session: { success: [request.i18next.t('flash.session.delete.success')] } };
     }
 
@@ -110,6 +112,7 @@ export const destroy = async (request, reply) => {
   } catch (error) {
     // ...existing code...
     if (request.session) {
+      // eslint-disable-next-line no-param-reassign
       request.session.flash = {
         error: ['Error during logout. Please try again.'],
       };
@@ -122,10 +125,12 @@ export const destroy = async (request, reply) => {
 export const loginUser = async (request, reply, user) => {
   try {
     await request.logIn(user);
+    // eslint-disable-next-line no-param-reassign
     request.session.flash = { success: ['Successfully logged in!'] };
     return true;
   } catch (error) {
     // ...existing code...
+    // eslint-disable-next-line no-param-reassign
     request.session.flash = { error: ['Login failed'] };
     return false;
   }
