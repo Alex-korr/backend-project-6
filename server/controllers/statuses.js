@@ -61,11 +61,11 @@ export const create = async (req, reply) => {
       }
       req.session.flash = { status: { success: [successMsg] } };
     }
-    reply.redirect('/statuses');
+    return reply.redirect('/statuses');
   } catch (err) {
     // Build array of errors for template
     const errors = [err.message];
-    reply.code(422).view('statuses/new', {
+    return reply.code(422).view('statuses/new', {
       errors,
       alert: 'Не удалось создать статус',
       name,
@@ -100,11 +100,11 @@ export const update = async (req, reply) => {
   try {
     await TaskStatus.query().findById(id).patch({ name });
     req.session.flash = { status: { success: [req.i18next.t('flash.statuses.update.success')] } };
-    reply.redirect('/statuses');
+    return reply.redirect('/statuses');
   } catch (err) {
-    const status = await TaskStatus.query().findById(id);
-    reply.view('statuses/edit', {
-      status,
+    // const status = await TaskStatus.query().findById(id); // removed unused variable
+    return reply.view('statuses/edit', {
+      // status,
       error: err.message,
       isAuthenticated: !!req.user,
       user: req.user,

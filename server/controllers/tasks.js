@@ -158,11 +158,7 @@ export const create = async (req, reply) => {
   const raw = body.labels || body['labels[]'] || req.body['labels[]'];
   let labelIds = [];
   if (raw) {
-    if (Array.isArray(raw)) {
-      labelIds = raw;
-    } else {
-      labelIds = [raw];
-    }
+    labelIds = Array.isArray(raw) ? raw : [raw];
   }
   const creatorId = req.user?.id;
   const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
@@ -297,11 +293,7 @@ export const update = async (req, reply) => {
   const raw = req.body['labels[]'];
   let labelIds = [];
   if (raw) {
-    if (Array.isArray(raw)) {
-      labelIds = raw;
-    } else {
-      labelIds = [raw];
-    }
+    labelIds = Array.isArray(raw) ? raw : [raw];
   }
   try {
     await Task.query().findById(id).patch({

@@ -1,10 +1,8 @@
-// ...existing code...
-
 export const newSession = async (request, reply) => {
   try {
     // Safely get query params
     const query = request.query ? { ...request.query } : {};
-
+    // ...existing code...
     // Determine current language
     const currentLang = request.cookies?.lang || query.lang || 'ru';
 
