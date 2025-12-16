@@ -4,11 +4,6 @@ export default {
       required: 'This field is required',
     },
     create: 'Create',
-    layouts: {
-      application: {
-        labels: 'Labels',
-      },
-    },
     flash: {
       session: {
         create: {

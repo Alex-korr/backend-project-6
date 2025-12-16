@@ -1,7 +1,7 @@
 import Fastify from 'fastify';
 import app from './index.js';
 
-const fastify = new Fastify({
+const fastify = Fastify({
   logger: false,
 });
 
