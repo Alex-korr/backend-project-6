@@ -102,9 +102,7 @@ export const update = async (req, reply) => {
     req.session.flash = { status: { success: [req.i18next.t('flash.statuses.update.success')] } };
     return reply.redirect('/statuses');
   } catch (err) {
-    // const status = await TaskStatus.query().findById(id); // removed unused variable
     return reply.view('statuses/edit', {
-      // status,
       error: err.message,
       isAuthenticated: !!req.user,
       user: req.user,
