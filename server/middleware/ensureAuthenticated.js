@@ -7,4 +7,5 @@ export default async function ensureAuthenticated(req, reply) {
   if (!req.user) {
     return reply.redirect('/session/new');
   }
+  return undefined;
 }

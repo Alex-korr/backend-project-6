@@ -296,16 +296,18 @@ export const update = async (req, reply) => {
     const task = await Task.query().findById(id);
     // First, detach all old labels
     await task.$relatedQuery('labels').unrelate();
-    // Then attach new ones
-    for (const labelId of labelIds) {
-      await task.$relatedQuery('labels').relate(Number(labelId));
+    // Then attach new ones (avoid await in loop)
+    if (labelIds.length > 0) {
+      const relatePromises = labelIds.map((labelId) => task.$relatedQuery('labels').relate(Number(labelId)));
+      await Promise.all(relatePromises);
     }
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
     req.flash('success', t('flash.tasks.update.success'));
-    reply.redirect('/tasks');
+    return reply.redirect('/tasks');
   } catch (e) {
+    const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
     req.flash('error', t('flash.tasks.update.error'));
-    reply.redirect(`/tasks/${id}/edit`);
+    return reply.redirect(`/tasks/${id}/edit`);
   }
 };
 

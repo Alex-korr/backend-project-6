@@ -87,8 +87,6 @@ export default {
         name: 'Name',
         actions: 'Actions',
         edit: 'Edit',
-        name: 'Name',
-        actions: 'Actions',
         noLabels: 'No tags',
       },
     },
@@ -115,7 +113,6 @@ export default {
       index: {
         status: 'Status',
         all: 'All',
-        executor: 'Executor',
         label: 'Label',
         labels: 'Labels',
         onlyMy: 'Only my tasks',

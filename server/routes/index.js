@@ -1,9 +1,9 @@
 import * as usersController from '../controllers/users.js';
 import * as sessionsController from '../controllers/sessions.js';
-// import ensureAuthenticated from '../middleware/ensureAuthenticated.js';
+
 let User;
 
-export default async (app, options) => {
+export default async (app) => {
   // Language switch route
   app.get('/change-lang/:lang', (request, reply) => {
     const { lang } = request.params;
@@ -52,6 +52,7 @@ export default async (app, options) => {
         allSuccess.push(...request.session.flash.session.success.map(translateMsg));
       }
 
+      // eslint-disable-next-line no-param-reassign
       request.session.flash = {};
     }
 
@@ -115,10 +116,8 @@ export default async (app, options) => {
   // POST /session - Login route
   app.post('/session', async (request, reply) => {
     const { email, password } = request.body;
-
     const currentLang = request.cookies?.lang || 'ru';
     const translateError = () => (currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password');
-
     // Server-side validation - render form directly (NO redirect)
     if (!email || !email.trim() || !password || !password.trim()) {
       return reply.view('sessions/new', {
@@ -133,13 +132,10 @@ export default async (app, options) => {
         currentUrl: '/session',
       });
     }
-
     // Import User model directly
-    const User = (await import('../models/User.cjs')).default;
-
+    const UserSession = (await import('../models/User.cjs')).default;
     // Find user
-    const user = await User.query().findOne({ email });
-
+    const user = await UserSession.query().findOne({ email });
     if (!user) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -153,10 +149,8 @@ export default async (app, options) => {
         currentUrl: '/session',
       });
     }
-
     // Verify password
     const isValid = await user.verifyPassword(password);
-
     if (!isValid) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -170,9 +164,9 @@ export default async (app, options) => {
         currentUrl: '/session',
       });
     }
-
     // Authentication successful
     await request.logIn(user);
+    // eslint-disable-next-line no-param-reassign
     request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
     return reply.redirect('/');
   });
@@ -180,10 +174,8 @@ export default async (app, options) => {
   // POST /session/new - Login from /session/new page (no redirect, render directly)
   app.post('/session/new', async (request, reply) => {
     const { email, password } = request.body;
-
     const currentLang = request.cookies?.lang || 'ru';
     const translateError = () => (currentLang === 'ru' ? 'Неправильный email или пароль' : 'Invalid email or password');
-
     // Server-side validation - render form with error (NO redirect)
     if (!email || !email.trim() || !password || !password.trim()) {
       return reply.view('sessions/new', {
@@ -198,11 +190,9 @@ export default async (app, options) => {
         currentUrl: '/session/new',
       });
     }
-
     // Import User model
-    const User = (await import('../models/User.cjs')).default;
-    const user = await User.query().findOne({ email });
-
+    const UserSession = (await import('../models/User.cjs')).default;
+    const user = await UserSession.query().findOne({ email });
     if (!user) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -216,9 +206,7 @@ export default async (app, options) => {
         currentUrl: '/session/new',
       });
     }
-
     const isValid = await user.verifyPassword(password);
-
     if (!isValid) {
       return reply.view('sessions/new', {
         error: [translateError()],
@@ -232,9 +220,9 @@ export default async (app, options) => {
         currentUrl: '/session/new',
       });
     }
-
     // Success - redirect to home
     await request.logIn(user);
+    // eslint-disable-next-line no-param-reassign
     request.session.flash = { session: { success: [request.i18next.t('flash.session.create.success')] } };
     return reply.redirect('/');
   });
@@ -257,8 +245,12 @@ export default async (app, options) => {
         const knexConfigModule = await import('../../knexfile.js');
         const Knex = knexModule.default;
         const mode = process.env.NODE_ENV || 'development';
-        const knexConfig = knexConfigModule[mode] || knexConfigModule.default?.[mode] || knexConfigModule.default;
-        const db = Knex(knexConfig);
+        // eslint-disable-next-line max-len
+        const knexConfig = knexConfigModule[mode]
+          || knexConfigModule.default?.[mode]
+          || knexConfigModule.default;
+        // eslint-disable-next-line new-cap
+        const db = new Knex(knexConfig);
         await db.raw('SELECT 1');
         const directUsers = await db('users').select('*');
         await db.destroy();
