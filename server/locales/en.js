@@ -142,21 +142,6 @@ export default {
       },
     },
     appName: 'Task Manager',
-    layouts: {
-      application: {
-        home: 'Home',
-        users: 'Users',
-        statuses: 'Statuses',
-        tasks: 'Tasks',
-        labels: 'Labels',
-        signIn: 'Login',
-        signUp: 'Sign up',
-        language: 'Language',
-        edit: 'Edit',
-        delete: 'Delete',
-        signOut: 'Sign Out',
-      },
-    },
     views: {
       welcome: {
         index: {

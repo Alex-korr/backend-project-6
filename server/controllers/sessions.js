@@ -1,4 +1,4 @@
-
+// ...existing code...
 
 export const newSession = async (request, reply) => {
   try {

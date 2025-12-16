@@ -156,7 +156,14 @@ export const create = async (req, reply) => {
     name, description, statusId, executorId, newLabels,
   } = body;
   const raw = body.labels || body['labels[]'] || req.body['labels[]'];
-  const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
+  let labelIds = [];
+  if (raw) {
+    if (Array.isArray(raw)) {
+      labelIds = raw;
+    } else {
+      labelIds = [raw];
+    }
+  }
   const creatorId = req.user?.id;
   const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
   try {
@@ -288,7 +295,14 @@ export const update = async (req, reply) => {
     name, description, statusId, executorId,
   } = req.body;
   const raw = req.body['labels[]'];
-  const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
+  let labelIds = [];
+  if (raw) {
+    if (Array.isArray(raw)) {
+      labelIds = raw;
+    } else {
+      labelIds = [raw];
+    }
+  }
   try {
     await Task.query().findById(id).patch({
       name, description, statusId, executorId,
@@ -334,5 +348,5 @@ export const remove = async (req, reply) => {
   await Task.query().deleteById(id);
   console.log('[REMOVE] Task deleted:', id);
   req.flash('success', t('flash.tasks.delete.success'));
-  reply.redirect('/tasks');
+  return reply.redirect('/tasks');
 };
