@@ -5,7 +5,9 @@ import User from '../../models/User.cjs';
 export const index = async (req, reply) => {
   try {
     const query = req.query || {};
-    const { status, executor, label, my } = query;
+    const {
+      status, executor, label, my,
+    } = query;
     const isMy = my === 'on' || my === 'true' || my === true || my === 1 || my === '1';
     if (isMy && !req.user) {
       const statuses = await TaskStatus.query();
@@ -16,21 +18,24 @@ export const index = async (req, reply) => {
       req.session.flash = {};
       const currentLang = req.cookies?.lang || query.lang || 'en';
       const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
-      return reply.view('tasks/index', {
-        tasks: [],
-        statuses,
-        users,
-        labels,
-        query,
-        currentUser: req.user || null,
-        error,
-        success,
-        currentLang,
-        t,
-        isAuthenticated: !!req.user,
-        user: req.user,
-        currentUrl: req.raw.url,
-      });
+      return reply.view(
+        'tasks/index',
+        {
+          tasks: [],
+          statuses,
+          users,
+          labels,
+          query,
+          currentUser: req.user || null,
+          error,
+          success,
+          currentLang,
+          t,
+          isAuthenticated: !!req.user,
+          user: req.user,
+          currentUrl: req.raw.url,
+        },
+      );
     }
 
     let queryBuilder = Task.query().withGraphFetched('[status, labels, executor, creator]');
@@ -143,7 +148,10 @@ export const create = async (req, reply) => {
     name, description, statusId, executorId, newLabels,
   } = req.body;
   const raw = req.body['labels[]'];
-  const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
+  let labelIds = [];
+  if (raw) {
+    labelIds = Array.isArray(raw) ? raw : [raw];
+  }
   const creatorId = req.user?.id;
   const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
   try {
@@ -158,25 +166,24 @@ export const create = async (req, reply) => {
     if (newLabels && newLabels.trim()) {
       const Label = (await import('../../models/Label.cjs')).default;
       const names = newLabels.split(',').map((s) => s.trim()).filter(Boolean);
-      for (const labelName of names) {
-        // Check if label already exists
-        // eslint-disable-next-line no-await-in-loop
-        let label = await Label.query().findOne({ name: labelName });
-        if (!label) {
-          // eslint-disable-next-line no-await-in-loop
-          label = await Label.query().insert({ name: labelName });
-        }
-        labelIds.push(label.id.toString());
-      }
+      const labelResults = await Promise.all(
+        names.map(async (labelName) => {
+          let label = await Label.query().findOne({ name: labelName });
+          if (!label) {
+            label = await Label.query().insert({ name: labelName });
+          }
+          return label.id.toString();
+        }),
+      );
+      labelIds.push(...labelResults);
     }
     const task = await Task.query().insert({
       name, description, statusId: statusIdInt, creatorId, executorId: executorIdInt,
     });
     if (labelIds.length > 0) {
-      for (const labelId of labelIds) {
-        // eslint-disable-next-line no-await-in-loop
-        await task.$relatedQuery('labels').relate(Number(labelId));
-      }
+      await Promise.all(
+        labelIds.map((labelId) => task.$relatedQuery('labels').relate(Number(labelId))),
+      );
     }
     // Fetch the task with creator relation to ensure it's available in the next render
     await Task.query().findById(task.id).withGraphFetched('[creator]');
@@ -216,21 +223,24 @@ export const edit = async (req, reply) => {
   const success = req.session?.flash?.success || [];
   req.session.flash = {};
   const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : ((s) => s);
-  reply.view('tasks/edit', {
-    task,
-    statuses,
-    users,
-    labels,
-    currentUser: req.user,
-    error,
-    success,
-    currentLang: req.cookies?.lang || query.lang || 'en',
-    t,
-    isAuthenticated: !!req.user,
-    user: req.user,
-    currentUrl: req.raw.url,
-    query,
-  });
+  return reply.view(
+    'tasks/edit',
+    {
+      task,
+      statuses,
+      users,
+      labels,
+      currentUser: req.user,
+      error,
+      success,
+      currentLang: req.cookies?.lang || query.lang || 'en',
+      t,
+      isAuthenticated: !!req.user,
+      user: req.user,
+      currentUrl: req.raw.url,
+      query,
+    },
+  );
 };
 
 export const update = async (req, reply) => {
@@ -239,7 +249,10 @@ export const update = async (req, reply) => {
     name, description, statusId, executorId,
   } = req.body;
   const raw = req.body['labels[]'];
-  const labelIds = raw ? (Array.isArray(raw) ? raw : [raw]) : [];
+  let labelIds = [];
+  if (raw) {
+    labelIds = Array.isArray(raw) ? raw : [raw];
+  }
   try {
     await Task.query().findById(id).patch({
       name, description, statusId, executorId,
@@ -248,10 +261,9 @@ export const update = async (req, reply) => {
     // First, detach all old labels
     await task.$relatedQuery('labels').unrelate();
     // Then attach new ones
-    for (const labelId of labelIds) {
-      // eslint-disable-next-line no-await-in-loop
-      await task.$relatedQuery('labels').relate(Number(labelId));
-    }
+    await Promise.all(
+      labelIds.map((labelId) => task.$relatedQuery('labels').relate(Number(labelId))),
+    );
     const t = req.i18next?.t ? req.i18next.t.bind(req.i18next) : (s) => s;
     req.flash('success', t('flash.tasks.update.success'));
     return reply.redirect(`/tasks/${id}`);
