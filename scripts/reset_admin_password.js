@@ -12,7 +12,7 @@ async function updateAdminPassword() {
   await knex('users')
     .where({ email })
     .update({ passwordDigest: hash, role });
-  // Можно добавить вывод результата, если нужно
+
   process.exit(0);
 }
 
