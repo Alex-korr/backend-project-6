@@ -53,6 +53,7 @@ export const create = async (req, reply) => {
     });
   }
   try {
+    await TaskStatus.query().insert({ name });
     if (req.session && req.i18next) {
       let successMsg = req.i18next.t('flash.statuses.create.success');
       if (successMsg === 'flash.statuses.create.success') {
@@ -101,7 +102,9 @@ export const update = async (req, reply) => {
     req.session.flash = { status: { success: [req.i18next.t('flash.statuses.update.success')] } };
     return reply.redirect('/statuses');
   } catch (err) {
+    const status = await TaskStatus.query().findById(id);
     return reply.view('statuses/edit', {
+      status,
       error: err.message,
       isAuthenticated: !!req.user,
       user: req.user,
