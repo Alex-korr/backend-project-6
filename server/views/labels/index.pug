@@ -37,6 +37,6 @@ block content
             td= label.name
             td.text-end
               div.d-inline-flex.align-items-center.gap-1
-                a.btn.btn-sm.btn-outline-primary(href=`/labels/${label.id}/edit`)= t('users.index.Edit')
+                a.btn.btn-sm.btn-outline-primary(href=`/labels/${label.id}/edit`)= t('users.index.edit')
                 form(action=`/labels/${label.id}/delete`, method='POST', style='display:inline; margin:0;')
-                  button.btn.btn-sm.btn-label-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.Delete')
+                  button.btn.btn-sm.btn-label-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.delete')
