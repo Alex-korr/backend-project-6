@@ -166,6 +166,7 @@ export default {
         actions: 'Действия',
         noLabels: 'Нет меток',
         description: 'Описание',
+        title: 'Метки',
       },
     },
     statuses: {
