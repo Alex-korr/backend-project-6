@@ -44,5 +44,5 @@ block content
         else
           span(style='color: #bbb;') Нет меток
     .mt-4
-      button.btn.btn-primary(type='submit') Создать
-      a.btn.btn-secondary.ms-2(href='/tasks') Отмена
+      button.btn.btn-primary(type='submit')= t('tasks.create')
+      a.btn.btn-secondary.ms-2(href='/tasks')= t('tasks.cancel')

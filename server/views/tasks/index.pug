@@ -46,7 +46,6 @@ block content
           th= t('tasks.index.name')
           th= t('tasks.index.statusTh')
           th= t('tasks.index.executor')
-          th(style='width: 80px;')= t('tasks.index.creatorId')
           th(style='width: 25px; text-align: left;')= t('tasks.index.actions')
       tbody
         if tasks.length
@@ -59,9 +58,8 @@ block content
                 if task.status
                   span(style='padding: 2px 8px; border-radius: 6px; background: #e3f2fd; border: 1px solid #90caf9; font-weight: 500; color: #4a6fa5;')= task.status.name
                 else
-                  span.text-muted Нет статуса
+                  span.text-muted= t('tasks.index.noStatus')
               td= task.executor ? `${task.executor.firstName} ${task.executor.lastName}` : '-'
-              td= task.creatorId || task.creator_id
               td(style='text-align: left; vertical-align: middle;')
                 if currentUser && (currentUser.id === task.creatorId || currentUser.id === task.creator_id)
                   a.btn.btn-sm(href=`/tasks/${task.id}/edit` style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9; margin-right: 4px;')= t('tasks.index.edit')

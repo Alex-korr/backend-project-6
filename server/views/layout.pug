@@ -35,3 +35,9 @@ html(lang= currentLang)
           each msg in layoutSuccess
             div.alert.alert-success.mt-3(style='background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;')= msg
         block content
+    footer.footer.mt-auto.py-3.bg-light
+      .container.d-flex.justify-content-between.align-items-center
+        span.text-muted © 2025 Task Manager
+        .language-switcher
+          a(href="/change-lang/ru" aria-label="Русский" class=(currentLang === 'ru' ? 'active' : '')) RU
+          a(href="/change-lang/en" aria-label="English" class=(currentLang === 'en' ? 'active' : '')) EN

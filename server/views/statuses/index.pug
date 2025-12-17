@@ -14,12 +14,13 @@ block content
       thead
         tr
           th= t('statuses.index.name')
-          th(style='text-align: right; padding-right: 32px;')= t('statuses.index.actions')
+          // th(style='text-align: right; padding-right: 32px;')= t('statuses.index.actions')
       tbody
         each status, i in statuses
           tr
             td(class=`${['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'][i]} status`)= status.name
             td(style='text-align: right; white-space: nowrap;')
-              a.btn.btn-sm.btn-outline-primary.me-2(href=`/statuses/${status.id}/edit` style='margin-left: 8px;')= t('users.index.Edit')
-              form(action=`/statuses/${status.id}/delete`, method='POST', style='display:inline;')
-                button.btn.btn-sm.btn-status-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373; margin-left: 8px;')= t('statuses.index.delete')
+              div.d-inline-flex.align-items-center.gap-1
+                a.btn.btn-sm.btn-outline-primary(href=`/statuses/${status.id}/edit`)= t('users.index.Edit')
+                form(action=`/statuses/${status.id}/delete`, method='POST', style='display:inline; margin:0;')
+                  button.btn.btn-sm.btn-status-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('statuses.index.delete')

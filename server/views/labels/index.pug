@@ -31,12 +31,13 @@ block content
       thead
         tr
           th= t('labels.index.name')
-          th= t('labels.index.actions')
+          // th= t('labels.index.actions')
       tbody
         each label in labels
           tr
             td= label.name
-            td
-              a.btn.btn-sm.btn-outline-primary.me-2(href=`/labels/${label.id}/edit`)= t('users.index.Edit')
-              form(action=`/labels/${label.id}/delete`, method='POST', style='display:inline;')
-                button.btn.btn-sm.btn-label-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.Delete')
+            td.text-end
+              div.d-inline-flex.align-items-center.gap-1
+                a.btn.btn-sm.btn-outline-primary(href=`/labels/${label.id}/edit`)= t('users.index.Edit')
+                form(action=`/labels/${label.id}/delete`, method='POST', style='display:inline; margin:0;')
+                  button.btn.btn-sm.btn-label-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.Delete')

@@ -1,3 +1,56 @@
+/* Language switcher styles */
+/* Language switcher as two gray squares */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.language-switcher a {
+  background: #f4f4f4;
+  border: none;
+  color: #444;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 400;
+  width: 26px;
+  height: 26px;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.language-switcher a.active {
+  background: #e3eaf6;
+  color: #2257a7;
+  font-weight: bold;
+}
+.language-switcher a:hover {
+  background: #e0e0e0;
+  color: #1976d2;
+}
+/* Sticky footer styles */
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.main-content {
+  flex: 1 0 auto;
+}
+footer.footer {
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+}
 /* Custom hover for status delete button (red) */
 .btn-status-delete:hover {
   background: #e57373 !important;

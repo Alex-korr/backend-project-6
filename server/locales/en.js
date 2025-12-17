@@ -1,5 +1,17 @@
 export default {
   translation: {
+    layouts: {
+      application: {
+        home: 'Home',
+        users: 'Users',
+        statuses: 'Statuses',
+        tasks: 'Tasks',
+        labels: 'Labels',
+        signIn: 'Sign in',
+        signUp: 'Sign up',
+        signOut: 'Sign out',
+      },
+    },
     validation: {
       required: 'This field is required',
     },
@@ -15,6 +27,9 @@ export default {
         },
       },
       tasks: {
+        index: {
+          show: 'Show',
+        },
         create: {
           success: 'Success',
           error: 'Failed to create task',
@@ -69,7 +84,8 @@ export default {
         submit: 'Create User',
       },
       index: {
-        show: 'Show',
+        edit: 'Edit',
+        delete: 'Delete',
         Name: 'Name',
         Edit: 'Edit',
         Delete: 'Delete',
@@ -95,16 +111,19 @@ export default {
         actions: 'Actions',
         delete: 'Delete',
         save: 'Save',
+        submit: 'Create',
       },
     },
     tasks: {
-      editTitle: 'Edit Task',
+      edit: 'Edit Task',
       name: 'Name',
       description: 'Description',
       status: 'Status',
       executor: 'Executor',
       labels: 'Labels',
       save: 'Save',
+      create: 'Create',
+      cancel: 'Cancel',
       index: {
         status: 'Status',
         all: 'All',
@@ -118,12 +137,17 @@ export default {
         signInToAdd: 'Sign in to add tasks',
         name: 'Name',
         statusTh: 'Status',
+        statusPlaceholder: 'Select status',
         creator: 'Creator',
         executor: 'Executor',
         actions: 'Actions',
         noTasksFound: 'No tasks found',
         delete: 'Delete',
         description: 'Description',
+        notAssigned: 'Not assigned',
+        noStatus: 'No status',
+        edit: 'Edit Task',
+        show: 'Show Task',
       },
     },
     sessions: {

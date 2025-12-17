@@ -35,7 +35,7 @@ block content
             td= user.email
             td.text-end.align-middle
               if currentUser && (currentUser.id === user.id || currentUser.role === 'admin')
-                div.d-inline-flex.align-items-center.gap-2
+                div.d-inline-flex.align-items-center.gap-1
                   a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('users.index.Edit')
                   if currentUser && (currentUser.id === user.id || (currentUser.role === 'admin' && user.role === 'user'))
                     form(action=`/users/${user.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline; margin: 0;')

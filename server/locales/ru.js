@@ -1,5 +1,17 @@
 export default {
   translation: {
+    layouts: {
+      application: {
+        home: 'Главная',
+        users: 'Пользователи',
+        statuses: 'Статусы',
+        tasks: 'Задачи',
+        labels: 'Метки',
+        signIn: 'Войти',
+        signUp: 'Регистрация',
+        signOut: 'Выйти',
+      },
+    },
     validation: {
       required: 'Обязательное поле',
     },
@@ -31,6 +43,10 @@ export default {
         },
       },
       tasks: {
+        index: {
+          show: 'Показать',
+          // ...existing code...
+        },
         create: {
           success: 'Задача успешно создана!',
           error: 'Не удалось создать задачу',
@@ -73,6 +89,8 @@ export default {
     tasks: {
       index: {
         show: 'Показать',
+        edit: 'Изменить',
+        delete: 'Удалить',
         status: 'Статус',
         all: 'Все',
         executor: 'Исполнитель',
@@ -94,6 +112,7 @@ export default {
         delete: 'Удалить',
         description: 'Описание',
         notAssigned: 'Не назначен',
+        noStatus: 'Нет статуса',
       },
       editTitle: 'Изменить задачу',
       name: 'Наименование',
