@@ -7,7 +7,7 @@ export default {
         statuses: 'Статусы',
         tasks: 'Задачи',
         labels: 'Метки',
-        signIn: 'Войти',
+        signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выйти',
       },
