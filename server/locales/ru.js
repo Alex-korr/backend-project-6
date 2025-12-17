@@ -163,6 +163,7 @@ export default {
       index: {
         newLabel: 'Создать метку',
         name: 'Наименование',
+        edit: 'Изменить',
         actions: 'Действия',
         noLabels: 'Нет меток',
         description: 'Описание',
