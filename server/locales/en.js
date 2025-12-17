@@ -112,6 +112,7 @@ export default {
         delete: 'Delete',
         save: 'Save',
         submit: 'Create',
+        submit: 'Create',
       },
     },
     tasks: {

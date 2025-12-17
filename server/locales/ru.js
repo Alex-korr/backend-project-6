@@ -163,6 +163,7 @@ export default {
         actions: 'Действия',
         delete: 'Удалить',
         save: 'Сохранить',
+        submit: 'Создать',
       },
       createSubmit: 'Создать',
     },
