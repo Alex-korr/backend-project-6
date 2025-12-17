@@ -62,7 +62,12 @@ export default {
       labels: {
         create: {
           success: 'Label was created successfully!',
-          error: 'Failed to create label. Name cannot be empty.',
+          error: 'Failed to create label',
+          empty: 'Label name cannot be empty',
+        },
+        update: {
+          success: 'Label was updated successfully!',
+          fallback: 'Label was updated successfully!',
         },
         delete: {
           success: 'Label was deleted!',

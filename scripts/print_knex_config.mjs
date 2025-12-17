@@ -1,1 +1,0 @@
-import { development as knexConfig } from '../knexfile.js';

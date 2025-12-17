@@ -53,9 +53,9 @@ export const create = async (req, reply) => {
     userId = req.body.user_id;
   }
   // Common error handler
-  const renderError = (msg) => reply.view('labels/new', {
-    error: ['Не удалось создать метку'],
-    msg,
+  const renderError = (msgKey) => reply.view('labels/new', {
+    error: [t('flash.labels.create.error')],
+    msg: t(msgKey),
     name,
     t,
     currentLang: req.cookies?.lang || 'ru',
@@ -65,8 +65,8 @@ export const create = async (req, reply) => {
     query: req.query || {},
   });
   if (!name || name.trim().length === 0) {
-    req.session.flash = { labels: { error: ['Не удалось создать метку'] } };
-    return renderError('Поле метки не может быть пустым');
+    req.session.flash = { labels: { error: [t('flash.labels.create.error')] } };
+    return renderError('flash.labels.create.empty');
   }
   try {
     const labelData = { name };
@@ -75,7 +75,7 @@ export const create = async (req, reply) => {
     req.session.flash = { labels: { success: [t('flash.labels.create.success')] } };
     return reply.redirect('/labels');
   } catch (err) {
-    return renderError('Не удалось создать метку');
+    return renderError('flash.labels.create.error');
   }
 };
 
@@ -99,10 +99,9 @@ export const update = async (req, reply) => {
   }
   await Label.query().patchAndFetchById(req.params.id, { name });
   const t = req.i18next.t.bind(req.i18next);
-  // Use translation if exists, fallback to default
   let msg = t('flash.labels.update.success');
   if (!msg || msg === 'flash.labels.update.success') {
-    msg = 'Метка успешно изменена';
+    msg = t('flash.labels.update.fallback');
   }
   req.session.flash = { labels: { success: [msg] } };
   return reply.redirect('/labels');

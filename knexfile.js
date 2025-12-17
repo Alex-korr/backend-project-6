@@ -12,7 +12,7 @@ const migrations = {
 export const development = {
   client: 'sqlite3',
   connection: {
-    filename: path.resolve(__dirname, 'database.sqlite'),
+    filename: path.resolve(__dirname, 'server', 'db', 'database.sqlite'),
   },
   useNullAsDefault: true,
   migrations,
@@ -29,7 +29,7 @@ export const test = {
 export const production = {
   client: 'sqlite3',
   connection: {
-    filename: path.resolve(__dirname, 'database.sqlite'),
+    filename: path.resolve(__dirname, 'server', 'db', 'database.sqlite'),
   },
   useNullAsDefault: true,
   migrations,
