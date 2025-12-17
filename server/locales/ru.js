@@ -121,6 +121,8 @@ export default {
       executor: 'Исполнитель',
       labels: 'Метки',
       save: 'Сохранить',
+      create: 'Создать',
+      cancel: 'Отмена',
     },
     users: {
       new: {
