@@ -1,4 +1,3 @@
-import * as usersController from '../controllers/users.js';
 import * as sessionsController from '../controllers/sessions.js';
 
 let User;
