@@ -2,7 +2,6 @@ export const newSession = async (request, reply) => {
   try {
     // Safely get query params
     const query = request.query ? { ...request.query } : {};
-    // ...existing code...
     // Determine current language
     const currentLang = request.cookies?.lang || query.lang || 'ru';
 
@@ -55,7 +54,6 @@ export const newSession = async (request, reply) => {
       currentUser: request.user || null,
     });
   } catch (error) {
-    // ...existing code...
     // Render page with generic error
     return reply.view('sessions/new', {
       error: ['An error occurred. Please try again.'],
@@ -74,8 +72,6 @@ export const newSession = async (request, reply) => {
 // This function is no longer used - login is handled directly in the route
 // But we keep it for compatibility
 export const create = async (request, reply) => {
-  // ...existing code...
-
   // If somehow this is called, redirect to home
   if (request.user) {
     return reply.redirect('/');
@@ -85,8 +81,6 @@ export const create = async (request, reply) => {
 
 export const destroy = async (request, reply) => {
   try {
-    // ...existing code...
-
     // Set flash message BEFORE clearing session
     if (request.session) {
       // eslint-disable-next-line no-param-reassign
@@ -97,18 +91,12 @@ export const destroy = async (request, reply) => {
     if (request.logout && typeof request.logout === 'function') {
       try {
         request.logout();
-        // ...existing code...
       } catch (err) {
-        // ...existing code...
+        // no-op
       }
-    } else {
-      // ...existing code...
     }
-
-    // ...existing code...
     return reply.redirect('/');
   } catch (error) {
-    // ...existing code...
     if (request.session) {
       // eslint-disable-next-line no-param-reassign
       request.session.flash = {
@@ -127,7 +115,6 @@ export const loginUser = async (request, reply, user) => {
     request.session.flash = { success: ['Successfully logged in!'] };
     return true;
   } catch (error) {
-    // ...existing code...
     // eslint-disable-next-line no-param-reassign
     request.session.flash = { error: ['Login failed'] };
     return false;

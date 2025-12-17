@@ -191,16 +191,6 @@ export const destroy = async (request, reply) => {
     return reply.redirect('/users');
   }
 
-  // Check for related tasks (optional - can be removed if not needed)
-  // const tasksAsCreator = await User.relatedQuery('tasks').for(id).where('creatorId', id);
-  // const tasksAsExecutor = await User.relatedQuery('tasks').for(id).where('executorId', id);
-  // if (tasksAsCreator.length > 0 || tasksAsExecutor.length > 0) {
-  //   request.session.flash = {
-  //     error: [request.i18next.t('Cannot delete user with related tasks')],
-  //   };
-  //   return reply.redirect('/users');
-  // }
-
   await User.query().deleteById(id);
 
   // Set flash message

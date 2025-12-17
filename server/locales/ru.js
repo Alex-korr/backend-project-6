@@ -45,7 +45,6 @@ export default {
       tasks: {
         index: {
           show: 'Показать',
-          // ...existing code...
         },
         create: {
           success: 'Задача успешно создана!',
@@ -139,9 +138,9 @@ export default {
       },
       index: {
         Name: 'Имя',
-        Edit: 'Изменить',
-        Delete: 'Удалить',
-        noUsersYet: 'Пользователей пока нет',
+        edit: 'Изменить',
+        delete: 'Удалить',
+        actions: 'Действия',
         newUser: 'Создать пользователя',
       },
     },
@@ -178,20 +177,6 @@ export default {
       },
     },
     appName: 'Менеджер задач',
-    layouts: {
-      application: {
-        home: 'Главная',
-        users: 'Пользователи',
-        statuses: 'Статусы',
-        tasks: 'Задачи',
-        labels: 'Метки',
-        signIn: 'Вход',
-        signUp: 'Регистрация',
-        edit: 'Редактировать',
-        delete: 'Удалить',
-        signOut: 'Выход',
-      },
-    },
     views: {
       welcome: {
         index: {
