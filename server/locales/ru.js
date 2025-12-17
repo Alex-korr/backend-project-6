@@ -9,7 +9,7 @@ export default {
         labels: 'Метки',
         signIn: 'Вход',
         signUp: 'Регистрация',
-        signOut: 'Выйти',
+        signOut: 'Выход',
       },
     },
     validation: {
