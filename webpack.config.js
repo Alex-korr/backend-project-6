@@ -7,7 +7,7 @@ const mode = process.env.NODE_ENV || 'development';
 export default {
   mode,
   entry: {
-    app: './src/index.js',
+    app: './server/src/index.js',
   },
   output: {
     filename: 'app.js',
