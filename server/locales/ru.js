@@ -205,5 +205,6 @@ export default {
         },
       },
     },
+    noUsersYet: 'Пользователей пока нет',
   },
 };
