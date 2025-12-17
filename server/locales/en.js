@@ -1,5 +1,29 @@
 export default {
   translation: {
+    labels: {
+      index: {
+        title: 'Labels',
+        newLabel: 'Create label',
+        name: 'Name',
+        description: 'Description',
+        actions: 'Actions',
+        edit: 'Edit',
+        delete: 'Delete',
+        submit: 'Save',
+      },
+    },
+    statuses: {
+      index: {
+        title: 'Statuses',
+        createStatus: 'Create status',
+        name: 'Name',
+        actions: 'Actions',
+        delete: 'Delete',
+        edit: 'Edit',
+        submit: 'Save',
+        editStatus: 'Edit status',
+      },
+    },
     layouts: {
       application: {
         home: 'Home',
@@ -96,27 +120,17 @@ export default {
         Delete: 'Delete',
         newUser: 'Create user',
       },
-    },
-    labels: {
-      index: {
-        newLabel: 'New Label',
-        name: 'Name',
-        actions: 'Actions',
-        edit: 'Edit',
-        noLabels: 'No tags',
-      },
-    },
-    statuses: {
-      index: {
-        title: 'Statuses',
-        createStatus: 'Create status',
-        editStatus: 'Edit status',
-        edit: 'Edit',
-        name: 'Name',
-        actions: 'Actions',
-        delete: 'Delete',
-        save: 'Save',
-        submit: 'Create',
+      edit: {
+        title: 'Edit User',
+        firstNameLabel: 'First Name',
+        firstNamePlaceholder: 'First Name',
+        lastNameLabel: 'Last Name',
+        lastNamePlaceholder: 'Last Name',
+        emailLabel: 'Email',
+        emailPlaceholder: 'Email',
+        passwordLabel: 'Password',
+        passwordPlaceholder: 'Password (leave blank to keep current)',
+        submit: 'Update',
       },
     },
     tasks: {

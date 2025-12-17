@@ -12,7 +12,7 @@ block content
       .invalid-feedback.d-block(style='font-size: 0.85rem; max-width: 400px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 0.25rem 0.5rem; margin-bottom: 0.5rem; border-radius: 0.25rem;')= err
   .d-flex.justify-content-between.align-items-center.mb-3
     h1= t('layouts.application.users')
-    a.btn.btn-primary(href=`/users/new?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('users.index.newUser')
+    a.btn.btn-primary(href='/users/new')= t('users.index.newUser')
   if users.length
     table.table.table-striped.table-hover.mt-4
       thead
@@ -36,9 +36,9 @@ block content
             td.text-end.align-middle
               if currentUser && (currentUser.id === user.id || currentUser.role === 'admin')
                 div.d-inline-flex.align-items-center.gap-1
-                  a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`)= t('users.index.Edit')
+                  a.btn.btn-sm.btn-outline-primary(href=`/users/${user.id}/edit`)= t('users.index.edit')
                   if currentUser && (currentUser.id === user.id || (currentUser.role === 'admin' && user.role === 'user'))
-                    form(action=`/users/${user.id}/delete?lang=${typeof currentLang !== 'undefined' ? currentLang : 'en'}`, method='post', style='display: inline; margin: 0;')
-                      button.btn.btn-sm.btn-user-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.Delete')
+                    form(action=`/users/${user.id}/delete`, method='post', style='display: inline; margin: 0;')
+                      button.btn.btn-sm.btn-user-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('users.index.delete')
   else
     div.alert.alert-info.mt-4= t('noUsersYet')

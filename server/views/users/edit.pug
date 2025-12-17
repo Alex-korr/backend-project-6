@@ -3,41 +3,19 @@ extends ../layout
 block content
   .d-flex.justify-content-center.align-items-center(style='min-height:40vh; margin-top:40px;')
     form(action=`/users/${user.id}/update`, method='post', class='w-100', style='max-width:330px;padding:15px;margin:auto;')
-      if typeof currentLang !== 'undefined' && currentLang === 'ru'
-        h1.h3.mb-3.fw-normal.text-center Редактировать
-      else
-        h1.h3.mb-3.fw-normal.text-center Edit User
+      h1.h3.mb-3.fw-normal.text-center= t('users.edit.title')
       if (typeof error === 'string' && error.trim()) || (Array.isArray(error) && error.length && error[0] && error[0].trim())
         .alert.alert-danger.alert-dismissible.fade.show(role='alert')= Array.isArray(error) ? error[0] : error
       .form-floating.mb-3
-        if typeof currentLang !== 'undefined' && currentLang === 'ru'
-          input.form-control(type='text', name='firstName', id='data_firstName', placeholder='Имя', value=user.firstName)
-          label(for='data_firstName') Имя
-        else
-          input.form-control(type='text', name='firstName', id='data_firstName', placeholder='First Name', value=user.firstName)
-          label(for='data_firstName') First Name
+        input.form-control(type='text', name='firstName', id='data_firstName', placeholder=t('users.edit.firstNamePlaceholder'), value=user.firstName, ariaLabel=t('users.edit.firstNameLabel'))
+        label(for='data_firstName')= t('users.edit.firstNameLabel')
       .form-floating.mb-3
-        if typeof currentLang !== 'undefined' && currentLang === 'ru'
-          input.form-control(type='text', name='lastName', id='data_lastName', placeholder='Фамилия', value=user.lastName)
-          label(for='data_lastName') Фамилия
-        else
-          input.form-control(type='text', name='lastName', id='data_lastName', placeholder='Last Name', value=user.lastName)
-          label(for='data_lastName') Last Name
+        input.form-control(type='text', name='lastName', id='data_lastName', placeholder=t('users.edit.lastNamePlaceholder'), value=user.lastName, ariaLabel=t('users.edit.lastNameLabel'))
+        label(for='data_lastName')= t('users.edit.lastNameLabel')
       .form-floating.mb-3
-        if typeof currentLang !== 'undefined' && currentLang === 'ru'
-          input.form-control(type='email', name='email', id='data_email', placeholder='Email', value=user.email)
-          label(for='data_email') Email
-        else
-          input.form-control(type='email', name='email', id='data_email', placeholder='Email', value=user.email)
-          label(for='data_email') Email
+        input.form-control(type='email', name='email', id='data_email', placeholder=t('users.edit.emailPlaceholder'), value=user.email, ariaLabel=t('users.edit.emailLabel'))
+        label(for='data_email')= t('users.edit.emailLabel')
       .form-floating.mb-3
-        if typeof currentLang !== 'undefined' && currentLang === 'ru'
-          input.form-control(type='password', name='password', id='data_password', placeholder='Пароль (оставьте пустым, чтобы не менять)')
-          label(for='data_password') Пароль
-        else
-          input.form-control(type='password', name='password', id='data_password', placeholder='Password (leave blank to keep current)')
-          label(for='data_password') Password
-      if typeof currentLang !== 'undefined' && currentLang === 'ru'
-        button.w-100.btn.btn-lg.btn-primary(type='submit') Изменить
-      else
-        button.w-100.btn.btn-lg.btn-primary(type='submit') Update
+        input.form-control(type='password', name='password', id='data_password', placeholder=t('users.edit.passwordPlaceholder'), ariaLabel=t('users.edit.passwordLabel'))
+        label(for='data_password')= t('users.edit.passwordLabel')
+      button.w-100.btn.btn-lg.btn-primary(type='submit')= t('users.edit.submit')

@@ -12,6 +12,6 @@ block content
       if msg
         div.invalid-feedback(style='display:block; margin-left:8px;')= msg
     .mb-3
-      label.form-label(for='description') Описание
+      label.form-label(for='description')= t('labels.index.description')
       textarea.form-control(id='description', name='description')= typeof description !== 'undefined' ? description : ''
     button.btn.btn-primary(type='submit')= t('create')

@@ -21,6 +21,6 @@ block content
             td(class=`${['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'][i]} status`)= status.name
             td(style='text-align: right; white-space: nowrap;')
               div.d-inline-flex.align-items-center.gap-1
-                a.btn.btn-sm.btn-outline-primary(href=`/statuses/${status.id}/edit`)= t('users.index.Edit')
+                a.btn.btn-sm.btn-outline-primary(href=`/statuses/${status.id}/edit`)= t('users.index.edit')
                 form(action=`/statuses/${status.id}/delete`, method='POST', style='display:inline; margin:0;')
                   button.btn.btn-sm.btn-status-delete(type='submit' style='background: #fff; color: #e57373; border: 1px solid #e57373;')= t('statuses.index.delete')
