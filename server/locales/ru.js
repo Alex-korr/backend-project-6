@@ -138,8 +138,8 @@ export default {
       },
       index: {
         Name: 'Имя',
-        edit: 'Изменить',
-        delete: 'Удалить',
+        Edit: 'Изменить',
+        Delete: 'Удалить',
         actions: 'Действия',
         newUser: 'Создать пользователя',
       },
