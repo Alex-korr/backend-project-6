@@ -9,6 +9,7 @@ export async function up(knex) {
     table.string('last_name').notNullable();
     table.string('email').notNullable().unique();
     table.string('password');
+    table.string('role').notNullable().defaultTo('user');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
   });
